@@ -12,7 +12,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",  // Change from "preserve" to "react-jsx"
     "incremental": true,
     "plugins": [
       {
@@ -26,8 +26,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/proposalForm/steps/ProjectFeatures.jsx",
-    "src/components/proposalForm/steps/ProjectFeatures.jsx",
-    "src/components/proposalForm/steps/ProjectRequirement.jsx",
     "src/components/proposalForm/steps/ProjectRequirement.jsx",
     "src/components/proposalForm/steps/CompanyInfo.jsx",
     "src/components/proposalForm/Stepper.jsx",

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -90,24 +90,19 @@ const MainSlider: FC<MainSliderProps> = ({ sliderData, bodyStyle }) => {
     <div className="bg-black">
       <div className="container mx-auto h-full">
         <Slider {...settings}>
-          {sliderData.map((data): ReactNode => {
-            return (
-              <div key={data.id} className={bodyStyle}>
-                <p
-                  className={data.tagClass}
-                  style={{ backgroundColor: data.bg }}
-                >
+          {sliderData.map((data) => (
+            <React.Fragment key={data.id}>
+              <div className={bodyStyle}>
+                <p className={data.tagClass} style={{ backgroundColor: data.bg }}>
                   {data.tag}
                 </p>
                 <p className="text-primary text-lg font-semiBold">
                   {data.title}
                 </p>
-                <p className="text-white text-lg font-semiBold">
-                  {data.offer}
-                </p>
+                <p className="text-white text-lg font-semiBold">{data.offer}</p>
               </div>
-            );
-          })}
+            </React.Fragment>
+          ))}
         </Slider>
       </div>
     </div>

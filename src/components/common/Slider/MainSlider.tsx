@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import Slider, { CustomArrowProps } from "react-slick";
 
-function SampleNextArrow(props: any) {
+function SampleNextArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;
   return (
     <div
@@ -17,7 +17,7 @@ function SampleNextArrow(props: any) {
   );
 }
 
-function SamplePrevArrow(props: any) {
+function SamplePrevArrow(props: CustomArrowProps) {
   const { className, style, onClick } = props;
   return (
     <div
@@ -45,7 +45,7 @@ interface MainSliderProps {
   bodyStyle: string;
 }
 
-const MainSlider: FC<MainSliderProps> = ({ sliderData, bodyStyle }) => {
+const MainSlider = ({ sliderData, bodyStyle }: MainSliderProps) => {
   const settings = {
     infinite: true,
     speed: 1000,

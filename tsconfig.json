@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,7 +16,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",  // Change from "preserve" to "react-jsx"
+    "jsx": "preserve", // Change from "preserve" to "react-jsx"
     "incremental": true,
     "plugins": [
       {
@@ -33,5 +37,7 @@
     "src/components/proposalForm/StepperControl.jsx",
     "src/assets/Icons.jscc"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

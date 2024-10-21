@@ -1,27 +1,24 @@
-# Install dependencies only when needed
-FROM node:18-alpine AS deps
-WORKDIR /app
-COPY package.json yarn.lock* ./
-RUN yarn install --frozen-lockfile
+# Use the official Node image as a base image
+FROM node:18-alpine
 
-# Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+# Set the working directory inside the container
 WORKDIR /app
+
+# Copy the package.json and yarn.lock (if available)
+COPY package.json yarn.lock ./
+
+# Install dependencies using Yarn
+RUN yarn install --production
+
+# Copy the rest of the application code
 COPY . .
-COPY --from=deps /app/node_modules ./node_modules
+
+# Build the Next.js app for production
 RUN yarn build
 
-# Production image, copy all the files and run the app
-FROM node:16-alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
+# Expose the port on which Next.js will run (default: 3000)
 EXPOSE 3000
 
+
+# Start the Next.js server in production mode
 CMD ["yarn", "start"]

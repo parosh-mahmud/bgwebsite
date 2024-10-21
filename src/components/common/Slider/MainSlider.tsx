@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Image, { StaticImageData } from "next/image";
 import Slider from "react-slick";
+
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
@@ -31,18 +31,21 @@ function SamplePrevArrow(props: any) {
   );
 }
 
-interface types {
-  sliderData: {
-    id: number;
-    title: string;
-    offer: string;
-    tag: string;
-    tagClass: string;
-    bg: string;
-  }[];
+interface SliderItem {
+  id: number;
+  title: string;
+  offer: string;
+  tag: string;
+  tagClass: string;
+  bg: string;
+}
+
+interface MainSliderProps {
+  sliderData: SliderItem[];
   bodyStyle: string;
 }
-const MainSlider: FC<types> = ({ sliderData, bodyStyle }) => {
+
+const MainSlider: FC<MainSliderProps> = ({ sliderData, bodyStyle }) => {
   const settings = {
     infinite: true,
     speed: 1000,
@@ -51,7 +54,6 @@ const MainSlider: FC<types> = ({ sliderData, bodyStyle }) => {
     autoplay: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-
     responsive: [
       {
         breakpoint: 1024,
@@ -88,18 +90,21 @@ const MainSlider: FC<types> = ({ sliderData, bodyStyle }) => {
     <div className="bg-black">
       <div className="container mx-auto h-full">
         <Slider {...settings}>
-          {sliderData.map((data) => {
+          {sliderData.map((data): ReactNode => {
             return (
               <div key={data.id} className={bodyStyle}>
                 <p
                   className={data.tagClass}
-                  style={{ backgroundColor: data.bg }}>
+                  style={{ backgroundColor: data.bg }}
+                >
                   {data.tag}
                 </p>
                 <p className="text-primary text-lg font-semiBold">
                   {data.title}
                 </p>
-                <p className="text-white text-lg font-semiBold">{data.offer}</p>
+                <p className="text-white text-lg font-semiBold">
+                  {data.offer}
+                </p>
               </div>
             );
           })}

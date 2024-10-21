@@ -1,24 +1,30 @@
-# Use the official Node image as a base image
-FROM node:18-alpine
+# Stage 1: Build Stage
+FROM node:16-alpine AS builder
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and yarn.lock (if available)
 COPY package.json yarn.lock ./
 
-# Install dependencies using Yarn
-RUN yarn install --production
+RUN yarn install
 
-# Copy the rest of the application code
 COPY . .
 
-# Build the Next.js app for production
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 RUN yarn build
 
-# Expose the port on which Next.js will run (default: 3000)
+# Stage 2: Production Stage
+FROM node:16-alpine
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --production
+
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+
 EXPOSE 3000
 
-
-# Start the Next.js server in production mode
-CMD ["yarn", "start"]
+CMD ["node_modules/.bin/next", "start"]

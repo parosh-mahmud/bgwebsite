@@ -1,0 +1,73 @@
+
+.heroImg {
+  object-fit: contain;
+  width: 100% !important;
+}
+.hireImg {
+  object-fit: contain;
+  width: 100% !important;
+}
+.heroBanner {
+  position: relative;
+  /* To position the pseudo-element correctly */
+  height: 100%;
+  /* Adjust height as needed */
+  width: 100%;
+  /* Adjust width as needed */
+  display: flex;
+  /* Maintain flex for content alignment */
+  justify-content: center;
+  /* Adjust content alignment */
+  align-items: center;
+  /* Center the content vertically */
+  overflow: hidden;
+  /* To handle any overflow from the pseudo-element */
+}
+
+.heroBanner::before {
+  content: "";
+  position: absolute;
+  /* Absolute positioning to cover the parent */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../assets//87420.jpg');
+  /* Path to your image */
+  background-size: cover;
+  /* Adjust the size of the background */
+  background-position: center;
+  /* Center the background */
+  background-repeat: no-repeat;
+  /* Prevent repeating */
+  opacity: 0.1;
+  /* Adjust the opacity here */
+  z-index: 1;
+  /* Layer it behind the content */
+}
+
+.heroBanner .container {
+  position: relative;
+  /* Ensure content is above the background */
+  z-index: 2;
+  /* Layer it above the background */
+  color: white;
+  /* Ensure text color is visible over the background */
+}
+/* For extremely small screen devices (595px and below) */
+@media only screen and (max-width: 595px) {
+}
+/* Small screen devices (600px and above) */
+@media only screen and (min-width: 600px) {
+}
+/* Medium screen devices (768px and above) */
+@media only screen and (min-width: 768px) {
+}
+/* Big screen devices (889px and above) */
+@media only screen and (min-width: 889px) {
+  .hireImg {
+    object-fit: contain;
+    width: 80% !important;
+  }
+ 
+}

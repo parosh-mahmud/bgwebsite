@@ -1,0 +1,377 @@
+{
+  "termsAndConditions": [
+    {
+      "id": 1,
+      "title": "Introduction",
+      "description": "These terms and conditions and the documents referred to below (the 'Terms') apply to the use of Bazigaar app and its related or connected services (collectively, the 'Service').You should carefully review these Terms as they contain important information concerning your rights and obligations concerning the use of the app and form a binding legal agreement between you - our customer (the 'Customer'), and us. By using this app and/or accessing the Service, you, whether you are a guest or a registered user with an account ('Account'), agree to be bound by these Terms, together with any amendments, which may be published from time to time. If you do not accept these Terms, you should refrain from accessing the Service and using the Bazigaar app.",
+      "listItems": []
+    },
+    {
+      "id": 2,
+      "title": "Your Obligations ",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "Age requirement: You must be of legal age to participate in lotteries in your jurisdiction. In most places, this means you must be at least 18 years old. You should not use the lottery app if you are not of legal age."
+        },
+        {
+          "id": 2,
+          "option": "Accurate information: When you register on the Bazigaar app, you must provide accurate and complete information about yourself. This includes your name, date of birth, and contact information. You should update your information if it changes."
+        },
+        {
+          "id": 3,
+          "option": "Secure account: You are responsible for keeping our app account secure. This means choosing a strong password and not sharing it with anyone. You should also enable two-factor authentication."
+        },
+        {
+          "id": 4,
+          "option": "Compliance with terms: You must comply with the terms and conditions of the Bazigaar app. This includes any rules related to purchasing tickets, claiming prizes, and using the app."
+        },
+        {
+          "id": 5,
+          "option": "Responsible gambling: Lottery gambling can be addictive and can have serious financial consequences. You should only spend what you can afford and never gamble with money you need for other important expenses. If you feel like you may have a gambling problem, seek help from a professional."
+        },
+        {
+          "id": 6,
+          "option": "Paying taxes: If you win a prize, you may be required to pay taxes on it. You should consult with a tax professional to understand your obligations."
+        },
+        {
+          "id": 7,
+          "option": "Appropriate conduct: You should use the Bazigaar app responsibly and refrain from any inappropriate conduct, such as using the app to cheat or harass other users."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Registration",
+      "description": "You agree that at all times when using the service: In order to protect the integrity of the service and for other operational reasons we reserve the right to refuse to accept a registration application from any applicant at our sole discretion and without any obligation to communicate a specific reason. Before using the service, you must personally complete the registration form and read and accept these terms. In order to start buying the lottery on our app, we will require you to become a verified Customer which includes passing certain checks. You may be required to provide a valid proof of identification and any other document as it may be deemed necessary.",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "You must provide complete and accurate information about yourself, inclusive of a valid name, surname, address and email address, and update such information in the future to keep it complete and accurate. It is your responsibility to keep your contact details up to date on your account. Failure to do so may result in you failing to receive important account related notifications and information from us, including changes we make to these terms."
+        },
+        {
+          "id": 2,
+          "option": "We identify and communicate with our Customers via their Registered Email Addresses. It is the responsibility of the Customer to maintain an active and unique email account, to provide us with the correct email address, and to advise Bazigaar of any changes in their email address. Each Customer is wholly responsible for maintaining the security of his Registered Email Address to prevent the use of his Registered Email Address by any third party."
+        },
+        {
+          "id": 3,
+          "option": "Bazigaar shall not be responsible for any damages or losses deemed or alleged to have resulted from communications between Bazigaar and the Customer using the Registered Email Address. Any Customer not having an email address reachable by Bazigaar will have his Account suspended until such an address is provided to us. We will immediately suspend your Account upon written notice to you to this effect if you intentionally provide false or inaccurate personal information. "
+        },
+        {
+          "id": 4,
+          "option": "You are only allowed to register one Account with the service. Accounts are subject to immediate closure if it is found that you have multiple Accounts registered with us."
+        },
+        {
+          "id": 5,
+          "option": "You must keep your password for the service confidential. Provided that the Account information requested has been correctly supplied, we are entitled to assume that bets, deposits, and withdrawals have been made by you. We advise you to change your password on a regular basis and never disclose it to any third party. Passwords must contain at least one letter, one number, and one special character and must be at least eight characters long. It is your responsibility to protect your password and any failure to do so shall be at your sole risk and expense. You must log out of the Service at the end of each session. If you believe any of your Account information is being misused by a third party, your Account has been hacked into, or your password has been discovered by a third party, you must notify us immediately by email using your registered Email Address to support@bazigaar.com."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Restricted Use",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "If you are under the age of 18 years (or below the age of majority as stipulated in the laws of the jurisdiction applicable to you) or if you are not legally able to enter into a binding legal agreement with us; to collect e-mail addresses,nicknames and other information of other Customers by any means (for example, by sending spam, other types of unsolicited e-mails or the unauthorised framing of, or linking to, the Service); to disrupt or unduly affect or influence the activities of other Customers or the operation of the Service generally;. to promote unsolicited commercial advertisements, affiliate links, and other forms of solicitation which may be removed from the Service without notice;. in any way which, in our reasonable opinion, could be considered as an attempt to: (i) cheat the Service or another Customer using the Service; or (ii) collude with any other Customer using the Service in order to obtain a dishonest advantage; to scrape our odds or violate any of our Intellectual Property Rights; or. for any unlawful activity whatsoever."
+        },
+        {
+          "id": 2,
+          "option": "You cannot transfer, sell, or pledge Your Account to another person. This prohibition includes the transfer of any assets of the value of any kind, including but not limited to ownership of accounts, winnings, deposits, rights, and/or claims in connection with these assets, legal, commercial, or otherwise. The prohibition on said transfers also includes however is not limited to the encumbrance, pledging, assigning, usufruct, trading, brokering, hypothecation, and/or gifting in cooperation with a fiduciary or any other third party, company, natural or legal individual, foundation and/or association in any way shape or form."
+        },
+        {
+          "id": 3,
+          "option": "If you are a resident of one of the following countries, or accessing the Website from one of the following countries, you must use VPN to use our service."
+        },
+        {
+          "id": 4,
+          "option": "You may not, in any manner, transfer funds between user accounts."
+        },
+        {
+          "id": 5,
+          "option": "We may immediately terminate your Account upon written notice to you if you use the Service for unauthorised purposes. We may also take legal action against you for doing so in certain circumstances."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Privacy",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "Any information provided to us by you will be protected and processed in strict accordance with these Terms and our Privacy Policy."
+        },
+        {
+          "id": 2,
+          "option": "We will not reveal the identity of any person who places bets using the service unless the information is lawfully required by competent authorities such as Regulators, the Police (e.g. to investigate fraud, money laundering or sports integrity issues), or by Financial Entities such as banks or payment suppliers or as permitted from time to time pursuant to the Privacy Policy."
+        },
+        {
+          "id": 3,
+          "option": "Upon registration , your information will be stored in our database. This means that your personal information may be transferred outside the European Economic Area (EEA) to jurisdictions that may not provide the same level of protection and security as applied within the EU or EEA. By agreeing to these Terms you agree to the transfer of your personal information for the purpose of the provision of the Service object of this agreement and as further detailed in our Privacy Policy."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Your Account",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "Account balances and transactions appear in the currency selected when the account was originally opened."
+        },
+        {
+          "id": 2,
+          "option": "We do not give credit for the use of the service."
+        },
+        {
+          "id": 3,
+          "option": "We may close or suspend an Account and refund any monies held if you are not or we reasonably believe that you are not complying with these Terms, or to ensure the integrity or fairness of the Service or if we have other reasonable grounds to do so. We may not always be able to give you prior notice."
+        },
+        {
+          "id": 4,
+          "option": "We reserve the right to suspend an account without prior notice and return all funds. Contractual obligations already matured will however be honored."
+        },
+        {
+          "id": 5,
+          "option": "We reserve the right to refuse, restrict, cancel or limit any wager at any time for whatever reason, including any bet perceived to be placed in a fraudulent manner in order to circumvent our betting limits and/ or our system regulations."
+        },
+        {
+          "id": 6,
+          "option": "If we close or suspend your account due to you not complying with these terms, we may cancel and/or void any of your bets."
+        },
+        {
+          "id": 7,
+          "option": "If any amount is mistakenly credited to your account it remains our property and when we become aware of any such mistake, we shall notify you and the amount will be withdrawn from your Account."
+        },
+        {
+          "id": 8,
+          "option": "If, for any reason, your account goes overdrawn, you shall be in debt to us for the amount overdrawn."
+        },
+        {
+          "id": 9,
+          "option": "You must inform us as soon as you become aware of any errors with respect to your Account."
+        },
+        {
+          "id": 10,
+          "option": "Customers have the right to self-exclude themselves from Bazigaar. These requests have to be received from the Customer’s Registered Email Address and have to be sent to support@bazigaar.com."
+        },
+        {
+          "id": 11,
+          "option": "Customers may set limitations on the amount they may wager and lose. Such request has to be sent from the Customer’s Registered Email Address to support@bazigaar.com Implementation and increasing of limits shall be processed diligently, however, any request for removing or reducing limitations shall be done after a cooling-off period of seven days following your request."
+        }
+      ],
+      "description": "Should you wish to close your account with us, please send an email from your Registered Email Address to support@bazigaar.com."
+    },
+    {
+      "id": 7,
+      "title": "Deposit of Funds",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "All deposits should be made from an account or payment system or credit card that is registered in your own name, and any deposits made in any other currency will be converted using the daily exchange rate obtained from oanda.com, or at our own bank's or our payment processor’s prevailing rate of exchange following which your Account will be deposited accordingly. Note that some payment systems may apply additional currency exchange fees which will be deducted from the sum of your deposit."
+        },
+        {
+          "id": 2,
+          "option": "Fees and charges may apply to customer deposits and withdrawals, which can be found on the Website. In most cases, we absorb transaction fees for deposits to your < yourwebsite.com > Account. You are responsible for your own bank charges that you may incur due to depositing funds with us."
+        },
+        {
+          "id": 3,
+          "option": "Company is not a financial institution and uses third-party electronic payment processors to process credit and debit card deposits; they are not processed directly by us. If you deposit funds with either a credit card or a debit card, your Account will only be credited if we receive an approval and authorization code from the payment issuing institution. If your card issuer gives no such authorization, your Account will not be credited with those funds."
+        },
+        {
+          "id": 4,
+          "option": "You agree to fully pay any and all payments and charges due to us or to payment providers in connection with your use of the Service. You further agree not to make any charge-backs or renounce or cancel or otherwise reverse any of your deposits, and in any such event you will refund and compensate us for such unpaid deposits including any expenses incurred by us in the process of collecting your deposit, and you agree that any winnings from wagers utilizing those charged back funds will be forfeited. You acknowledge and agree that your player account is not a bank account and is therefore not guaranteed, insured, or otherwise protected by any deposit or banking insurance system or by any other similar insurance system of any other jurisdiction, including but not limited to your local jurisdiction. Furthermore, the player account does not bear interest on any of the funds held in it."
+        },
+        {
+          "id": 5,
+          "option": "If you decide to accept any of our promotional or bonus offers by entering a bonus code during deposit, you agree to the Terms of Bonuses and terms of each specific bonus."
+        },
+        {
+          "id": 6,
+          "option": "Funds originating from criminal and/or illegal and/or unauthorized activities must not be deposited with us."
+        },
+        {
+          "id": 7,
+          "option": "If you deposit using your credit card, it is recommended that you retain a copy of Transaction Records and a copy of these Terms."
+        },
+        {
+          "id": 8,
+          "option": "Internet Gambling may be illegal in the jurisdiction in which you are located; if so, you are not authorized to use your payment card to deposit on this site. It is your responsibility to know the laws concerning online gambling in your country of domicile."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Withdrawal of Funds",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "You may withdraw any or all of your account Balance within the transaction maximums as shown on the Bazigaar app. "
+        },
+        {
+          "id": 2,
+          "option": "All withdrawals must be made in the currency of your account, unless otherwise stipulated by us."
+        },
+        {
+          "id": 3,
+          "option": "We reserve the right to request documentation for the purpose of identity verification prior to granting any withdrawals from your Account. We also reserve our rights to request this documentation at any time during the lifetime of your relationship with us."
+        },
+        {
+          "id": 4,
+          "option": "All withdrawals must be made to the original debit, credit card, bank account, or method of payment used to make the payment to your Bazigaar Account. We may, and always at our own discretion, allow you to withdraw to a payment method from which your original deposit did not originate. This will always be subject to additional security checks."
+        },
+        {
+          "id": 5,
+          "option": "Should you wish to withdraw funds but your account is either inaccessible, dormant, locked or closed, please contact our Customer Service Department at support@bazigaar.com."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Selection of winners",
+      "description": "How we determine the winners is described below:",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "We create a list of all eligible participants who have entered the lottery."
+        },
+        {
+          "id": 2,
+          "option": "We use a computer program(Random number generator) to determine 1st,2nd and 3rd winners from the list of entries. We ensure that the selection process is truly random and unbiased."
+        },
+        {
+          "id": 3,
+          "option": "Document the selection process and keep a record of the winning entries and their corresponding prizes."
+        },
+        {
+          "id": 4,
+          "option": "Announce the winners and notify them of their prizes. We ensure that the selection process is transparent and that it can be verified by an independent party if necessary."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Prizes",
+      "description": "We have three types of prizes here: 1st prize: iPhone 14 pro max        2nd prize:       3rd prize:              The Authority may change the prizes from time to time.",
+      "listItems": []
+    },
+    {
+      "id": 11,
+      "title": "Claiming prizes",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "Notification: We will notify the winners via the notification panel of the user account. The notification should include information on how to claim the prize, the deadline for claiming the prize, and any other relevant details."
+        },
+        {
+          "id": 2,
+          "option": "Prize collection: The winners may be required to collect their prizes in their account’s balance or they can collect it from other product suppliers"
+        },
+        {
+          "id": 3,
+          "option": "Prize deadline: We will provide a deadline to claim their prize. If a winner fails to claim their prize within the given time frame, the prize may be forfeited."
+        },
+        {
+          "id": 4,
+          "option": "Taxes and fees: The winners may be responsible for paying any taxes or fees associated with the prize. The organizers should provide information on the tax implications of winning the prize."
+        },
+        {
+          "id": 5,
+          "option": "Disqualification: The winners may be disqualified if they fail to meet the eligibility criteria or if they violate any of the lottery rules."
+        },
+        {
+          "id": 6,
+          "option": "Appeals: Winners may appeal if a winner believes they were unfairly disqualified or if they encounter any other issues during the prize claiming process."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Liability and disclaimers",
+      "listItems": []
+    }
+  ],
+
+  "privacyPolicy": [
+    {
+      "id": 1,
+      "title": "Privacy Policy",
+      "description": "Bazigaar is committed to protecting your privacy. This Privacy Policy describes how we collect, use, and share your personal information when you use our mobile application.",
+      "listItems": []
+    },
+    {
+      "id": 2,
+      "title": "Information we collect",
+      "description": "We collect the information you provide to us directly, such as when you create an account, complete a form, or contact us for support. This may include your name, email address, phone number, and any other information you choose to provide. We may also collect information about your use of the app, including information about the device you use to access the app, your IP address, your browsing history within the app, and other useful information. We may also receive information about you from third-party sources, such as social media platforms or other users of the app.",
+      "listItems": []
+    },
+    {
+      "id": 3,
+      "title": "How we use your information",
+      "description": "We may use the information we collect for various purposes, including:",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "To provide and improve our services: We may use your information to operate and improve our mobile app, and to provide you with a better user experience."
+        },
+        {
+          "id": 2,
+          "option": "To personalize your experience: We may use your information to personalize your experience with the app, such as by showing you content that is tailored to your interests."
+        },
+        {
+          "id": 3,
+          "option": "To communicate with you: We may use your information to send you updates, notifications, and other communications related to the app."
+        },
+        {
+          "id": 4,
+          "option": "To comply with legal obligations: We may use your information to comply with applicable laws and regulations, such as responding to a legal process or government request."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "How we share your information",
+      "description": "We may share your information with third-party service providers who perform services on our behalf, such as hosting, data analysis, and customer service. We may also share your information with our affiliates, such as our parent company or subsidiaries. We may also share your information with other users of the app, such as when you choose to share content or interact with other users. We may disclose your information when we believe it is necessary to comply with applicable laws or regulations, to respond to a legal process or government request, or to protect our rights or the rights of others.",
+      "listItems": []
+    },
+    {
+      "id": 5,
+      "title": "Your rights",
+      "description": "You can instruct us to provide you with any data we hold about you at any time. We require these documents to protect the identities of our users and to ensure personal information is only disclosed to the person who has the right to receive it. Such requests will be fulfilled subject to the following conditions: ",
+      "listItems": [
+        {
+          "id": 1,
+          "option": "The payment of an administration fee"
+        },
+        {
+          "id": 2,
+          "option": "The supply of appropriate evidence of your identity. This includes a notarised copy of your passport and an original copy of a utility bill showing your name and address. We reserve the right to request additional proof of your identity if necessary"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Security of your information",
+      "description": "We take reasonable measures to protect your information from unauthorized access, use, and disclosure. Our methods of transmission over the internet or electronic storage is completely secure, and we guarantee the security of your information.",
+      "listItems": []
+    },
+    {
+      "id": 7,
+      "title": "Your choices",
+      "description": "You can always choose not to provide us with certain information, but this may limit your ability to use certain features of the app. You can also opt out of receiving promotional communications from us by following the instructions in the communication.",
+      "listItems": []
+    },
+    {
+      "id": 8,
+      "title": "Changes to this Privacy Policy",
+      "description": "This privacy policy may be updated without notice. New versions of the policy will be published on our website or within the app and we advise that you revisit this page to keep up with any changes. We may on occasion notify you of any changes to this privacy policy via email.",
+      "listItems": []
+    },
+    {
+      "id": 9,
+      "title": "Contact us",
+      "description": "If you have any questions or concerns about this Privacy Policy or our privacy practices, please contact us at support@bazigaar.com.",
+      "listItems": []
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+export const API_PRIMARY_BASE_URL="https://silicornya.com:8080/api"

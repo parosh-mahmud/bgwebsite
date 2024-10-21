@@ -90,9 +90,10 @@ const MainSlider: FC<MainSliderProps> = ({ sliderData, bodyStyle }) => {
     <div className="bg-black">
       <div className="container mx-auto h-full">
         <Slider {...settings}>
-          {sliderData.map((data) => (
-            <React.Fragment key={data.id}>
-              <div className={bodyStyle}>
+          {/* Wrap the entire result of map inside a single parent div */}
+          <div>
+            {sliderData.map((data) => (
+              <div key={data.id} className={bodyStyle}>
                 <p className={data.tagClass} style={{ backgroundColor: data.bg }}>
                   {data.tag}
                 </p>
@@ -101,8 +102,8 @@ const MainSlider: FC<MainSliderProps> = ({ sliderData, bodyStyle }) => {
                 </p>
                 <p className="text-white text-lg font-semiBold">{data.offer}</p>
               </div>
-            </React.Fragment>
-          ))}
+            ))}
+          </div>
         </Slider>
       </div>
     </div>

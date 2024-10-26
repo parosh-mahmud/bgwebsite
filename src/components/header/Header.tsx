@@ -119,7 +119,7 @@ const Header: FC<types> = ({ navfix }) => {
             ))}
             <li>
               <Link
-                href="/"
+                href="/lottery"
                 style={{
       background: 'linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)', // Apply your gradient
     }}

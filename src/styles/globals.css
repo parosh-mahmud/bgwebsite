@@ -8,10 +8,17 @@ html,
 body {
   padding: 0;
   margin: 0;
-  background-color: #111111;
+  background-color: white;
   scroll-behavior: smooth;
 }
-
+/* styles.css or a global CSS file */
+.carousel-container {
+  width: 100%;
+  height: 500px;
+  /* Adjust the height as needed */
+  position: relative;
+  overflow: hidden;
+}
 /* root styles */
 :root {
   /* scrollbar - color */

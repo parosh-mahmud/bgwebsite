@@ -39,11 +39,12 @@ const games2 = [
 const Home = () => {
   const [numCounter, setNumCounter] = useState(0);
 
-  const counter = (minimum, maximum) => {
-    for (let numCounter = minimum; numCounter <= maximum; numCounter++) {
-      setTimeout(() => setNumCounter(numCounter), 50);
-    }
-  };
+const counter = (minimum: number, maximum: number) => {
+  for (let numCounter = minimum; numCounter <= maximum; numCounter++) {
+    setTimeout(() => setNumCounter(numCounter), 50);
+  }
+};
+
   
   useEffect(() => {
     counter(50000, 98396);

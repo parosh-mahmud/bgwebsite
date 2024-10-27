@@ -121,11 +121,12 @@ const LotteryPage: React.FC = () => {
               </div>
             </div>
             <div className="mt-6 text-right">
-              <Link href={`/lottery/${lottery.LotteryId}`} passHref>
-                <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-2 px-6 rounded-lg">
-                  Select Ticket
-                </button>
-              </Link>
+             <Link href={`/ticket-details/${lottery.LotteryId}`} passHref>
+  <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-2 px-6 rounded-lg">
+    Select Ticket
+  </button>
+</Link>
+
             </div>
           </div>
         ))}

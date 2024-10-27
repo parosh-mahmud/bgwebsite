@@ -7,6 +7,9 @@ import Link from "next/link";
 import HeaderLogo from "../../assets/LandingPage/SVG/BazigaarLogo.svg";
 import Image from "next/image";
 import { TicketIcon } from "../../assets/Icons";
+import LoginModal from "../modal/loginModal";
+import SignUpModal from "../modal/signupModal";
+
 
 interface types {
   navfix: boolean;
@@ -15,7 +18,19 @@ interface types {
 const Header: FC<types> = ({ navfix }) => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setdropdownOpen] = useState(false);
+  const [isLoginOpen, setLoginOpen] = useState(false);
+  const [isSignUpOpen, setSignUpOpen] = useState(false);
+  // Function to toggle from LoginModal to SignUpModal
+  const toggleToSignUp = () => {
+    setLoginOpen(false); // Close the LoginModal
+    setSignUpOpen(true); // Open the SignUpModal
+  };
 
+  // Function to toggle from SignUpModal to LoginModal
+  const toggleToLogin = () => {
+    setSignUpOpen(false); // Close the SignUpModal
+    setLoginOpen(true); // Open the LoginModal
+  };
   const Links = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
@@ -86,7 +101,7 @@ const Header: FC<types> = ({ navfix }) => {
   //   }, [userProfile]);
   return (
     <Fragment>
-      <nav className="w-full " style={{ background: 'rgba(26, 26, 64, 0.4)'}}>
+         <nav className="w-full" style={{ background: 'rgba(26, 26, 64, 0.4)'}}>
         <div className="container lg:flex items-center justify-between py-5">
           <Link href="/">
             <Image src={HeaderLogo} alt="Header Logo" />
@@ -103,7 +118,7 @@ const Header: FC<types> = ({ navfix }) => {
           </div>
 
           <ul
-            className={` mt-4 lg:mt-0 lg:flex lg:items-center lg:bg-inherit absolute lg:static text-white lg:z-auto z-[1] right-0 w-full h-screen lg:h-full lg:w-auto lg:pl-0 px-5 transition-all duration-500 ease-in-out gap-5 lg:gap-8 bg-black  ${
+            className={`mt-4 lg:mt-0 lg:flex lg:items-center lg:bg-inherit absolute lg:static text-white lg:z-auto z-[1] right-0 w-full h-screen lg:h-full lg:w-auto lg:pl-0 px-5 transition-all duration-500 ease-in-out gap-5 lg:gap-8 bg-black ${
               open ? "right-19" : "hidden"
             }`}>
             {Links.map((link, i) => (
@@ -112,24 +127,55 @@ const Header: FC<types> = ({ navfix }) => {
                 className="shadow-md lg:shadow-none py-3 px-6 lg:px-0 mb-2 lg:mb-0 rounded-lg lg:rounded-none">
                 <Link
                   href={link.link}
-                  className="text-white text-xl font-semiBold  hover:text-primary duration-500 active:text-primary focus:text-primaryt">
+                  className="text-white text-xl font-semiBold hover:text-primary duration-500 active:text-primary focus:text-primary">
                   {link.name}
                 </Link>
               </li>
             ))}
+
+            <li className="flex items-center">
+  <button
+    onClick={() => setSignUpOpen(true)}
+    style={{
+      background: 'linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)',
+      borderTopLeftRadius: '9999px', // Left corners rounded
+      borderBottomLeftRadius: '9999px',
+    }}
+    className="text-white font-bold py-2 px-6"
+  >
+    Sign Up
+  </button>
+  <button
+    onClick={() => setLoginOpen(true)}
+    style={{
+      backgroundColor: '#DFF4E4',
+      marginLeft: '-10px', // Overlap with the Sign Up button
+    }}
+    className="text-black font-bold py-2 px-6 rounded-r-full"
+  >
+    Log In
+  </button>
+</li>
+
             <li>
               <Link
                 href="/lottery"
                 style={{
-      background: 'linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)', // Apply your gradient
-    }}
+                  background: 'linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)',
+                }}
                 className="shadow-btn py-2 px-6 rounded-lg text-white text-xl font-semiBold hover:text-primary duration-500 active:text-primary focus:text-primary bg-secondary flex items-center gap-2">
                 <TicketIcon /> Buy Ticket
               </Link>
             </li>
+           
           </ul>
         </div>
       </nav>
+
+        {/* Modals */}
+      {/* Modals */}
+      <SignUpModal isOpen={isSignUpOpen} onClose={() => setSignUpOpen(false)} onLoginClick={toggleToLogin} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onSignUpClick={toggleToSignUp} />
       <Toaster
         position="top-right"
         toastOptions={{

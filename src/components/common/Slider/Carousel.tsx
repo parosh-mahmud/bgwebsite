@@ -12,7 +12,7 @@ interface CarouselProps {
 
 const Carousel: React.FC<CarouselProps> = ({ images }) => {
   return (
-    <div className="carousel-container">
+    <div className="carousel-container w-full h-[400px] md:h-[500px] lg:h-[600px] relative">
       <Swiper
   className="carousel-container"
   modules={[Navigation, Pagination, Autoplay]}

@@ -1,13 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSignUpClick: () => void;
+  onLoginSuccess: (userDetails: any) => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick, onLoginSuccess }) => {
   if (!isOpen) return null;
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('https://api.bazigaar.com/lottery/user-login/', {
+        email,
+        password,
+      });
+
+      const { id, token } = response.data;
+
+      // Fetch full user details
+      const userDetailsResponse = await axios.get(`https://api.bazigaar.com/user/user_details/${id}`, {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+
+      onLoginSuccess(userDetailsResponse.data); // Pass the entire user details object
+      setError(null);
+      onClose();
+    } catch (err) {
+      setError('Login failed. Please check your credentials and try again.');
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -19,20 +50,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick 
           <button onClick={onSignUpClick} className="text-green-600 ml-1">Sign up</button>
         </p>
 
-        <div className="flex gap-4 mb-4">
-          <button className="flex-1 py-2 border rounded-lg flex items-center justify-center gap-2">
-            Google <span>🌐</span>
-          </button>
-          <button className="flex-1 py-2 border rounded-lg flex items-center justify-center gap-2">
-            Facebook <span>📘</span>
-          </button>
-        </div>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-        <div className="text-center my-4 text-gray-900">OR</div>
-
-        <form className="flex flex-col gap-3">
-          <input type="email" placeholder="Email" className="border p-2 rounded-lg" />
-          <input type="password" placeholder="Password" className="border p-2 rounded-lg" />
+        <form onSubmit={handleLogin} className="flex flex-col gap-3">
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            className="border p-2 rounded-lg" 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            className="border p-2 rounded-lg" 
+          />
           <div className="flex justify-between mt-4">
             <button type="button" className="text-black border border-gray-300 py-2 px-4 rounded-lg">
               Forgot Password?

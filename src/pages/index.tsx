@@ -38,36 +38,52 @@ const games2 = [
 
 const Home = () => {
   const [numCounter, setNumCounter] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-const counter = (minimum: number, maximum: number) => {
-  for (let numCounter = minimum; numCounter <= maximum; numCounter++) {
-    setTimeout(() => setNumCounter(numCounter), 50);
-  }
-};
+  const counter = (minimum: number, maximum: number) => {
+    for (let numCounter = minimum; numCounter <= maximum; numCounter++) {
+      setTimeout(() => setNumCounter(numCounter), 50);
+    }
+  };
 
-  
   useEffect(() => {
     counter(50000, 98396);
+    // Simulate loading time (e.g., for data or assets)
+    setTimeout(() => setLoading(false), 2000); // Adjust time as needed
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black text-white">
+        <p className="text-2xl font-bold">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <HomeLayout>
-      <main className="bg-white">
+        {/* Loading Spinner Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="loader"></div>
+        </div>
+      )}
+       {!loading && (
+      <main className="">
         {/* Full-width Carousel Section */}
-     <div className={`w-full ${styles.heroBanner}`} style={{ marginTop: "85px" }}>
-  <Carousel images={images} />
-</div>
-
+        <div className={`w-full ${styles.heroBanner}`} style={{ marginTop: "85px" }}>
+          <Carousel images={images} />
+        </div>
 
         {/* Centered Text Content Section */}
         <div className="container mx-auto text-center mt-8 md:mt-12 lg:mt-16 px-4">
-          <p className="uppercase font-semiBold text-xl lg:text-2xl text-primary">
+          <p className="uppercase font-semiBold text-xl lg:text-2xl text-teal-200">
             Play Anytime & Anywhere
           </p>
-          <h1 className="font-semiBold text-2xl lg:text-3xl xl:text-6xl text-black py-4">
-            Win the Latest iPhone!
+          <h1 className="font-semiBold text-2xl lg:text-3xl xl:text-6xl text-yellow-100 py-4">
+            Win Latest iPhone!
           </h1>
-          <h3 className="font-semiBold text-2xl lg:text-3xl xl:text-3xl text-black pb-8">
+          <h3 className="font-semiBold text-2xl lg:text-3xl xl:text-3xl text-yellow-100 pb-8">
             Check Out Our Exciting Lottery Packages and Get Your Chance to Win!
           </h3>
           <button
@@ -176,6 +192,7 @@ const counter = (minimum: number, maximum: number) => {
           </div>
         </div>
       </main>
+      )}
     </HomeLayout>
   );
 };

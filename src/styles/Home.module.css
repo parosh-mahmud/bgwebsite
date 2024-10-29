@@ -54,6 +54,25 @@
   color: white;
   /* Ensure text color is visible over the background */
 }
+/* Spinner CSS */
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 /* For extremely small screen devices (595px and below) */
 @media only screen and (max-width: 595px) {
 }

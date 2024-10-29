@@ -1,7 +1,8 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import RefreshIcon from "@mui/icons-material/Refresh"; // Add this import at the top
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HistoryIcon from "@mui/icons-material/History";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
@@ -21,15 +22,34 @@ interface types {
 }
 
 const Header: FC<types> = ({ navfix }) => {
-  const [open, setOpen] = useState(false);
+ const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isSignUpOpen, setSignUpOpen] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
 
-  const handleLoginSuccess = (details: any) => {
+  useEffect(() => {
+    // Load from localStorage on initial render
+    const savedToken = localStorage.getItem("authToken");
+    const savedUserDetails = localStorage.getItem("userDetails");
+
+    if (savedToken && savedUserDetails) {
+      setUserDetails(JSON.parse(savedUserDetails));
+    }
+  }, []);
+
+const handleLoginSuccess = (details: any) => {
+  const token = details.token;
+  if (token) {
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("userDetails", JSON.stringify(details));
     setUserDetails(details);
-  };
+    console.log("Login successful, token saved.");
+  } else {
+    console.error("No token received during login.");
+  }
+};
+
 
   const toggleToSignUp = () => {
     setLoginOpen(false);
@@ -46,6 +66,8 @@ const Header: FC<types> = ({ navfix }) => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userDetails");
     setUserDetails(null);
     setDropdownOpen(false);
     toast.success("Logout Successful");
@@ -56,7 +78,6 @@ const Header: FC<types> = ({ navfix }) => {
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
   ];
-
   return (
     <Fragment>
       <nav className="w-full" style={{ background: "rgba(26, 26, 64, 0.4)" }}>
@@ -101,7 +122,7 @@ const Header: FC<types> = ({ navfix }) => {
                   href={link.link}
                   className="text-white text-xl font-semiBold hover:text-primary duration-500 active:text-primary focus:text-primary"
                 >
-                  {link.name}
+                  {/* {link.name} */}
                 </Link>
               </li>
             ))}
@@ -109,6 +130,12 @@ const Header: FC<types> = ({ navfix }) => {
             {userDetails ? (
               // Display user details after login
               <div className="flex items-center gap-4 relative">
+                <button
+    onClick={() => window.location.reload()}
+    className="  flex items-center justify-center"
+  >
+    <RefreshIcon className="w-5 h-5   rounded-full" />
+  </button>
                <div className="flex items-center gap-2 bg-yellow-500 text-black px-3 py-1 rounded-full">
   <MonetizationOnIcon className="w-6 h-6 text-yellow-800" />
   <span className="font-bold text-lg">{userDetails.user.bgcoin}</span>
@@ -188,10 +215,10 @@ const Header: FC<types> = ({ navfix }) => {
 
       {/* Modals */}
       <SignUpModal isOpen={isSignUpOpen} onClose={() => setSignUpOpen(false)} onLoginClick={toggleToLogin} />
-      <LoginModal
+     <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setLoginOpen(false)}
-        onSignUpClick={() => setSignUpOpen(true)}
+        onSignUpClick={toggleToSignUp}  // Triggered when "Sign up" is clicked in LoginModal
         onLoginSuccess={handleLoginSuccess}
       />
       <Toaster

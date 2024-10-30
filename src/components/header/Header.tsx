@@ -16,6 +16,7 @@ import Image from "next/image";
 import { TicketIcon } from "../../assets/Icons";
 import LoginModal from "../modal/loginModal";
 import SignUpModal from "../modal/signupModal";
+import axios from "axios";
 
 interface types {
   navfix: boolean;
@@ -28,7 +29,26 @@ const Header: FC<types> = ({ navfix }) => {
   const [isSignUpOpen, setSignUpOpen] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
 
-  useEffect(() => {
+   // Fetch latest user details to update balance
+ const fetchUserDetails = async (userId: string | number) => {
+  const token = localStorage.getItem("authToken");
+  if (token && userId) {
+    try {
+      const response = await axios.get(`https://api.bazigaar.com/user/user_details/${userId}`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const updatedUserDetails = response.data;
+      setUserDetails(updatedUserDetails);
+      localStorage.setItem("userDetails", JSON.stringify(updatedUserDetails)); // Update localStorage
+    } catch (error) {
+      console.error("Failed to fetch user details:", error);
+    }
+  }
+};
+
+
+
+useEffect(() => {
     // Load from localStorage on initial render
     const savedToken = localStorage.getItem("authToken");
     const savedUserDetails = localStorage.getItem("userDetails");
@@ -39,17 +59,25 @@ const Header: FC<types> = ({ navfix }) => {
   }, []);
 
 const handleLoginSuccess = (details: any) => {
-  const token = details.token;
-  if (token) {
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("userDetails", JSON.stringify(details));
-    setUserDetails(details);
-    console.log("Login successful, token saved.");
-  } else {
-    console.error("No token received during login.");
-  }
-};
+    const token = details.token;
+    if (token) {
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userDetails", JSON.stringify(details));
+      setUserDetails(details);
+      toast.success("Login Successful");
+      console.log("Login successful, token saved.");
+    } else {
+      console.error("No token received during login.");
+    }
+  };
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userDetails");
+    setUserDetails(null);
+    setDropdownOpen(false);
+    toast.success("Logout Successful");
+  };
 
   const toggleToSignUp = () => {
     setLoginOpen(false);
@@ -65,13 +93,11 @@ const handleLoginSuccess = (details: any) => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userDetails");
-    setUserDetails(null);
-    setDropdownOpen(false);
-    toast.success("Logout Successful");
-  };
+ // Call fetchUserDetails whenever there's an update to bgcoin
+  // useEffect(() => {
+  //   if (userDetails) fetchUserDetails();
+  // }, [userDetails?.bgcoin]);
+
 
   const Links = [
     { name: "Home", link: "/" },
@@ -131,10 +157,10 @@ const handleLoginSuccess = (details: any) => {
               // Display user details after login
               <div className="flex items-center gap-4 relative">
                 <button
-    onClick={() => window.location.reload()}
-    className="  flex items-center justify-center"
+    onClick={() => fetchUserDetails(userDetails?.user?.id)}  // Pass userId dynamically
+    className="flex items-center justify-center"
   >
-    <RefreshIcon className="w-5 h-5   rounded-full" />
+    <RefreshIcon className="w-5 h-5 rounded-full" />
   </button>
                <div className="flex items-center gap-2 bg-yellow-500 text-black px-3 py-1 rounded-full">
   <MonetizationOnIcon className="w-6 h-6 text-yellow-800" />

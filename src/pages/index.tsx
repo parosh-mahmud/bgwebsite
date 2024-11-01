@@ -17,6 +17,7 @@ import qr from "../assets/LandingPage/Image/QRCode.png";
 import apple from "../assets/LandingPage/SVG/AppleStoreSilver.svg";
 import android from "../assets/LandingPage/SVG/GooglePlaySilver.svg";
 import Carousel from "../components/common/Slider/Carousel";
+import LoadingSpinner from "../components/common/loadingSpinner/LoadingSpinner";
 
 const images = [
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943693/Buylottery_vn0b0p.jpg",
@@ -53,20 +54,17 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-black text-white">
-        <p className="text-2xl font-bold">Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
     <HomeLayout>
         {/* Loading Spinner Overlay */}
       {loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="loader"></div>
-        </div>
+        <div className="spinner">
+  <span className="spinner-text">BG</span>
+</div>
+
       )}
        {!loading && (
       <main className="">

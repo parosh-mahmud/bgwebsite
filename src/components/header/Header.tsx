@@ -7,6 +7,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HistoryIcon from "@mui/icons-material/History";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import StarIcon from "@mui/icons-material/Star";
+import ChatIcon from "@mui/icons-material/Chat";
+
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import toast, { Toaster } from "react-hot-toast";
@@ -187,6 +189,11 @@ const handleLoginSuccess = (details: any) => {
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
                         <HistoryIcon className="w-5 h-5" /> Lottery History
                       </button>
+                      <Link href="/chat" passHref>
+  <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
+    <ChatIcon className="w-5 h-5" /> Chat
+  </button>
+</Link>
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
                         <SportsEsportsIcon className="w-5 h-5" /> Games
                       </button>

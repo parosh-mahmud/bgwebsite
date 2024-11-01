@@ -18,7 +18,6 @@ import apple from "../assets/LandingPage/SVG/AppleStoreSilver.svg";
 import android from "../assets/LandingPage/SVG/GooglePlaySilver.svg";
 import Carousel from "../components/common/Slider/Carousel";
 import LoadingSpinner from "../components/common/loadingSpinner/LoadingSpinner";
-
 const images = [
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943693/Buylottery_vn0b0p.jpg",
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943692/1stdepositebonus_jykk47.jpg",
@@ -94,7 +93,7 @@ const Home = () => {
             Participate Now
           </button>
         </div>
-
+          
         {/* Top Slider */}
         <MainSlider sliderData={announcement} bodyStyle="!flex items-center py-2 lg:py-3 gap-3" />
 

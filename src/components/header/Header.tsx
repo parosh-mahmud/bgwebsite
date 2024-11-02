@@ -139,7 +139,10 @@ const Header: FC<types> = ({ navfix }) => {
     }}
     className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm flex items-center rounded-full"
   >
-    <TicketIcon className="w-4 h-4 md:w-5 md:h-5 mr-1" /> Buy Ticket
+    <span className="w-4 h-4 md:w-5 md:h-5 mr-1">
+  <TicketIcon />
+</span> 
+ Buy Ticket
   </Link>
 
             {userDetails ? (

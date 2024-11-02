@@ -2,13 +2,13 @@ import React, { FC, Fragment, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import RefreshIcon from "@mui/icons-material/Refresh"; // Add this import at the top
+import RefreshIcon from "@mui/icons-material/Refresh";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; 
 import HistoryIcon from "@mui/icons-material/History";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import StarIcon from "@mui/icons-material/Star";
 import ChatIcon from "@mui/icons-material/Chat";
-
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import toast, { Toaster } from "react-hot-toast";
@@ -25,32 +25,33 @@ interface types {
 }
 
 const Header: FC<types> = ({ navfix }) => {
- const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isSignUpOpen, setSignUpOpen] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
 
-   // Fetch latest user details to update balance
- const fetchUserDetails = async (userId: string | number) => {
-  const token = localStorage.getItem("authToken");
-  if (token && userId) {
-    try {
-      const response = await axios.get(`https://api.bazigaar.com/user/user_details/${userId}`, {
-        headers: { Authorization: `Token ${token}` },
-      });
-      const updatedUserDetails = response.data;
-      setUserDetails(updatedUserDetails);
-      localStorage.setItem("userDetails", JSON.stringify(updatedUserDetails)); // Update localStorage
-    } catch (error) {
-      console.error("Failed to fetch user details:", error);
+  // Fetch latest user details to update balance
+  const fetchUserDetails = async (userId: string | number) => {
+    const token = localStorage.getItem("authToken");
+    if (token && userId) {
+      try {
+        const response = await axios.get(
+          `https://api.bazigaar.com/user/user_details/${userId}`,
+          {
+            headers: { Authorization: `Token ${token}` },
+          }
+        );
+        const updatedUserDetails = response.data;
+        setUserDetails(updatedUserDetails);
+        localStorage.setItem("userDetails", JSON.stringify(updatedUserDetails)); // Update localStorage
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
     }
-  }
-};
+  };
 
-
-
-useEffect(() => {
+  useEffect(() => {
     // Load from localStorage on initial render
     const savedToken = localStorage.getItem("authToken");
     const savedUserDetails = localStorage.getItem("userDetails");
@@ -60,7 +61,7 @@ useEffect(() => {
     }
   }, []);
 
-const handleLoginSuccess = (details: any) => {
+  const handleLoginSuccess = (details: any) => {
     const token = details.token;
     if (token) {
       localStorage.setItem("authToken", token);
@@ -95,94 +96,92 @@ const handleLoginSuccess = (details: any) => {
     setDropdownOpen(!dropdownOpen);
   };
 
- // Call fetchUserDetails whenever there's an update to bgcoin
-  // useEffect(() => {
-  //   if (userDetails) fetchUserDetails();
-  // }, [userDetails?.bgcoin]);
-
-
   const Links = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
   ];
+
   return (
     <Fragment>
-      <nav className="w-full" style={{ background: "rgba(26, 26, 64, 0.4)" }}>
-        <div className="container lg:flex items-center justify-between py-5">
-          <Link href="/">
-            <Image src={HeaderLogo} alt="Header Logo" />
-          </Link>
+      <nav
+        className="w-full"
+        style={{ background: "rgba(26, 26, 64, 0.4)" }}
+      >
+        <div className="container flex items-center justify-between py-5">
+          {/* Left Side: Logo and Mobile Menu Icon */}
+          <div className="flex items-center">
+            {/* Mobile Menu Icon */}
+            {/* <div className="block lg:hidden mr-4">
+              <button onClick={() => setOpen(!open)}>
+                {open ? (
+                  <CloseIcon className="text-white" />
+                ) : (
+                  <MenuIcon className="text-white" />
+                )}
+              </button>
+            </div> */}
 
-          <div
-            onClick={() => setOpen(!open)}
-            className="text-3xl absolute right-4 top-[22%] cursor-pointer lg:hidden"
-          >
-            {open ? (
-              <CloseIcon className={`${navfix && "text-primaryText"}`} />
-            ) : (
-              <MenuIcon className={`${navfix && "text-primaryText"}`} />
-            )}
+            {/* Logo */}
+            <Link href="/">
+              <Image src={HeaderLogo} alt="Header Logo" />
+            </Link>
           </div>
 
-          <ul
-            className={`mt-4 lg:mt-0 lg:flex lg:items-center lg:bg-inherit absolute lg:static text-white lg:z-auto z-[1] right-0 w-full h-screen lg:h-full lg:w-auto lg:pl-0 px-5 transition-all duration-500 ease-in-out gap-5 lg:gap-8 bg-black ${
-              open ? "right-19" : "hidden"
-            }`}
-          >
-            <li>
-              <Link
-                href="/lottery"
-                style={{
-                  background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-                }}
-                className="shadow-btn py-2 px-6 rounded-lg text-white text-xl font-semiBold hover:text-primary duration-500 active:text-primary focus:text-primary bg-secondary flex items-center gap-2"
-              >
-                <TicketIcon /> Buy Ticket
-              </Link>
-            </li>
-            {Links.map((link, i) => (
-              <li
-                key={i}
-                className="shadow-md lg:shadow-none py-3 px-6 lg:px-0 mb-2 lg:mb-0 rounded-lg lg:rounded-none"
-              >
-                <Link
-                  href={link.link}
-                  className="text-white text-xl font-semiBold hover:text-primary duration-500 active:text-primary focus:text-primary"
-                >
-                  {/* {link.name} */}
-                </Link>
-              </li>
-            ))}
+          {/* Right Side: Buttons */}
+          <div className="flex items-center gap-4">
+            {/* Buy Ticket Button */}
+          <Link
+    href="/lottery"
+    style={{
+      background:
+        "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
+    }}
+    className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm flex items-center rounded-full"
+  >
+    <TicketIcon className="w-4 h-4 md:w-5 md:h-5 mr-1" /> Buy Ticket
+  </Link>
 
             {userDetails ? (
               // Display user details after login
-              <div className="flex items-center gap-4 relative">
+              <div className="flex items-center gap-2 relative">
                 <button
-    onClick={() => fetchUserDetails(userDetails?.user?.id)}  // Pass userId dynamically
-    className="flex items-center justify-center"
-  >
-    <RefreshIcon className="w-5 h-5 rounded-full" />
-  </button>
-               <div className="flex items-center gap-2 bg-yellow-500 text-black px-3 py-1 rounded-full">
-  <MonetizationOnIcon className="w-6 h-6 text-yellow-800" />
-  <span className="font-bold text-lg">{userDetails.user.bgcoin}</span>
+                  onClick={() => fetchUserDetails(userDetails?.user?.id)} // Pass userId dynamically
+                  className="flex items-center justify-center"
+                >
+                  <RefreshIcon className="w-5 h-5 rounded-full text-white" />
+                </button>
+              <div className="flex items-center gap-1 md:gap-2 bg-yellow-500 text-black px-2 py-1 md:px-3 md:py-1 rounded-full">
+  <MonetizationOnIcon className="w-4 h-4 md:w-6 md:h-6 text-yellow-800" />
+  <span className="font-bold text-xs md:text-lg">
+    {userDetails.user.bgcoin}
+  </span>
 </div>
+
 
                 <div className="flex items-center gap-2 relative">
-                 <div className="flex items-center gap-3 bg-gray-800 text-white px-4 py-2 rounded-full cursor-pointer" onClick={toggleDropdown}>
-  <span className="font-semibold text-md">{userDetails.user.username}</span>
-  <img
-    src={userDetails.user.profile_picture || "/default-profile.png"}
-    alt="Profile"
-    className="w-8 h-8 rounded-full border-2 border-white"
-  />
-</div>
-
+                 <div
+                  className="flex items-center gap-1 md:gap-2 relative cursor-pointer"
+                  onClick={toggleDropdown}
+                >
+                  <div className="relative">
+                    <img
+                      src={
+                        userDetails.user.profile_picture ||
+                        "/default-profile.png"
+                      }
+                      alt="Profile"
+                      className="w-8 h-8 md:w-8 md:h-8 rounded-full border-2 border-white"
+                    />
+                    <ArrowDropDownIcon
+                      className="absolute bottom-0 right-0 w-3 h-3 md:w-4 md:h-4 text-white"
+                    />
+                  </div>
+                </div>
 
                   {/* Dropdown menu */}
                   {dropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-50"> {/* Updated position */}
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-50">
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
                         <AccountCircleIcon className="w-5 h-5" /> Profile
                       </button>
@@ -190,10 +189,10 @@ const handleLoginSuccess = (details: any) => {
                         <HistoryIcon className="w-5 h-5" /> Lottery History
                       </button>
                       <Link href="/chat" passHref>
-  <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-    <ChatIcon className="w-5 h-5" /> Chat
-  </button>
-</Link>
+                        <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
+                          <ChatIcon className="w-5 h-5" /> Chat
+                        </button>
+                      </Link>
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
                         <SportsEsportsIcon className="w-5 h-5" /> Games
                       </button>
@@ -215,43 +214,67 @@ const handleLoginSuccess = (details: any) => {
                 </div>
               </div>
             ) : (
-              // Show Sign Up and Log In buttons if not logged in
-              <div className="flex gap-4">
-                <li className="flex items-center">
-                  <button
-                    onClick={() => setSignUpOpen(true)}
-                    style={{
-                      background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-                      borderTopLeftRadius: "9999px",
-                      borderBottomLeftRadius: "9999px",
-                    }}
-                    className="text-white font-bold py-2 px-6"
-                  >
-                    Sign Up
-                  </button>
-                  <button
-                    onClick={() => setLoginOpen(true)}
-                    style={{
-                      backgroundColor: "#DFF4E4",
-                      marginLeft: "-10px",
-                    }}
-                    className="text-black font-bold py-2 px-6 rounded-r-full"
-                  >
-                    Log In
-                  </button>
-                </li>
+             // Show Sign Up and Log In buttons if not logged in
+              <div className="flex gap-0">
+                <button
+                  onClick={() => setSignUpOpen(true)}
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
+                    borderTopLeftRadius: "9999px",
+                    borderBottomLeftRadius: "9999px",
+                  }}
+                  className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm"
+                >
+                  Sign Up
+                </button>
+                <button
+                  onClick={() => setLoginOpen(true)}
+                  style={{
+                    backgroundColor: "#DFF4E4",
+                    marginLeft: "-1px",
+                  }}
+                  className="text-black font-bold py-1 px-2 md:py-2 md:px-4 rounded-r-full text-xs md:text-sm"
+                >
+                  Log In
+                </button>
               </div>
             )}
-          </ul>
+          </div>
         </div>
+
+        {/* Mobile Menu
+        {open && (
+          <ul className="lg:hidden absolute top-full left-0 w-full bg-black text-white flex flex-col items-center">
+            <li className="py-2">
+              <Link href="/" className="hover:text-primary">
+                Home
+              </Link>
+            </li>
+            <li className="py-2">
+              <Link href="/about" className="hover:text-primary">
+                About
+              </Link>
+            </li>
+            <li className="py-2">
+              <Link href="/contact" className="hover:text-primary">
+                Contact
+              </Link>
+            </li>
+          </ul>
+        )} */}
       </nav>
 
       {/* Modals */}
-      <SignUpModal isOpen={isSignUpOpen} onClose={() => setSignUpOpen(false)} onLoginClick={toggleToLogin} />
-     <LoginModal
+      <SignUpModal
+        isOpen={isSignUpOpen}
+        onClose={() => setSignUpOpen(false)}
+        onLoginClick={toggleToLogin}
+      />
+      <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setLoginOpen(false)}
-        onSignUpClick={toggleToSignUp}  // Triggered when "Sign up" is clicked in LoginModal
+        onSignUpClick={toggleToSignUp} // Triggered when "Sign up" is clicked in LoginModal
         onLoginSuccess={handleLoginSuccess}
       />
       <Toaster

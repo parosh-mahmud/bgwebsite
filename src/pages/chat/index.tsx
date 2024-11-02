@@ -1,16 +1,16 @@
-'use client'
-
-import { useState } from 'react'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import IconButton from '@mui/material/IconButton'
-import CallIcon from '@mui/icons-material/Call'
-import VideocamIcon from '@mui/icons-material/Videocam'
-import SendIcon from '@mui/icons-material/Send'
-import MicIcon from '@mui/icons-material/Mic'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import IconButton from '@mui/material/IconButton';
+import CallIcon from '@mui/icons-material/Call';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import SendIcon from '@mui/icons-material/Send';
+import MicIcon from '@mui/icons-material/Mic';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 interface Message {
   id: number;
@@ -28,7 +28,7 @@ interface Contact {
 }
 
 function CustomAvatar({ src, name }: { src: string, name: string }) {
-  const [imageLoaded, setImageLoaded] = useState(true)
+  const [imageLoaded, setImageLoaded] = useState(true);
 
   return (
     <Avatar
@@ -39,42 +39,150 @@ function CustomAvatar({ src, name }: { src: string, name: string }) {
     >
       {!imageLoaded && name.charAt(0)}
     </Avatar>
-  )
+  );
 }
 
 export default function ChatInterface() {
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [inputMessage, setInputMessage] = useState('')
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [showChat, setShowChat] = useState(false);
 
-  const contacts: Contact[] = [
-    { id: 1, name: 'John Doe', avatar: '/placeholder.svg?height=40&width=40', lastMessage: 'Hey, how are you?', lastMessageTime: '2:30 PM' },
-    { id: 2, name: 'Jane Smith', avatar: '/placeholder.svg?height=40&width=40', lastMessage: 'See you tomorrow!', lastMessageTime: '1:45 PM' },
-    { id: 3, name: 'Mike Johnson', avatar: '/placeholder.svg?height=40&width=40', lastMessage: 'Thanks for your help!', lastMessageTime: 'Yesterday' },
-  ]
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim() !== '') {
-      const newMessage: Message = {
-        id: messages.length + 1,
-        content: inputMessage,
-        sender: 'user',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  // Fetch contacts from API
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('No authentication token found');
+        return;
       }
-      setMessages([...messages, newMessage])
-      setInputMessage('')
+
+      try {
+        const response = await axios.get('https://api.bazigaar.com/chatWithFriend/GetChatList/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+        const contactData = response.data.results.map((contact: any) => ({
+          id: contact.id,
+          name: `${contact.message_req_to.first_name} ${contact.message_req_to.last_name}`,
+          avatar: contact.message_req_to.profile_picture,
+          lastMessage: contact.lastMessage?.text_message || '',
+          lastMessageTime: new Date(contact.lastMessage?.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        setContacts(contactData);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+      }
+    };
+    fetchContacts();
+  }, []);
+
+  // Fetch messages for selected contact
+  const fetchMessages = async (contactId: number) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    try {
+      const response = await axios.get(`https://api.bazigaar.com/chatWithFriend/GetChatWithFriend/${contactId}/`, {
+        headers: { Authorization: `Token ${token}` }
+      });
+      const messageData = response.data.messages.map((message: any) => ({
+        id: message.id,
+        content: message.text_message,
+        sender: message.user.id === response.data.message_req_from.id ? 'user' : 'other',
+        timestamp: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }));
+      setMessages(messageData);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+ const handleSendMessage = async () => {
+  if (inputMessage.trim() !== '' && selectedContact) {
+    // Retrieve userDetails from localStorage
+    const userDetailsString = localStorage.getItem('userDetails');
+    if (!userDetailsString) {
+      console.error('No userDetails found in localStorage');
+      return;
+    }
+
+    let userDetails;
+    try {
+      userDetails = JSON.parse(userDetailsString); // Parse the JSON string to an object
+      console.log('User Details:', userDetails); // Log the entire userDetails object
+    } catch (error) {
+      console.error('Error parsing userDetails:', error);
+      return;
+    }
+
+    const userID = userDetails.user.id; // Extract userID
+    const token = userDetails.token; // Extract token for Authorization header
+
+    if (!token || !userID) {
+      console.error('No authentication token or user ID found');
+      return;
+    }
+
+    // Construct the request payload
+    const requestBody = {
+      message_req_from: userID,
+      message_req_to: 11,
+      text: [inputMessage]
+    };
+
+    // Log the request body for debugging
+    console.log('Sending message with body:', requestBody);
+
+    try {
+      // Send message to the backend
+      const response = await axios.post(
+        'https://api.bazigaar.com/chatWithFriend/CreateChatWithFriend/',
+        requestBody,
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      );
+
+      // Check for response to confirm message sent successfully
+      if (response.status === 201 || response.status === 200) {
+        // Add message to local state if successful
+        const newMessage: Message = {
+          id: response.data.id, // Use ID from response if available
+          content: inputMessage,
+          sender: 'user',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages([...messages, newMessage]);
+        setInputMessage('');
+      } else {
+        console.error('Unexpected response:', response);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   }
+};
+
 
   const handleContactSelect = (contact: Contact) => {
-    setSelectedContact(contact)
-    setMessages([]) // In a real application, fetch messages for the selected contact here
-  }
+    setSelectedContact(contact);
+    fetchMessages(contact.id); // Fetch messages when a contact is selected
+    setShowChat(true);
+  };
+
+  const handleBack = () => {
+    setShowChat(false);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Contacts list */}
-      <div className="w-1/4 bg-white border-r">
+      <div className={`w-full lg:w-1/4 bg-white border-r ${showChat ? 'hidden lg:block' : 'block'}`}>
         <div className="p-4 border-b">
           <h2 className="text-xl font-semibold">Chats</h2>
         </div>
@@ -82,9 +190,7 @@ export default function ChatInterface() {
           {contacts.map((contact) => (
             <div
               key={contact.id}
-              className={`flex items-center p-4 hover:bg-gray-100 cursor-pointer ${
-                selectedContact?.id === contact.id ? 'bg-gray-200' : ''
-              }`}
+              className={`flex items-center p-4 hover:bg-gray-100 cursor-pointer ${selectedContact?.id === contact.id ? 'bg-gray-200' : ''}`}
               onClick={() => handleContactSelect(contact)}
             >
               <CustomAvatar src={contact.avatar} name={contact.name} />
@@ -99,12 +205,21 @@ export default function ChatInterface() {
       </div>
 
       {/* Chat area */}
-      <div className="flex-1 flex flex-col">
+      <div className={`flex-1 flex flex-col ${showChat ? 'block' : 'hidden lg:flex'}`}>
         {selectedContact ? (
           <>
             {/* Chat header */}
             <div className="bg-white p-4 flex items-center justify-between border-b">
               <div className="flex items-center">
+                {showChat && (
+                  <IconButton
+                    aria-label="Back"
+                    className="lg:hidden mr-2"
+                    onClick={handleBack}
+                  >
+                    <ArrowBackIcon />
+                  </IconButton>
+                )}
                 <CustomAvatar src={selectedContact.avatar} name={selectedContact.name} />
                 <h2 className="ml-4 font-semibold">{selectedContact.name}</h2>
               </div>
@@ -145,7 +260,7 @@ export default function ChatInterface() {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      handleSendMessage()
+                      handleSendMessage();
                     }
                   }}
                   fullWidth
@@ -167,5 +282,5 @@ export default function ChatInterface() {
         )}
       </div>
     </div>
-  )
+  );
 }

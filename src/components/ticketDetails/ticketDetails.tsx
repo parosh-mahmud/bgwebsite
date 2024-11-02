@@ -14,6 +14,7 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import Ticket from "./ticket"; // Import the Ticket component
 
 interface TicketDetailsProps {
   ticketId: number;
@@ -43,6 +44,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
   const [quantity, setQuantity] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [luckyNumbers, setLuckyNumbers] = useState<string[]>(["", "", "", "", "", ""]);
+  const [showTicket, setShowTicket] = useState(false); // New state to toggle Ticket component visibility
 
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -104,7 +106,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
           headers: { Authorization: `Token ${token}` },
         }
       );
-      setModalOpen(true);
+      setModalOpen(false); // Close the modal if it was open
+      setShowTicket(true); // Show the Ticket component after successful purchase
     } catch (error) {
       console.error("Failed to purchase ticket:", error);
     }
@@ -114,6 +117,26 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
 
   const totalPrice = ticketData ? ticketData.price * quantity : 0;
   const isPayDisabled = quantity < 1 || luckyNumbers.some((num) => num === "");
+
+  if (showTicket && ticketData) {
+    return (
+      <Ticket
+        lotteryName={ticketData.LotteryName}
+        ticketId={ticketId}
+        luckyNumbers={luckyNumbers}
+        drawDate={ticketData.drawStatus} // Assuming drawStatus contains draw date; replace if different
+        price={totalPrice}
+        prizeImage={ticketData.prizeImage} // New property
+        firstPrizeName={ticketData.firstPrizeName} // New property
+        firstPrize={ticketData.firstPrize} // New property
+        secondPrizeName={ticketData.secondPrizeName} // New property
+        secondPrize={ticketData.secondPrize} // New property
+        thirdPrizeName={ticketData.thirdPrizeName} // New property
+        thirdPrize={ticketData.thirdPrize} // New property
+         onBackToHistory={onBack}
+      />
+    );
+  }
 
   if (!ticketData) {
     return (
@@ -233,49 +256,31 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
             </div>
           </div>
 
-          {/* Prize Details */}
+          {/* Prize Details Section */}
           <div className="mt-8">
             <h3 className="text-2xl font-bold mb-4">Prizes</h3>
             <div className="flex flex-wrap gap-6">
-              {[ticketData.firstPrize, ticketData.secondPrize, ticketData.thirdPrize].map(
-                (prize, index) => (
-                  <div key={index} className="text-center">
-                    <Image
-                      src={prize || "/placeholder-image.png"}
-                      alt={`Prize ${index + 1}`}
-                      width={150}
-                      height={150}
-                      className="rounded-lg object-cover w-36 h-36"
-                    />
-                    <p className="mt-2">
-                      {[ticketData.firstPrizeName, ticketData.secondPrizeName, ticketData.thirdPrizeName][index]}
-                    </p>
-                  </div>
-                )
-              )}
+              {[
+                { label: "1st Prize", name: ticketData.firstPrizeName, image: ticketData.firstPrize },
+                { label: "2nd Prize", name: ticketData.secondPrizeName, image: ticketData.secondPrize },
+                { label: "3rd Prize", name: ticketData.thirdPrizeName, image: ticketData.thirdPrize },
+              ].map((prize, index) => (
+                <div key={index} className="text-center">
+                  <p className="font-bold text-lg mb-2">{prize.label}</p>
+                  <Image
+                    src={prize.image || "/placeholder-image.png"}
+                    alt={`${prize.label} Image`}
+                    width={150}
+                    height={150}
+                    className="rounded-lg object-cover w-36 h-36"
+                  />
+                  <p className="mt-2">{prize.name}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Success Modal */}
-      <Modal open={modalOpen} onClose={handleModalClose}>
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center mx-4">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Purchase Successful!</h2>
-            <p className="text-gray-800">You have successfully purchased {quantity} ticket(s).</p>
-            <p className="text-gray-800 mt-2">Check your ticket on the My Lottery History page.</p>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleModalClose}
-              className="mt-6"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };

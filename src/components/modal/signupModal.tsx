@@ -6,9 +6,10 @@ interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLoginClick: () => void;
+  onSignUpSuccess: (userDetails: any) => void; // Callback for successful signup
 }
 
-const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick }) => {
+const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick, onSignUpSuccess }) => {
   if (!isOpen) return null;
 
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
   const [error, setError] = useState<string | null>(null);
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [verificationKey, setVerificationKey] = useState('');
-
+  const [userDetails, setUserDetails] = useState(null);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -48,11 +49,17 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
       console.log('Registration successful:', response.data);
       setError(null);
       setVerificationKey(response.data.key);
-      setOtpModalOpen(true);
-    } catch (err) {
-      console.error('Registration failed:', err);
+      setOtpModalOpen(true); // Open OTP modal after successful registration
+    } catch (err: any) {
       setError('Registration failed. Please try again.');
     }
+  };
+
+  // Callback function to handle OTP verification success
+ const handleOtpVerificationSuccess = (userDetails: any) => {
+    setOtpModalOpen(false); // Close OTP modal
+    onSignUpSuccess(userDetails); // Pass user details up to Header
+    onClose(); // Close SignUpModal
   };
 
   return (
@@ -173,8 +180,13 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
         </div>
       </div>
 
-      {/* OTP Modal */}
-      <OtpModal isOpen={otpModalOpen} onClose={() => setOtpModalOpen(false)} verificationKey={verificationKey} />
+       {/* OTP Modal */}
+      <OtpModal 
+        isOpen={otpModalOpen} 
+        onClose={() => setOtpModalOpen(false)} 
+        verificationKey={verificationKey} 
+        onOtpSuccess={handleOtpVerificationSuccess} // Callback for OTP success
+      />
     </>
   );
 };

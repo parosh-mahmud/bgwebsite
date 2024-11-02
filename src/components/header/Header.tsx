@@ -51,7 +51,11 @@ const Header: FC<types> = ({ navfix }) => {
       }
     }
   };
-
+   const handleSignUpSuccess = (details: any) => {
+    setSignUpOpen(false); // Close the signup modal
+    setUserDetails(details); // Set the user details in the Header
+    toast.success("Sign-Up Successful!");
+  };
   const handleProfileClick = () => {
     setProfileModalOpen(true); // Open ProfileModal
     setDropdownOpen(false); // Close dropdown
@@ -278,7 +282,8 @@ const Header: FC<types> = ({ navfix }) => {
       <SignUpModal
         isOpen={isSignUpOpen}
         onClose={() => setSignUpOpen(false)}
-        onLoginClick={toggleToLogin}
+        onSignUpSuccess={handleSignUpSuccess}
+        onLoginClick={() => {}}
       />
       <LoginModal
         isOpen={isLoginOpen}

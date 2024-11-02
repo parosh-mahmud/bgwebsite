@@ -18,6 +18,7 @@ import Image from "next/image";
 import { TicketIcon } from "../../assets/Icons";
 import LoginModal from "../modal/loginModal";
 import SignUpModal from "../modal/signupModal";
+import ProfileModal from "../modal/profileModal";
 import axios from "axios";
 
 interface types {
@@ -30,7 +31,7 @@ const Header: FC<types> = ({ navfix }) => {
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isSignUpOpen, setSignUpOpen] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
-
+ const [isProfileModalOpen, setProfileModalOpen] = useState(false);
   // Fetch latest user details to update balance
   const fetchUserDetails = async (userId: string | number) => {
     const token = localStorage.getItem("authToken");
@@ -49,6 +50,11 @@ const Header: FC<types> = ({ navfix }) => {
         console.error("Failed to fetch user details:", error);
       }
     }
+  };
+
+  const handleProfileClick = () => {
+    setProfileModalOpen(true); // Open ProfileModal
+    setDropdownOpen(false); // Close dropdown
   };
 
   useEffect(() => {
@@ -92,7 +98,7 @@ const Header: FC<types> = ({ navfix }) => {
     setLoginOpen(true);
   };
 
-  const toggleDropdown = () => {
+ const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
@@ -139,10 +145,10 @@ const Header: FC<types> = ({ navfix }) => {
     }}
     className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm flex items-center rounded-full"
   >
-    <span className="w-4 h-4 md:w-5 md:h-5 mr-1">
+    <span className="w-6 h-6 md:w-5 md:h-5 mr-1">
   <TicketIcon />
 </span> 
- Buy Ticket
+ Buy Tickets
   </Link>
 
             {userDetails ? (
@@ -185,7 +191,7 @@ const Header: FC<types> = ({ navfix }) => {
                   {/* Dropdown menu */}
                   {dropdownOpen && (
                     <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-50">
-                      <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
+                      <button   onClick={handleProfileClick}  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
                         <AccountCircleIcon className="w-5 h-5" /> Profile
                       </button>
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
@@ -297,6 +303,18 @@ const Header: FC<types> = ({ navfix }) => {
             },
           },
         }}
+      />
+
+       {/* Profile Modal */}
+      <ProfileModal
+        user={userDetails} // Pass user details to ProfileModal
+        open={isProfileModalOpen}
+        onClose={() => setProfileModalOpen(false)} // Close ProfileModal
+        cards={[
+          { header: "Deposits", value: 0 },
+          { header: "Withdrawals", value: 0 },
+          // Additional cards...
+        ]}
       />
     </Fragment>
   );

@@ -1,40 +1,28 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { ArrowBack, HelpOutline, AccountBalanceWallet } from '@mui/icons-material'
-import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import clsx from 'clsx'
-import axios from 'axios'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowBack, HelpOutline, AccountBalanceWallet } from '@mui/icons-material';
+import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import clsx from 'clsx';
+import axios from 'axios';
 
 type PaymentMethod = {
-  id: string
-  name: string
-  iconUrl: string
-  fee: string
-}
+  id: string;
+  name: string;
+  iconUrl: string;
+  fee: string;
+};
 
 type Reseller = {
-  id: string
-  name: string
-}
+  id: number;
+  username: string;
+  profile_picture: string | null;
+  first_name: string;
+  last_name: string;
+};
 
-const countries = ["Bangladesh", "India", "Nepal"]
-
-const resellersByCountry: Record<string, Reseller[]> = {
-  Bangladesh: [
-    { id: 'reseller1', name: 'Reseller A' },
-    { id: 'reseller2', name: 'Reseller B' },
-  ],
-  India: [
-    { id: 'reseller3', name: 'Reseller C' },
-    { id: 'reseller4', name: 'Reseller D' },
-  ],
-  Nepal: [
-    { id: 'reseller5', name: 'Reseller E' },
-    { id: 'reseller6', name: 'Reseller F' },
-  ],
-}
+const countries = ["Bangladesh", "India", "Nepal"];
 
 const paymentMethods: PaymentMethod[] = [
   { id: 'bkash', name: 'bKash', iconUrl: 'https://freelogopng.com/images/all_img/1656234745bkash-app-logo-png.png', fee: '' },
@@ -42,86 +30,95 @@ const paymentMethods: PaymentMethod[] = [
   { id: 'nagad', name: 'Nagad', iconUrl: 'https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png', fee: '' },
   { id: 'usdt_trc20', name: 'USDT TRC20', iconUrl: 'https://cryptologos.cc/logos/tether-usdt-logo.png', fee: '' },
   { id: 'bitcoin', name: 'Bitcoin', iconUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', fee: '' }
-]
+];
 
-const amountOptions = [2000, 3000, 5000, 10000, 15000, 20000, 25000, 1000, 500, 100]
+const amountOptions = [2000, 3000, 5000, 10000, 15000, 20000, 25000, 1000, 500, 100];
 
 export default function FundsComponent() {
-  const router = useRouter()
-  const [selectedTab, setSelectedTab] = useState('deposit')
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
-  const [selectedReseller, setSelectedReseller] = useState<string | null>(null)
-  const [selectedPayment, setSelectedPayment] = useState<string>('bkash')
-  const [amount, setAmount] = useState<string>('')
-  const [withdrawPhoneNumber, setWithdrawPhoneNumber] = useState('')
- const [balance, setBalance] = useState<number | null>(null)
+  const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState('deposit');
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [selectedReseller, setSelectedReseller] = useState<string | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<string>('bkash');
+  const [amount, setAmount] = useState<string>('');
+  const [withdrawPhoneNumber, setWithdrawPhoneNumber] = useState('');
+  const [balance, setBalance] = useState<number | null>(null);
+  const [resellers, setResellers] = useState<Reseller[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Retrieve userDetails from localStorage
-    const userDetailsString = localStorage.getItem('userDetails')
-
+    const userDetailsString = localStorage.getItem('userDetails');
     if (userDetailsString) {
-      const userDetails = JSON.parse(userDetailsString)
-      const { user, token } = userDetails
+      const userDetails = JSON.parse(userDetailsString);
+      const { user, token } = userDetails;
 
-      console.log("userDetails from localStorage:", userDetails)
+      setBalance(parseFloat(user.bgcoin));
 
-      // Set initial balance from localStorage
-      setBalance(parseFloat(user.bgcoin))
-
-      // Optionally, fetch balance from API using token if needed
       const fetchBalance = async () => {
         try {
           const response = await axios.get(`https://api.bazigaar.com/user/user_details/${user.id}`, {
             headers: {
               Authorization: `Token ${token}`,
             },
-          })
-          setBalance(parseFloat(response.data.user.bgcoin) || 0)
+          });
+          setBalance(parseFloat(response.data.user.bgcoin) || 0);
         } catch (error) {
-          console.error('Error fetching user balance:', error)
+          console.error('Error fetching user balance:', error);
         }
-      }
-
-      fetchBalance()
+      };
+      fetchBalance();
     } else {
-      console.warn('No userDetails found in localStorage.')
+      console.warn('No userDetails found in localStorage.');
     }
-  }, [])
+  }, []);
 
-  const handleTabSwitch = (tab: string) => {
-    setSelectedTab(tab)
-  }
+  useEffect(() => {
+    const fetchResellers = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) throw new Error('Token not found');
+
+        const response = await axios.get<Reseller[]>(
+          'https://api.bazigaar.com/reseller/ResellerList/',
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setResellers(response.data);
+      } catch (error) {
+        console.error('Error fetching reseller list:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResellers();
+  }, []);
+
+  const handleTabSwitch = (tab: string) => setSelectedTab(tab);
 
   const handleCountryChange = (event: SelectChangeEvent<string>) => {
-    setSelectedCountry(event.target.value)
-    setSelectedReseller(null) // Reset reseller when country changes
-  }
+    setSelectedCountry(event.target.value);
+    setSelectedReseller(null);
+  };
 
-  const handleResellerChange = (event: SelectChangeEvent<string>) => {
-    setSelectedReseller(event.target.value)
-  }
+  const handleResellerChange = (event: SelectChangeEvent<string>) => setSelectedReseller(event.target.value);
 
-  const handlePaymentSelect = (id: string) => {
-    setSelectedPayment(id)
-  }
+  const handlePaymentSelect = (id: string) => setSelectedPayment(id);
 
-  const handleAmountSelect = (amount: number) => {
-    setAmount(amount.toString()) // Set amount in the input field
-  }
+  const handleAmountSelect = (amount: number) => setAmount(amount.toString());
 
-  const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value) // Update amount based on input
-  }
+  const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setAmount(e.target.value);
 
   const handleSubmit = () => {
-    const selectedAmount = parseFloat(amount) || 0
+    const selectedAmount = parseFloat(amount) || 0;
     if (selectedTab === 'deposit') {
-      alert(`Deposited ${selectedAmount} via ${selectedPayment} to ${selectedReseller}`)
+      alert(`Deposited ${selectedAmount} via ${selectedPayment} to ${selectedReseller}`);
     } else {
-      alert(`Withdrawn ${selectedAmount} via ${selectedPayment} to ${withdrawPhoneNumber}`)
+      alert(`Withdrawn ${selectedAmount} via ${selectedPayment} to ${withdrawPhoneNumber}`);
     }
-  }
+  };
 
   return (
     <div className="p-4 bg-gray-900 text-white min-h-screen">
@@ -170,8 +167,11 @@ export default function FundsComponent() {
               className="bg-gray-100 text-white"
             >
               <MenuItem value="" disabled>Select Reseller</MenuItem>
-              {resellersByCountry[selectedCountry].map((reseller) => (
-                <MenuItem key={reseller.id} value={reseller.name}>{reseller.name}</MenuItem>
+              {resellers.map((reseller) => (
+                <MenuItem key={reseller.id} value={reseller.username}>
+                  <Avatar src={reseller.profile_picture || ''} alt={reseller.username} />
+                  {`${reseller.first_name} ${reseller.last_name}`}
+                </MenuItem>
               ))}
             </Select>
           )}
@@ -237,7 +237,7 @@ export default function FundsComponent() {
         Submit
       </button>
     </div>
-  )
+  );
 }
 
 function DepositWithdrawContent({
@@ -251,15 +251,15 @@ function DepositWithdrawContent({
   withdrawPhoneNumber,
   setWithdrawPhoneNumber
 }: {
-  selectedTab: string
-  selectedPayment: string
-  amount: string
-  handlePaymentSelect: (id: string) => void
-  handleAmountSelect: (amount: number) => void
-  handleAmountInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  showPhoneInput?: boolean
-  withdrawPhoneNumber?: string
-  setWithdrawPhoneNumber?: (value: string) => void
+  selectedTab: string;
+  selectedPayment: string;
+  amount: string;
+  handlePaymentSelect: (id: string) => void;
+  handleAmountSelect: (amount: number) => void;
+  handleAmountInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showPhoneInput?: boolean;
+  withdrawPhoneNumber?: string;
+  setWithdrawPhoneNumber?: (value: string) => void;
 }) {
   return (
     <>
@@ -308,7 +308,7 @@ function DepositWithdrawContent({
               const extraPercentage =
                 option === 10000 ? '+1.5% Extra' :
                 option === 15000 ? '+2% Extra' :
-                option === 20000 ? '+3% Extra' : 
+                option === 20000 ? '+3% Extra' :
                 option === 25000 ? '+3.5% Extra' : '';
 
               return (
@@ -346,5 +346,5 @@ function DepositWithdrawContent({
         </div>
       )}
     </>
-  )
+  );
 }

@@ -85,20 +85,7 @@ const Header: FC<HeaderProps> = ({
 
         {/* Right Side: Buttons */}
         <div className="flex items-center gap-4">
-          {/* Buy Ticket Button */}
-          <Link
-            href="/lottery"
-            style={{
-              background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-            }}
-            className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm flex items-center rounded-full"
-          >
-            <span className="w-6 h-6 md:w-5 md:h-5 mr-1">
-              <TicketIcon />
-            </span>
-            Buy Tickets
-          </Link>
-
+        
           {userDetails ? (
             // Display user details after login
             <div className="flex items-center gap-2 relative">

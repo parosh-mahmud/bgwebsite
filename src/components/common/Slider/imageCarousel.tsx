@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSwipeable } from "react-swipeable";
-import styles from "..//..//../styles/imageCarousel.module.css"; // We'll create a CSS module for styles
+import styles from "..//..//../styles/imageCarousel.module.css"; // Correct import path
 
 interface CarouselProps {
   images: string[];
@@ -35,21 +35,15 @@ const ImageCarousel: React.FC<CarouselProps> = ({ images }) => {
   const handlers = useSwipeable({
     onSwipedLeft: handleNext,
     onSwipedRight: handlePrev,
-    preventScrollOnSwipe: true, // Updated property name
+    preventScrollOnSwipe: true,
     trackMouse: true,
   });
 
   return (
-    <div
-      className="relative w-full overflow-hidden"
-      style={{ height: "500px" }} // Adjust the height as needed
-      {...handlers}
-    >
+    <div className={styles.carouselContainer} {...handlers}>
       <div
         className={`${styles.slides} ${
-          transitionDirection === "next"
-            ? styles.slideNext
-            : styles.slidePrev
+          transitionDirection === "next" ? styles.slideNext : styles.slidePrev
         }`}
         key={currentIndex}
       >
@@ -57,18 +51,18 @@ const ImageCarousel: React.FC<CarouselProps> = ({ images }) => {
           src={images[currentIndex]}
           alt={`Slide ${currentIndex + 1}`}
           fill
-          className="object-contain"
+          style={{ objectFit: "cover" }} // Ensure images fill the container
           priority
         />
       </div>
 
       {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className={styles.dotsContainer}>
         {images.map((_, idx) => (
           <button
             key={idx}
-            className={`w-2 h-2 rounded-full ${
-              idx === currentIndex ? "bg-white" : "bg-gray-400"
+            className={`${styles.dot} ${
+              idx === currentIndex ? styles.activeDot : ""
             }`}
             onClick={() => {
               setTransitionDirection(idx > currentIndex ? "next" : "prev");

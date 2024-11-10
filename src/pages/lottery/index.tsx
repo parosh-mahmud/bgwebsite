@@ -1,4 +1,3 @@
-// pages/lottery/LotteryPage.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -44,9 +43,7 @@ const LotteryPage = () => {
   }, []);
 
   if (loading) {
-    return (
-     <LoadingSpinner/>
-    );
+    return <LoadingSpinner />;
   }
 
   if (selectedTicketId) {
@@ -59,15 +56,15 @@ const LotteryPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 text-white-100">
+    <div className="min-h-screen text-white-100">
       {/* Breadcrumb Navigation */}
       <div className="container mx-auto p-4">
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link color="inherit" href="/" className="flex items-center">
+        <Breadcrumbs aria-label="breadcrumb" style={{ color: "white" }}>
+          <Link href="/" className="flex items-center" style={{ color: "white" }}>
             <HomeIcon fontSize="small" className="mr-1" />
             Home
           </Link>
-          <Typography color="textPrimary" className="flex items-center">
+          <Typography className="flex items-center" style={{ color: "white" }}>
             <ConfirmationNumberIcon fontSize="small" className="mr-1" />
             Lottery Packages
           </Typography>
@@ -75,7 +72,7 @@ const LotteryPage = () => {
       </div>
 
       {/* Heading */}
-      <h1 className="text-3xl lg:text-4xl font-bold text-center mt-4">
+      <h1 className="text-3xl text-yellow-100 lg:text-4xl font-bold text-center mt-4">
         Available All Packages
       </h1>
 
@@ -94,13 +91,17 @@ const LotteryPage = () => {
                 height={250}
                 className="rounded-lg object-cover w-full h-48"
               />
-              <h1 className="text-x1 text-white font-semibold mt-4">{ticket.LotteryName}</h1>
-              <p className="text-gray-300 mt-2">Price: ${ticket.price.toFixed(2)}</p>
+              <h1 className="text-center text-xl lg:text-2xl text-yellow-100 font-extrabold mt-4">
+                {ticket.LotteryName}
+              </h1>
+              <p className="text-center text-yellow-300 font-medium text-lg mt-2">
+                Price: <span className="font-semibold">${ticket.price.toFixed(2)}</span>
+              </p>
               <button
                 className="mt-4 w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-gray-900 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200"
                 onClick={() => setSelectedTicketId(ticket.id)}
               >
-                Select Ticket
+                View Ticket Details
               </button>
             </div>
           ))}

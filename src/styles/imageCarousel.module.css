@@ -1,9 +1,19 @@
 /* components/common/Slider/ImageCarousel.module.css */
-.slides {
+
+.carouselContainer {
     position: relative;
     width: 100%;
+    overflow: hidden;
+    aspect-ratio: 640 / 221;
+    /* Maintains the 640:221 aspect ratio */
+}
+
+.slides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    display: flex;
     transition: transform 0.5s ease-in-out;
 }
 
@@ -33,4 +43,25 @@
     to {
         transform: translateX(0%);
     }
+}
+
+.dotsContainer {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: gray;
+    border: none;
+}
+
+.activeDot {
+    background-color: white;
 }

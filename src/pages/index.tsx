@@ -6,7 +6,7 @@ import { announcement, packages } from "../locales/home";
 import MainSlider from "../components/common/Slider/MainSlider";
 import ProjectsSlider from "../components/common/Slider/ProjectsSlider";
 import HomeLayout from "../components/layouts/HomeLayout";
-import { Dice, Trophy, Player } from "../assets/Icons";
+import { Dice, Trophy, Player, TicketIcon } from "../assets/Icons";
 import spinegame from "../assets/LandingPage/Image/spinGame.png";
 import cardgame from "../assets/LandingPage/Image/cardGame.png";
 import ludogame from "../assets/LandingPage/Image/luduGame.png";
@@ -19,6 +19,7 @@ import apple from "../assets/LandingPage/SVG/AppleStoreSilver.svg";
 import android from "../assets/LandingPage/SVG/GooglePlaySilver.svg";
 import ImageCarousel from "../components/common/Slider/imageCarousel";
 import LoadingSpinner from "../components/common/loadingSpinner/LoadingSpinner";
+import Link from "next/link";
 
 const images = [
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943693/Buylottery_vn0b0p.jpg",
@@ -69,33 +70,45 @@ const Home = () => {
 
   return (
     <HomeLayout>
-      <main className="">
-        {/* Carousel Section */}
-        <div className={`w-full mt-4 `}>
-          <ImageCarousel images={images} />
-        </div>
+      <main className="mt-20">
+<div className="container mx-auto pt-4 px-4 sm:px-6 md:px-8 flex flex-col-reverse lg:flex-row items-center">
+  {/* Buy Ticket Section */}
+  <div className="w-full lg:w-1/2 mt-4 lg:mt-0 lg:pl-8">
+    <div className="text-center lg:text-left">
+      <p className="uppercase font-semibold text-base sm:text-lg text-teal-200">
+        Play Anytime & Anywhere
+      </p>
+      <h1 className="font-semibold text-2xl sm:text-3xl text-yellow-100 py-2">
+        Win the Latest iPhone!
+      </h1>
+      <h3 className="font-medium text-base sm:text-lg text-yellow-100 pb-4">
+        Check Out Our Lottery Packages and Get Your Chance to Win!
+      </h3>
+    <Link
+  href="/lottery"
+  style={{
+    background: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)", // Right to left gradient
+  }}
+  className="text-black font-bold py-2 px-4 text-base sm:text-lg flex items-center justify-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 max-w-xs" // Max width
+>
+  <span className="w-5 h-5 mr-2">
+    <TicketIcon />
+  </span>
+  Buy Tickets
+</Link>
 
-        {/* Centered Text Content Section */}
-        <div className="container mx-auto text-center mt-8 md:mt-12 lg:mt-16 px-4 sm:px-6 md:px-8">
-          <p className="uppercase font-semibold text-lg sm:text-xl lg:text-2xl text-teal-200">
-            Play Anytime & Anywhere
-          </p>
-          <h1 className="font-semibold text-2xl sm:text-3xl lg:text-5xl text-yellow-100 py-4">
-            Win Latest iPhone!
-          </h1>
-          <h3 className="font-semibold text-lg sm:text-xl lg:text-2xl text-yellow-100 pb-8">
-            Check Out Our Exciting Lottery Packages and Get Your Chance to Win!
-          </h3>
-          <button
-            className="font-medium text-base sm:text-lg lg:text-xl text-white py-3 px-5 sm:py-4 sm:px-6 rounded-lg"
-            style={{
-              background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-              border: "none",
-            }}
-          >
-            Participate Now
-          </button>
-        </div>
+    </div>
+  </div>
+
+  {/* Carousel Section */}
+  <div className="w-full lg:w-1/2">
+    <div className={`w-full`}>
+      <ImageCarousel images={images} />
+    </div>
+  </div>
+</div>
+
+
 
         {/* Top Slider */}
         <div className="mt-8">

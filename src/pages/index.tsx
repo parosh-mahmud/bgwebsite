@@ -79,23 +79,22 @@ const Home = () => {
         Play Anytime & Anywhere
       </p>
       <h1 className="font-semibold text-2xl sm:text-3xl text-yellow-100 py-2">
-        Win the Latest iPhone!
+        Win  Latest iPhone!
       </h1>
-      <h3 className="font-medium text-base sm:text-lg text-yellow-100 pb-4">
-        Check Out Our Lottery Packages and Get Your Chance to Win!
-      </h3>
-    <Link
+     
+  <Link
   href="/lottery"
   style={{
     background: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)", // Right to left gradient
   }}
-  className="text-black font-bold py-2 px-4 text-base sm:text-lg flex items-center justify-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 max-w-xs" // Max width
+  className="text-black font-bold py-2 px-4 text-base sm:text-lg flex items-center justify-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 max-w-xs mx-auto lg:mx-0" // Centered for mobile
 >
   <span className="w-5 h-5 mr-2">
     <TicketIcon />
   </span>
   Buy Tickets
 </Link>
+
 
     </div>
   </div>

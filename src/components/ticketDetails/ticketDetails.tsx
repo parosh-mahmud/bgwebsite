@@ -191,75 +191,75 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
              {/* Lucky Number Input */}
 <div className="mt-4">
   <label className="block text-lg font-medium mb-2">Enter Your 6 Lucky Numbers</label>
-  <div className="flex items-center space-x-2">
-    {/* Lucky Number Inputs */}
-    <div className="flex space-x-2">
-      {luckyNumbers.map((num, index) => (
-        <TextField
-          key={index}
-          value={num}
-          onChange={(e) => handleLuckyNumberChange(index, e.target.value)}
-          variant="outlined"
-          inputProps={{
-            maxLength: 1,
-            style: { 
-              textAlign: "center", 
-              color: "#fff", 
-              fontSize: "1.5rem", 
-              fontWeight: "bold", 
-              padding: "10px 0",
+ <div className="flex flex-col md:flex-row items-center md:space-x-2 space-y-2 md:space-y-0">
+  {/* Lucky Number Inputs */}
+  <div className="flex space-x-2 md:space-x-2 justify-center">
+    {luckyNumbers.map((num, index) => (
+      <TextField
+        key={index}
+        value={num}
+        onChange={(e) => handleLuckyNumberChange(index, e.target.value)}
+        variant="outlined"
+        inputProps={{
+          maxLength: 1,
+          style: {
+            textAlign: "center",
+            color: "#fff",
+            fontSize: "1.25rem", // Slightly smaller font on mobile
+            fontWeight: "bold",
+            padding: "8px 0",
+          },
+        }}
+        InputLabelProps={{
+          style: { color: '#fff' }
+        }}
+        className="w-12 h-12 md:w-14 md:h-14" // Adjust width/height for mobile
+        inputRef={(el) => (inputRefs.current[index] = el)}
+        sx={{
+          position: "relative",
+          borderRadius: "6px",
+          background: "linear-gradient(to right, #ff7e5f, #feb47b)", // Gradient border effect
+          padding: "1px", // Space for the gradient border
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "4px", // Smaller radius for inner content on mobile
+            backgroundColor: "#333",
+            padding: "0px 6px", // Padding for inner input
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none", // Remove default outline
             },
-          }}
-          InputLabelProps={{
-            style: { color: '#fff' }
-          }}
-          className="w-14 h-14"
-          inputRef={(el) => (inputRefs.current[index] = el)}
-          sx={{
-            position: "relative",
-            borderRadius: "8px",
-            background: "linear-gradient(to right, #ff7e5f, #feb47b)", // Gradient background for the border effect
-            padding: "2px", // Space for the gradient border
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "6px", // Smaller radius for inner content
-              backgroundColor: "#333", // Inner background color
-              padding: "0px 8px", // Padding for inner input
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none", // Remove default outline
-              },
-            },
-          }}
-        />
-      ))}
-    </div>
-    
-    {/* Clear Button */}
-  <Button 
-  variant="outlined" 
-  onClick={handleClearLuckyNumbers}
-  sx={{
-    background: "linear-gradient(to right, #ff7e5f, #feb47b)", // Gradient background
-    color: "#fff", // White text color
-    fontSize: "1.5rem", // Same font size as input fields for consistency
-    fontWeight: "bold",
-    padding: "0", // Remove padding to keep it compact
-    borderRadius: "8px", // Matching border radius
-    minWidth: "56px", // Width to match input field width (or adjust as needed)
-    height: "56px", // Height to match the input field height
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "none",
-    "&:hover": {
-      background: "linear-gradient(to right, #feb47b, #ff7e5f)", // Reverse gradient on hover
-      opacity: 0.9, // Slight transparency effect on hover
-    },
-  }}
->
-  X
-</Button>
-
+          },
+        }}
+      />
+    ))}
   </div>
+
+  {/* Clear Button */}
+  <Button
+    variant="outlined"
+    onClick={handleClearLuckyNumbers}
+    sx={{
+      background: "linear-gradient(to right, #ff7e5f, #feb47b)", // Gradient background
+      color: "#fff",
+      fontSize: { xs: "1rem", md: "1.5rem" }, // Smaller font on mobile
+      fontWeight: "bold",
+      padding: { xs: "0", md: "8px" }, // No padding on mobile
+      borderRadius: "6px", // Matching border radius for mobile
+      minWidth: { xs: "48px", md: "56px" }, // Adjust width for mobile
+      height: { xs: "48px", md: "56px" }, // Adjust height for mobile
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      border: "none",
+      "&:hover": {
+        background: "linear-gradient(to right, #feb47b, #ff7e5f)", // Reverse gradient on hover
+        opacity: 0.9,
+      },
+    }}
+  >
+    clear
+  </Button>
+</div>
+
 </div>
 
 

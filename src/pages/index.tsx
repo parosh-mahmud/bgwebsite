@@ -67,7 +67,12 @@ const Home = () => {
   if (loading) {
     return <LoadingSpinner />;
   }
-
+  const iconGradientStyle = {
+    background: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)",
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    color: "transparent",
+  };
   return (
     <HomeLayout>
       <main className="mt-20">
@@ -122,7 +127,9 @@ const Home = () => {
           <div className="shadow-jackpot bg-[#222222] rounded-2xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-primary py-8 px-6 sm:px-10">
               <div className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
-                <Trophy />
+                     <span style={iconGradientStyle}>
+                  <Trophy />
+                </span>
                 <div>
                   <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
                     ${numCounter}

@@ -7,6 +7,7 @@ import { TicketIcon } from "../../assets/Icons";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import Bgcoin from "../../assets/LandingPage/SVG/bgcoin.svg"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HistoryIcon from "@mui/icons-material/History";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
@@ -95,12 +96,19 @@ const Header: FC<HeaderProps> = ({
               >
                 <RefreshIcon className="w-5 h-5 rounded-full text-white" />
               </button>
-              <div className="flex items-center gap-1 md:gap-2 bg-yellow-500 text-black px-2 py-1 md:px-3 md:py-1 rounded-full">
-                <MonetizationOnIcon className="w-4 h-4 md:w-6 md:h-6 text-yellow-800" />
-                <span className="font-bold text-xs md:text-lg">
-                  {userDetails.user.bgcoin}
-                </span>
-              </div>
+             <div
+  className="flex items-center gap-1 md:gap-2 text-black px-2 py-1 md:px-3 md:py-1 rounded-full"
+  // style={{
+  //   background: 'linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)',
+  // }}
+>
+
+  <Image src={Bgcoin} alt="Bg coin" width={25} height={25} />
+  <span className="font-bold text-xs md:text-lg text-white">
+    {userDetails.user.bgcoin}
+  </span>
+</div>
+
 
               <div className="flex items-center gap-2 relative">
                 <div

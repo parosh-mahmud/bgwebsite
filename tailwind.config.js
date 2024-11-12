@@ -25,15 +25,16 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: "#D1AE55",
-        secondary: "#222222",
+        primary: "#0B1E37",
+        secondary: "#455271",
         invalid: "#C2FFF3",
-        primaryText: "#333333",
+        primaryText: "#FFFFFF",
         secondaryText: "#474747",
         grayText: "#333333",
         announce: "#D64E4E",
       },
       backgroundImage: {
+        buttonGradient: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)",
         yourcompatiblepartner: "url('/assets/bg/yourcompatiblepartner.png')",
         developmentActive: "url('/src/assets/bg/developmentActive.png')",
         developmentInActive: "url('/src/assets/bg/developmentInActive.png')",
@@ -56,27 +57,17 @@ module.exports = {
         slcLogoSlider: "0px 8px 18px 6px rgba(97, 97, 97, 0.12)",
         slcTechnology: "5px 8px 12px rgba(0, 0, 0, 0.15)",
       },
-
       animation: {
         Loading: "Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        slideIn: "slideIn 0.4s cubic-bezier(1, 0, 0, 0  )",
-        // Nothing: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        slideIn: "slideIn 0.4s cubic-bezier(1, 0, 0, 0)",
       },
-
       keyframes: {
-        //  loading animation
         Loading: {
-          "0%, 100% ": {
-            opacity: 0.1,
-          },
-          "50%": {
-            opacity: 0.1,
-          },
+          "0%, 100%": { opacity: 0.1 },
+          "50%": { opacity: 0.1 },
         },
-
-        //  slidein animation
         slideIn: {
-          "75%, 100% ": {
+          "75%, 100%": {
             transform: "scale(1)",
             opacity: 1,
           },

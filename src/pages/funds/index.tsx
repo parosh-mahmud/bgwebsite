@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowBack, HelpOutline, AccountBalanceWallet } from '@mui/icons-material';
 import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import Bgcoin from "../../assets/LandingPage/SVG/bgcoin.svg"
 import clsx from 'clsx';
 import axios from 'axios';
+import Image from 'next/image';
 
 type PaymentMethod = {
   id: string;
@@ -47,6 +49,13 @@ export default function FundsComponent() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // Retrieve the 'type' query parameter to set the initial selectedTab
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    if (type === 'deposit' || type === 'withdrawal') {
+      setSelectedTab(type);
+    }
+
     const userDetailsString = localStorage.getItem('userDetails');
     if (userDetailsString) {
       const userDetails = JSON.parse(userDetailsString);
@@ -124,7 +133,7 @@ export default function FundsComponent() {
     <div className="p-4 bg-gray-900 text-white min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 p-2 bg-gray-800 rounded-lg">
-        <button onClick={() => router.push('/')} className="p-2 text-gray-400 hover:text-white">
+        <button onClick={() => router.back()} className="p-2 text-gray-400 hover:text-white">
           <ArrowBack className="h-6 w-6" />
         </button>
         <h1 className="text-xl font-semibold">Funds</h1>
@@ -135,13 +144,20 @@ export default function FundsComponent() {
 
       {/* Deposit or Main Wallet (for Withdrawal only) */}
       {selectedTab === 'withdrawal' ? (
-        <div className="bg-green-700 p-4 rounded-lg mb-4 text-center text-white">
-          <div className="flex justify-between items-center">
-            <span>Main Balance</span>
-            <AccountBalanceWallet className="text-white h-6 w-6" />
-          </div>
-          <div className="text-4xl font-bold">{balance !== null ? balance.toFixed(2) : 'Loading...'}</div>
-        </div>
+    <div className="bg-green-700 p-4 rounded-lg mb-4 text-center text-white">
+  <div className="flex justify-between items-center">
+    <span>Main Balance</span>
+    <AccountBalanceWallet className="text-white h-6 w-6" />
+  </div>
+
+  {/* Balance Display */}
+  <div className="flex justify-center items-center text-4xl font-bold mt-2">
+    <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+    <span style={{ color: '#FFD700', marginLeft: '8px' }}>
+      {balance !== null ? balance.toFixed(2) : 'Loading...'}
+    </span>
+  </div>
+</div>
       ) : (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
           <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
@@ -150,7 +166,8 @@ export default function FundsComponent() {
             value={selectedCountry || ''}
             onChange={handleCountryChange}
             displayEmpty
-            className="mb-4 bg-gray-100 text-white"
+            className="mb-4 bg-gray-700 text-white"
+            style={{ color: 'white' }}
           >
             <MenuItem value="" disabled>Select Country</MenuItem>
             {countries.map((country) => (
@@ -164,7 +181,8 @@ export default function FundsComponent() {
               value={selectedReseller || ''}
               onChange={handleResellerChange}
               displayEmpty
-              className="bg-gray-100 text-white"
+              className="bg-gray-700 text-white"
+              style={{ color: 'white' }}
             >
               <MenuItem value="" disabled>Select Reseller</MenuItem>
               {resellers.map((reseller) => (

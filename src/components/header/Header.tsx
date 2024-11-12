@@ -63,12 +63,12 @@ const Header: FC<HeaderProps> = ({
   };
 
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+    setDropdownOpen((prev) => !prev);
   };
 
   const handleProfileClick = () => {
     setProfileModalOpen(true);
-    setDropdownOpen(false);
+    setDropdownOpen(false); // Close the dropdown after opening profile modal
   };
 
   return (
@@ -96,18 +96,15 @@ const Header: FC<HeaderProps> = ({
               >
                 <RefreshIcon className="w-5 h-5 rounded-full text-white" />
               </button>
-             <div
-  className="flex items-center gap-1 md:gap-2 text-black px-2 py-1 md:px-3 md:py-1 rounded-full"
-  // style={{
-  //   background: 'linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)',
-  // }}
+           <div
+  className="flex items-center gap-1 md:gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-[#E65E09] to-[#F2BA56] shadow-md"
 >
-
-  <Image src={Bgcoin} alt="Bg coin" width={25} height={25} />
-  <span className="font-bold text-xs md:text-lg text-white">
+  <Image src={Bgcoin} alt="BG Coin" width={25} height={25} />
+  <span className="font-semibold text-xs md:text-lg text-black">
     {userDetails.user.bgcoin}
   </span>
 </div>
+
 
 
               <div className="flex items-center gap-2 relative">

@@ -134,7 +134,7 @@ const Home = () => {
                   <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
                     ${numCounter}
                   </p>
-                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primary">
+                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primaryText">
                     JACKPOT TODAY
                   </h3>
                 </div>
@@ -142,10 +142,10 @@ const Home = () => {
               <div className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
                 <Dice />
                 <div>
-                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
+                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-primaryText">
                     220
                   </p>
-                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primary">
+                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primaryText">
                     GAMES TODAY
                   </h3>
                 </div>
@@ -156,7 +156,7 @@ const Home = () => {
                   <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
                     5500
                   </p>
-                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primary">
+                  <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primaryText">
                     PLAYER ONLINE
                   </h3>
                 </div>
@@ -168,7 +168,7 @@ const Home = () => {
         {/* Available Games Section */}
         <div className="container">
           <div className="bg-black py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
-            <h3 className="font-semibold text-2xl lg:text-4xl text-primary text-center">
+            <h3 className="font-semibold text-2xl lg:text-4xltext-primaryText text-center">
               Available Games
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 justify-items-center items-center gap-8 py-8">
@@ -201,7 +201,7 @@ const Home = () => {
         {/* Lottery Package Section */}
         <div className="container py-12">
           <div>
-            <h3 className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-primary text-center">
+            <h3 className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-primaryText text-center">
               Lottery Package
             </h3>
             <p className="font-regular text-sm sm:text-base text-gray-400 text-center pt-6">
@@ -216,7 +216,7 @@ const Home = () => {
 
         {/* How to Play Section */}
         <div className="container">
-          <h3 className="font-semibold text-2xl lg:text-4xl text-primary text-center pb-6">
+          <h3 className="font-semibold text-2xl lg:text-4xl text-primaryText text-center pb-6">
             How to Play
           </h3>
           <div className="w-full h-auto">
@@ -242,7 +242,7 @@ const Home = () => {
                 />
               </div>
               <div className="w-full lg:w-1/2 mt-8 lg:mt-0 text-center lg:text-left">
-                <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-primary">
+                <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-primaryText">
                   Download Our Mobile App!
                 </h1>
                 <div className="flex flex-col sm:flex-row lg:flex-row items-center justify-center lg:justify-start gap-4 py-6">

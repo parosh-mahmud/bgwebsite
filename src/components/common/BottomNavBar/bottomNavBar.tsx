@@ -12,7 +12,10 @@ import { WhatsApp } from '@mui/icons-material';
 import { Facebook } from '@mui/icons-material';
 import ProfileIcon from '@mui/icons-material/Person';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import TransactionHistory from '../../Transactions/transactionHistory';
+import Bgcoin from "..//..//..//assets/LandingPage/SVG/bgcoin.svg"
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 interface UserDetails {
   user: {
     username: string;
@@ -90,41 +93,56 @@ const BottomNavBar = () => {
         </div>
 
         {/* Content Wrapper */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-primary">
           {/* Wallet Section */}
-          <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
-            <p className="text-gray-400">Main Wallet</p>
-            <div className="flex items-center justify-between">
-              <span className="text-lg">{userDetails.user.bgcoin}</span>
-            </div>
-          </div>
+        <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
+  <p className="text-gray-400 text-left">Main Wallet</p>
+  <div className="flex items-center justify-center space-x-2">
+    <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+    <span style={{ color: '#FFD700', marginLeft: '8px' }} className="text-4xl font-semibold">{userDetails.user.bgcoin}</span>
+  </div>
+</div>
+
+
 
           {/* Sections with Dividers */}
           <div className="space-y-6 px-4">
             {/* Funds Section */}
-            <div>
+            <div className='rounded-md rounded-lg' style={{backgroundColor:'#455271'}}>
               <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
                 Funds
               </h3>
               <div className="flex justify-around py-4">
-                <button className="flex flex-col items-center text-center">
-                  <div className="bg-gray-600 rounded-full p-3 mb-2">
-                    <DepositIcon sx={{ color: '#F2BA56' }} />
-                  </div>
-                  <span className="text-sm">Deposit</span>
-                </button>
-                <button className="flex flex-col items-center text-center">
-                  <div className="bg-gray-600 rounded-full p-3 mb-2">
-                    <WithdrawalIcon sx={{ color: '#F2BA56' }} />
-                  </div>
-                  <span className="text-sm">Withdrawal</span>
-                </button>
+                 <button
+                className="flex flex-col items-center text-center"
+                onClick={() => {
+                  setShowAccountScreen(false); // Close the account screen
+                  router.push('/funds?type=deposit'); // Navigate to Funds page with deposit type
+                }}
+              >
+                <div className="bg-gray-600 rounded-full p-3 mb-2">
+                  <DepositIcon sx={{ color: '#F2BA56' }} />
+                </div>
+                <span className="text-sm">Deposit</span>
+              </button>
+              <button
+                className="flex flex-col items-center text-center"
+                onClick={() => {
+                  setShowAccountScreen(false); // Close the account screen
+                  router.push('/funds?type=withdrawal'); // Navigate to Funds page with withdrawal type
+                }}
+              >
+                <div className="bg-gray-600 rounded-full p-3 mb-2">
+                  <WithdrawalIcon sx={{ color: '#F2BA56' }} />
+                </div>
+                <span className="text-sm">Withdrawal</span>
+              </button>
               </div>
             </div>
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* History Section */}
-            <div>
+            <div className='rounded-md rounded-lg bg-secondary' >
               <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
                 History
               </h3>
@@ -146,7 +164,7 @@ const BottomNavBar = () => {
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* Profile Section */}
-            <div>
+            <div className='rounded-md rounded-lg bg-secondary'>
               <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
                 Profile
               </h3>
@@ -174,7 +192,7 @@ const BottomNavBar = () => {
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* Contact Us Section */}
-            <div>
+            <div className='rounded-md rounded-lg bg-secondary'>
               <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
                 Contact Us
               </h3>
@@ -200,7 +218,7 @@ const BottomNavBar = () => {
               </div>
             </div>
             <div className="border-t border-gray-500 my-2"></div>
-            <div>
+            <div className='rounded-md rounded-lg bg-secondary'>
               <span>Logout</span>
             </div>
           </div>

@@ -26,7 +26,6 @@ const HomeLayout: FC<HomeLayoutProps> = ({ children }) => {
 
   // Handle navigation fix on scroll
   function setFixed() {
-    // Adjust as needed based on scroll position
     if (window.scrollY >= 500) {
       setNavfix(true);
     } else {
@@ -150,13 +149,12 @@ const HomeLayout: FC<HomeLayoutProps> = ({ children }) => {
         cards={[
           { header: "Deposits", value: 0 },
           { header: "Withdrawals", value: 0 },
-          // Additional cards...
         ]}
       />
 
       {/* Toast Notifications */}
       <Toaster
-        position="top-right"
+        position="top-center" // Change position to center the toast
         toastOptions={{
           className: "mt-6",
           duration: 5000,

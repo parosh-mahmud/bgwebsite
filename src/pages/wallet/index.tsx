@@ -15,32 +15,68 @@ import {
 } from "@mui/material"
 import { AccountBalanceWallet, ArrowDownward, ArrowUpward, History } from "@mui/icons-material"
 import clsx from "clsx"
+import axios from "axios"
 
-// Sample transaction history data
-const transactionHistory = [
-  { id: 1, type: "deposit", amount: 500, date: "2024-11-07" },
-  { id: 2, type: "withdrawal", amount: 200, date: "2024-11-06" },
-  { id: 3, type: "deposit", amount: 1000, date: "2024-11-05" },
-]
+// Define the types for transaction history and wallet response
+interface BgcoinResponse {
+  user_id: number
+  bgcoin: number
+}
+
+interface Transaction {
+  id: string
+  transaction_type: "Deposit" | "Withdrawal"
+  amount: string
+  date: string
+}
+
+interface TransactionResponse {
+  transactions: Transaction[]
+}
 
 export default function Wallet() {
   const [balance, setBalance] = useState<number>(0)
+  const [transactionHistory, setTransactionHistory] = useState<Transaction[]>([])
   const router = useRouter()
 
   useEffect(() => {
-    // Retrieve userDetails from localStorage
-    const userDetailsString = localStorage.getItem("userDetails")
-    if (userDetailsString) {
-      const userDetails = JSON.parse(userDetailsString)
-      console.log("userDetails from localStorage:", userDetails)
+    const fetchWalletData = async () => {
+      const userDetailsString = localStorage.getItem("userDetails")
+      if (userDetailsString) {
+        const userDetails = JSON.parse(userDetailsString)
+        const token = userDetails.token
+        console.log("Token:", token)  // Log the token to verify
 
-      // Set the balance from userDetails.user.bgcoin if it exists
-      if (userDetails.user && userDetails.user.bgcoin) {
-        setBalance(parseFloat(userDetails.user.bgcoin))
+        try {
+          // Fetch balance
+          const balanceResponse = await axios.get<BgcoinResponse>("https://api.bazigaar.com/user/api/v1/user/bgcoin", {
+            headers: { Authorization: `Token ${token}` }  // Use "Token" format
+          })
+          if (balanceResponse.data && balanceResponse.data.bgcoin) {
+            setBalance(balanceResponse.data.bgcoin)
+          }
+
+          // Fetch transaction history
+          const transactionResponse = await axios.get<TransactionResponse>("https://api.bazigaar.com/wallet_app/api/v1/user/my-wallet-profile", {
+            headers: { Authorization: `Token ${token}` }
+          })
+          if (transactionResponse.data && transactionResponse.data.transactions) {
+            setTransactionHistory(transactionResponse.data.transactions.map((transaction, index) => ({
+              id: `${index}-${transaction.transaction_type}-${transaction.date}`,
+              transaction_type: transaction.transaction_type,
+              amount: transaction.amount,
+              date: transaction.date,
+            })))
+          }
+        } catch (error) {
+          console.error("Failed to fetch wallet data:", error)
+        }
+      } else {
+        console.warn("No userDetails found in localStorage.")
       }
-    } else {
-      console.warn("No userDetails found in localStorage.")
     }
+
+    fetchWalletData()
   }, [])
 
   const navigateToFunds = (type: "deposit" | "withdrawal") => {
@@ -48,7 +84,7 @@ export default function Wallet() {
   }
 
   return (
-    <Card className="max-w-lg mx-auto my-8 p-4 bg-white shadow-lg rounded-lg md:max-w-2xl">
+    <Card className="max-w-lg mx-auto my-8 p-4 shadow-lg rounded-lg md:max-w-2xl">
       <CardHeader
         title="Bazigaar Wallet"
         subheader="Manage your BG COIN balance and transactions"
@@ -89,12 +125,12 @@ export default function Wallet() {
           {transactionHistory.map((transaction) => (
             <ListItem key={transaction.id} className="border-b border-gray-200">
               <ListItemAvatar>
-                <Avatar className={clsx(transaction.type === "deposit" ? "bg-green-500" : "bg-red-500")}>
-                  {transaction.type === "deposit" ? <ArrowDownward /> : <ArrowUpward />}
+                <Avatar className={clsx(transaction.transaction_type === "Deposit" ? "bg-green-500" : "bg-red-500")}>
+                  {transaction.transaction_type === "Deposit" ? <ArrowDownward /> : <ArrowUpward />}
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={`${transaction.type === "deposit" ? "Deposit" : "Withdrawal"} - ${transaction.amount} BG COIN`}
+                primary={`${transaction.transaction_type} - ${transaction.amount} BG COIN`}
                 secondary={transaction.date}
                 primaryTypographyProps={{ className: "text-gray-900" }}
                 secondaryTypographyProps={{ className: "text-gray-500" }}

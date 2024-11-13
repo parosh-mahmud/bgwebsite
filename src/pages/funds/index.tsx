@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowBack, HelpOutline, AccountBalanceWallet } from '@mui/icons-material';
 import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import Bgcoin from "../../assets/LandingPage/SVG/bgcoin.svg"
+import Bgcoin from "../../assets/LandingPage/SVG/bgcoin.svg";
 import clsx from 'clsx';
 import axios from 'axios';
 import Image from 'next/image';
@@ -49,7 +49,6 @@ export default function FundsComponent() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Retrieve the 'type' query parameter to set the initial selectedTab
     const params = new URLSearchParams(window.location.search);
     const type = params.get('type');
     if (type === 'deposit' || type === 'withdrawal') {
@@ -131,7 +130,6 @@ export default function FundsComponent() {
 
   return (
     <div className="p-4 bg-gray-900 text-white min-h-screen">
-      {/* Header */}
       <div className="flex items-center justify-between mb-4 p-2 bg-gray-800 rounded-lg">
         <button onClick={() => router.back()} className="p-2 text-gray-400 hover:text-white">
           <ArrowBack className="h-6 w-6" />
@@ -142,61 +140,21 @@ export default function FundsComponent() {
         </button>
       </div>
 
-      {/* Deposit or Main Wallet (for Withdrawal only) */}
       {selectedTab === 'withdrawal' ? (
-    <div className="bg-green-700 p-4 rounded-lg mb-4 text-center text-white">
-  <div className="flex justify-between items-center">
-    <span>Main Balance</span>
-    <AccountBalanceWallet className="text-white h-6 w-6" />
-  </div>
-
-  {/* Balance Display */}
-  <div className="flex justify-center items-center text-4xl font-bold mt-2">
-    <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
-    <span style={{ color: '#FFD700', marginLeft: '8px' }}>
-      {balance !== null ? balance.toFixed(2) : 'Loading...'}
-    </span>
-  </div>
-</div>
-      ) : (
-        <div className="bg-gray-800 p-4 rounded-lg mb-4">
-          <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
-          <Select
-            fullWidth
-            value={selectedCountry || ''}
-            onChange={handleCountryChange}
-            displayEmpty
-            className="mb-4 bg-gray-700 text-white"
-            style={{ color: 'white' }}
-          >
-            <MenuItem value="" disabled>Select Country</MenuItem>
-            {countries.map((country) => (
-              <MenuItem key={country} value={country}>{country}</MenuItem>
-            ))}
-          </Select>
-
-          {selectedCountry && (
-            <Select
-              fullWidth
-              value={selectedReseller || ''}
-              onChange={handleResellerChange}
-              displayEmpty
-              className="bg-gray-700 text-white"
-              style={{ color: 'white' }}
-            >
-              <MenuItem value="" disabled>Select Reseller</MenuItem>
-              {resellers.map((reseller) => (
-                <MenuItem key={reseller.id} value={reseller.username}>
-                  <Avatar src={reseller.profile_picture || ''} alt={reseller.username} />
-                  {`${reseller.first_name} ${reseller.last_name}`}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
+        <div className="bg-green-700 p-4 rounded-lg mb-4 text-center text-white">
+          <div className="flex justify-between items-center">
+            <span>Main Balance</span>
+            <AccountBalanceWallet className="text-white h-6 w-6" />
+          </div>
+          <div className="flex justify-center items-center text-4xl font-bold mt-2">
+            <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+            <span style={{ color: '#FFD700', marginLeft: '8px' }}>
+              {balance !== null ? balance.toFixed(2) : 'Loading...'}
+            </span>
+          </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Tabs for Deposit and Withdrawal */}
       <div className="flex mb-6">
         <button
           className={clsx(
@@ -218,7 +176,6 @@ export default function FundsComponent() {
         </button>
       </div>
 
-      {/* Content for Payment and Amount Selection */}
       <DepositWithdrawContent
         selectedTab={selectedTab}
         selectedPayment={selectedPayment}
@@ -229,24 +186,39 @@ export default function FundsComponent() {
         showPhoneInput={selectedTab === 'withdrawal'}
         withdrawPhoneNumber={withdrawPhoneNumber}
         setWithdrawPhoneNumber={setWithdrawPhoneNumber}
+        selectedCountry={selectedCountry}
+        handleCountryChange={handleCountryChange}
+        selectedReseller={selectedReseller}
+        handleResellerChange={handleResellerChange}
+        resellers={resellers}
       />
+{/* Instructions */}
+<div style={{ backgroundColor: '#455271', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem' }}>
+  <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
+  <p className="text-sm">
+    Dear member, to speed up your {selectedTab} process:
+    <ul className="list-disc list-inside mt-2">
+      {selectedTab === 'deposit' ? (
+        <>
+          <li>Ensure you have selected the correct deposit method.</li>
+          <li>Enter the exact amount you wish to deposit.</li>
+          <li>Confirm your transaction details before proceeding.</li>
+          <li>Attach the successful payment slip as proof.</li>
+          <li>Contact support if there are any issues with the deposit.</li>
+        </>
+      ) : (
+        <>
+          <li>Verify the phone number associated with your withdrawal account.</li>
+          <li>Enter the correct reference number for your withdrawal.</li>
+          <li>Withdraw only the amount you selected.</li>
+          <li>Ensure you have sufficient balance for the withdrawal amount.</li>
+          <li>Do not save phone numbers to avoid potential security issues.</li>
+        </>
+      )}
+    </ul>
+  </p>
+</div>
 
-      {/* Instructions */}
-      <div style={{ backgroundColor: '#455271', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem' }}>
-        <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
-        <p className="text-sm">
-          Dear member, to speed up your {selectedTab} process:
-          <ul className="list-disc list-inside mt-2">
-            <li>Verify the phone number used for {selectedTab}.</li>
-            <li>Input the correct reference number.</li>
-            <li>Process only the selected amount.</li>
-            <li>Attach the successful slip.</li>
-            <li>Do not save phone numbers to avoid loss.</li>
-          </ul>
-        </p>
-      </div>
-
-      {/* Submit Button */}
       <button
         className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md"
         onClick={handleSubmit}
@@ -267,7 +239,12 @@ function DepositWithdrawContent({
   handleAmountInputChange,
   showPhoneInput,
   withdrawPhoneNumber,
-  setWithdrawPhoneNumber
+  setWithdrawPhoneNumber,
+  selectedCountry,
+  handleCountryChange,
+  selectedReseller,
+  handleResellerChange,
+  resellers
 }: {
   selectedTab: string;
   selectedPayment: string;
@@ -278,10 +255,14 @@ function DepositWithdrawContent({
   showPhoneInput?: boolean;
   withdrawPhoneNumber?: string;
   setWithdrawPhoneNumber?: (value: string) => void;
+  selectedCountry: string | null;
+  handleCountryChange: (event: SelectChangeEvent<string>) => void;
+  selectedReseller: string | null;
+  handleResellerChange: (event: SelectChangeEvent<string>) => void;
+  resellers: Reseller[];
 }) {
   return (
     <>
-      {/* Payment Methods */}
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <h2 className="text-lg font-semibold mb-2">Payment Method</h2>
         <div className="grid grid-cols-3 gap-2">
@@ -302,54 +283,121 @@ function DepositWithdrawContent({
         </div>
       </div>
 
-      {/* Manual Amount Input */}
+     {selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
+  <div className="bg-gray-800 p-4 rounded-lg mb-4">
+    <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
+    
+    <Select
+      fullWidth
+      value={selectedCountry || ''}
+      onChange={handleCountryChange}
+      displayEmpty
+      className="mb-4"
+      style={{ backgroundColor: '#374151', color: 'white' }} // Dark background and white text for the select box
+      MenuProps={{
+        PaperProps: {
+          style: {
+            backgroundColor: '#374151', // Dark background for dropdown menu
+            color: 'white' // White text for dropdown menu
+          }
+        }
+      }}
+    >
+      <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Country</MenuItem>
+      {countries.map((country) => (
+        <MenuItem key={country} value={country} style={{ color: 'white' }}>
+          {country}
+        </MenuItem>
+      ))}
+    </Select>
+
+    {selectedCountry && (
+      <Select
+        fullWidth
+        value={selectedReseller || ''}
+        onChange={handleResellerChange}
+        displayEmpty
+        className="mb-4"
+        style={{ backgroundColor: '#374151', color: 'white' }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              backgroundColor: '#374151',
+              color: 'white'
+            }
+          }
+        }}
+      >
+        <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Reseller</MenuItem>
+        {resellers.map((reseller) => (
+          <MenuItem key={reseller.id} value={reseller.username} style={{ color: 'white' }}>
+            <Avatar src={reseller.profile_picture || ''} alt={reseller.username} className="mr-2" />
+            {`${reseller.first_name} ${reseller.last_name}`}
+          </MenuItem>
+        ))}
+      </Select>
+    )}
+  </div>
+)}
+
+
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <label htmlFor="manualAmount" className="block text-sm mb-2">
-          {selectedTab === 'deposit' ? 'Enter Deposit Amount' : 'Enter Withdrawal Amount'}
+          {selectedTab === 'deposit' ? 'Enter Deposit Coin Amount' : 'Enter Withdrawal Amount'}
         </label>
-        <input
-          id="manualAmount"
-          type="number"
-          placeholder={`Enter ${selectedTab} amount`}
-          className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
-          value={amount}
-          onChange={handleAmountInputChange}
-        />
+        <div className="relative">
+          <Image
+            src={Bgcoin}
+            alt="BG Coin"
+            width={24}
+            height={24}
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+          />
+          <input
+            id="manualAmount"
+            type="number"
+            placeholder={`Enter ${selectedTab} amount`}
+            className="w-full p-2 pl-10 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+            value={amount}
+            onChange={handleAmountInputChange}
+          />
+        </div>
       </div>
 
-      {/* Amount Selection (Only for Deposit) */}
       {selectedTab === 'deposit' && (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
           <h2 className="text-lg font-semibold mb-2">Amount</h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            {amountOptions.map((option) => {
-              const extraPercentage =
-                option === 10000 ? '+1.5% Extra' :
-                option === 15000 ? '+2% Extra' :
-                option === 20000 ? '+3% Extra' :
-                option === 25000 ? '+3.5% Extra' : '';
+            {amountOptions
+              .slice()
+              .sort((a, b) => a - b)
+              .map((option) => {
+                const extraPercentage =
+                  option === 10000 ? '+1.5% Extra' :
+                  option === 15000 ? '+2% Extra' :
+                  option === 20000 ? '+3% Extra' :
+                  option === 25000 ? '+3.5% Extra' : '';
 
-              return (
-                <button
-                  key={option}
-                  className={clsx(
-                    'py-2 px-4 rounded-md text-sm font-semibold flex flex-col items-center',
-                    parseFloat(amount) === option ? 'bg-green-700 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                  )}
-                  onClick={() => handleAmountSelect(option)}
-                >
-                  <span>{option.toLocaleString()}</span>
-                  {extraPercentage && (
-                    <span className="text-xs text-red-400 mt-1">{extraPercentage}</span>
-                  )}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={option}
+                    className={clsx(
+                      'py-2 px-4 rounded-md text-sm font-semibold flex flex-col items-center',
+                      parseFloat(amount) === option ? 'bg-green-700 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    )}
+                    onClick={() => handleAmountSelect(option)}
+                  >
+                    <span>{option.toLocaleString()}</span>
+                    {extraPercentage && (
+                      <span className="text-xs text-red-400 mt-1">{extraPercentage}</span>
+                    )}
+                  </button>
+                );
+              })}
           </div>
         </div>
       )}
 
-      {/* Phone Number Input for Withdrawal */}
       {showPhoneInput && (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
           <label htmlFor="withdrawPhone" className="block text-sm mb-2">Withdrawal Phone Number</label>

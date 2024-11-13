@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, IconButton, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
@@ -8,14 +8,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DepositIcon from '@mui/icons-material/AccountBalanceWallet';
 import WithdrawalIcon from '@mui/icons-material/Payment';
 import HistoryIcon from '@mui/icons-material/History';
-import { WhatsApp } from '@mui/icons-material';
-import { Facebook } from '@mui/icons-material';
+import { WhatsApp, Facebook } from '@mui/icons-material';
 import ProfileIcon from '@mui/icons-material/Person';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
-import TransactionHistory from '../../Transactions/transactionHistory';
-import Bgcoin from "..//..//..//assets/LandingPage/SVG/bgcoin.svg"
+import Bgcoin from "../../../assets/LandingPage/SVG/bgcoin.svg";
 import { useRouter } from 'next/router';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import Image from 'next/image';
+import ReferralProgram from '../../referral/referralMain';
 interface UserDetails {
   user: {
     username: string;
@@ -26,32 +27,34 @@ interface UserDetails {
 const BottomNavBar = () => {
   const [value, setValue] = useState(0);
   const [showAccountScreen, setShowAccountScreen] = useState(false);
-   const [userDetails, setUserDetails] = useState({ user: { username: '', bgcoin: 0 } });
+  const [userDetails, setUserDetails] = useState<UserDetails>({ user: { username: '', bgcoin: 0 } });
   const router = useRouter();
-  const handleChange = (event:any, newValue:any) => {
+ const [showReferralProgram, setShowReferralProgram] = useState(false);
+  const handleLogout = () => {
+    localStorage.removeItem('userDetails');
+    router.push('/login');
+  };
+
+  const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
     if (newValue === 1) {
-      router.push('/wallet'); // Navigate to the wallet page
+      router.push('/wallet');
     } else if (newValue === 4) {
-      setShowAccountScreen((prev) => !prev); // Toggle the account screen on "My Account"
+      setShowAccountScreen((prev) => !prev);
     } else {
-      setShowAccountScreen(false); // Close the account screen on other selections
+      setShowAccountScreen(false);
     }
   };
+
   useEffect(() => {
-    // Retrieve userDetails from localStorage on component mount
     const storedUserDetails = localStorage.getItem('userDetails');
     if (storedUserDetails) {
       setUserDetails(JSON.parse(storedUserDetails));
     }
   }, []);
-  // Prevent background scrolling when the account screen is open
+
   useEffect(() => {
-    if (showAccountScreen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = showAccountScreen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -65,9 +68,9 @@ const BottomNavBar = () => {
         onChange={handleChange}
         showLabels
         sx={{
-          backgroundColor: '#0B1E37', // Set background color for bottom nav
-          '& .MuiBottomNavigationAction-root': { color: '#F2BA56' }, // Icon color for all actions
-          '& .Mui-selected': { color: '#FFFFFF' }, // White color for selected item
+          backgroundColor: '#0B1E37',
+          '& .MuiBottomNavigationAction-root': { color: '#F2BA56' },
+          '& .Mui-selected': { color: '#FFFFFF' },
         }}
         className="fixed bottom-0 left-0 right-0 z-50"
       >
@@ -75,15 +78,17 @@ const BottomNavBar = () => {
         <BottomNavigationAction label="Wallet" icon={<AccountBalanceWalletIcon />} />
         <BottomNavigationAction label="Games" icon={<SportsEsportsIcon />} />
         <BottomNavigationAction label="Chats" icon={<ChatIcon />} />
-        <BottomNavigationAction label="My Account" icon={<AccountCircleIcon />} />
+        <BottomNavigationAction sx={{ whiteSpace: 'nowrap' }} label="My Account" icon={<AccountCircleIcon />} />
       </BottomNavigation>
 
       {/* Slide-up Account Screen */}
       <div
         className={`fixed inset-0 z-40 bg-gray-800 text-white transition-transform duration-500 transform ${
           showAccountScreen ? 'translate-y-0' : 'translate-y-full'
-        } flex flex-col`}
+        } flex flex-col h-screen`}
       >
+         {!showReferralProgram ? (
+          <>
         {/* Sticky Header */}
         <div className="flex justify-between items-center p-4 bg-gray-900">
           <h2 className="text-lg font-semibold">{userDetails.user.username}</h2>
@@ -93,59 +98,55 @@ const BottomNavBar = () => {
         </div>
 
         {/* Content Wrapper */}
-        <div className="flex-1 overflow-y-auto bg-primary">
+        <div className="flex-1 min-h-0 overflow-y-auto bg-primary">
           {/* Wallet Section */}
-        <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
-  <p className="text-gray-400 text-left">Main Wallet</p>
-  <div className="flex items-center justify-center space-x-2">
-    <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
-    <span style={{ color: '#FFD700', marginLeft: '8px' }} className="text-4xl font-semibold">{userDetails.user.bgcoin}</span>
-  </div>
-</div>
-
-
+          <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
+            <p className="text-gray-400 text-left">Main Wallet</p>
+            <div className="flex items-center justify-center space-x-2">
+              <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+              <span style={{ color: '#FFD700', marginLeft: '8px' }} className="text-4xl font-semibold">
+                {userDetails.user.bgcoin}
+              </span>
+            </div>
+          </div>
 
           {/* Sections with Dividers */}
           <div className="space-y-6 px-4">
             {/* Funds Section */}
-            <div className='rounded-md rounded-lg' style={{backgroundColor:'#455271'}}>
-              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
-                Funds
-              </h3>
+            <div className="rounded-md bg-secondary p-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">Funds</h3>
               <div className="flex justify-around py-4">
-                 <button
-                className="flex flex-col items-center text-center"
-                onClick={() => {
-                  setShowAccountScreen(false); // Close the account screen
-                  router.push('/funds?type=deposit'); // Navigate to Funds page with deposit type
-                }}
-              >
-                <div className="bg-gray-600 rounded-full p-3 mb-2">
-                  <DepositIcon sx={{ color: '#F2BA56' }} />
-                </div>
-                <span className="text-sm">Deposit</span>
-              </button>
-              <button
-                className="flex flex-col items-center text-center"
-                onClick={() => {
-                  setShowAccountScreen(false); // Close the account screen
-                  router.push('/funds?type=withdrawal'); // Navigate to Funds page with withdrawal type
-                }}
-              >
-                <div className="bg-gray-600 rounded-full p-3 mb-2">
-                  <WithdrawalIcon sx={{ color: '#F2BA56' }} />
-                </div>
-                <span className="text-sm">Withdrawal</span>
-              </button>
+                <button
+                  className="flex flex-col items-center text-center"
+                  onClick={() => {
+                    setShowAccountScreen(false);
+                    router.push('/funds?type=deposit');
+                  }}
+                >
+                  <div className="bg-gray-600 rounded-full p-3 mb-2">
+                    <DepositIcon sx={{ color: '#F2BA56' }} />
+                  </div>
+                  <span className="text-sm">Deposit</span>
+                </button>
+                <button
+                  className="flex flex-col items-center text-center"
+                  onClick={() => {
+                    setShowAccountScreen(false);
+                    router.push('/funds?type=withdrawal');
+                  }}
+                >
+                  <div className="bg-gray-600 rounded-full p-3 mb-2">
+                    <WithdrawalIcon sx={{ color: '#F2BA56' }} />
+                  </div>
+                  <span className="text-sm">Withdrawal</span>
+                </button>
               </div>
             </div>
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* History Section */}
-            <div className='rounded-md rounded-lg bg-secondary' >
-              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
-                History
-              </h3>
+            <div className="rounded-md bg-secondary p-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">History</h3>
               <div className="flex justify-around py-4">
                 <button className="flex flex-col items-center text-center">
                   <div className="bg-gray-600 rounded-full p-3 mb-2">
@@ -164,10 +165,8 @@ const BottomNavBar = () => {
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* Profile Section */}
-            <div className='rounded-md rounded-lg bg-secondary'>
-              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
-                Profile
-              </h3>
+            <div className="rounded-md bg-secondary p-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">Profile</h3>
               <div className="flex justify-around py-4">
                 <button className="flex flex-col items-center text-center">
                   <div className="bg-gray-600 rounded-full p-3 mb-2">
@@ -187,15 +186,22 @@ const BottomNavBar = () => {
                   </div>
                   <span className="text-sm">Inbox</span>
                 </button>
+                 <button
+                      className="flex flex-col items-center text-center"
+                      onClick={() => setShowReferralProgram(true)}
+                    >
+                      <div className="bg-gray-600 rounded-full p-3 mb-2">
+                        <ProfileIcon sx={{ color: '#F2BA56' }} />
+                      </div>
+                      <span className="text-sm">Referral</span>
+                    </button>
               </div>
             </div>
             <div className="border-t border-gray-500 my-2"></div>
 
             {/* Contact Us Section */}
-            <div className='rounded-md rounded-lg bg-secondary'>
-              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">
-                Contact Us
-              </h3>
+            <div className="rounded-md bg-secondary p-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-green-500 pl-2">Contact Us</h3>
               <div className="flex justify-around py-4">
                 <button className="flex flex-col items-center text-center">
                   <div className="bg-gray-600 rounded-full p-3 mb-2">
@@ -218,11 +224,32 @@ const BottomNavBar = () => {
               </div>
             </div>
             <div className="border-t border-gray-500 my-2"></div>
-            <div className='rounded-md rounded-lg bg-secondary'>
-              <span>Logout</span>
+            <div className="rounded-md bg-secondary p-4 text-center">
+              <button onClick={handleLogout} className="text-white font-semibold">
+                Logout
+              </button>
             </div>
           </div>
         </div>
+
+           </>
+        ) : (
+          // Referral Program Component with Back Button
+          // Referral Program with Custom Header
+          <Box className="flex flex-col h-full bg-primary">
+            <Box display="flex" alignItems="center" p={2} sx={{ backgroundColor: '#00693e' }}>
+              <IconButton onClick={() => setShowReferralProgram(false)} sx={{ color: 'white' }}>
+                <ArrowBackIcon />
+              </IconButton>
+              <Typography variant="h6" sx={{ ml: 1 }}>
+                Referral Program
+              </Typography>
+            </Box>
+            <Box p={3}>
+              <ReferralProgram /> {/* Render Referral Program component here */}
+            </Box>
+          </Box>
+        )}
       </div>
     </>
   );

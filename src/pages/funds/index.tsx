@@ -8,6 +8,7 @@ import Bgcoin from "../../assets/LandingPage/SVG/bgcoin.svg";
 import clsx from 'clsx';
 import axios from 'axios';
 import Image from 'next/image';
+import PaymentDetails from '../../components/payments/paymentDetails';
 
 type PaymentMethod = {
   id: string;
@@ -15,8 +16,11 @@ type PaymentMethod = {
   iconUrl: string;
   fee: string;
 };
-
+type PaymentDetailsProps = {
+  onBack: () => void;
+};
 type Reseller = {
+  country: any;
   id: number;
   username: string;
   profile_picture: string | null;
@@ -47,6 +51,7 @@ export default function FundsComponent() {
   const [balance, setBalance] = useState<number | null>(null);
   const [resellers, setResellers] = useState<Reseller[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showPaymentDetails, setShowPaymentDetails] = useState<boolean>(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -58,8 +63,8 @@ export default function FundsComponent() {
     const userDetailsString = localStorage.getItem('userDetails');
     if (userDetailsString) {
       const userDetails = JSON.parse(userDetailsString);
+      console.log('Retrieved userDetails from localStorage:', userDetails);
       const { user, token } = userDetails;
-
       setBalance(parseFloat(user.bgcoin));
 
       const fetchBalance = async () => {
@@ -122,11 +127,47 @@ export default function FundsComponent() {
   const handleSubmit = () => {
     const selectedAmount = parseFloat(amount) || 0;
     if (selectedTab === 'deposit') {
+      // Handle deposit logic here
       alert(`Deposited ${selectedAmount} via ${selectedPayment} to ${selectedReseller}`);
     } else {
+      // Handle withdrawal logic here
       alert(`Withdrawn ${selectedAmount} via ${selectedPayment} to ${withdrawPhoneNumber}`);
     }
+    // Show PaymentDetails component
+    setShowPaymentDetails(true);
   };
+
+  const handleBackToFunds = () => {
+    // Hide PaymentDetails and return to FundsComponent
+    setShowPaymentDetails(false);
+  };
+const handlePaymentDetailsSubmit = (data: {
+    resellerId: number;
+    amount: number;
+    transactionId: string;
+    screenshot: File | null;
+  }) => {
+    // Handle submission of payment details here
+    console.log('Payment Details Submitted:', data);
+    // After handling, you might want to navigate back or show a success message
+    setShowPaymentDetails(false);
+  };
+
+  if (showPaymentDetails) {
+    // Prepare the reseller list for PaymentDetails component
+    const resellerList = resellers
+      .filter((reseller) => reseller.country === selectedCountry)
+      .map((reseller) => ({
+        id: reseller.id,
+        name: `${reseller.first_name} ${reseller.last_name}`,
+        country: reseller.country,
+      }));
+
+
+    return <PaymentDetails  resellers={resellerList}
+      onBack={() => setShowPaymentDetails(false)}
+        onSubmit={handlePaymentDetailsSubmit} />;
+  }
 
   return (
     <div className="p-4 bg-gray-900 text-white min-h-screen">
@@ -192,32 +233,33 @@ export default function FundsComponent() {
         handleResellerChange={handleResellerChange}
         resellers={resellers}
       />
-{/* Instructions */}
-<div style={{ backgroundColor: '#455271', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem' }}>
-  <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
-  <p className="text-sm">
-    Dear member, to speed up your {selectedTab} process:
-    <ul className="list-disc list-inside mt-2">
-      {selectedTab === 'deposit' ? (
-        <>
-          <li>Ensure you have selected the correct deposit method.</li>
-          <li>Enter the exact amount you wish to deposit.</li>
-          <li>Confirm your transaction details before proceeding.</li>
-          <li>Attach the successful payment slip as proof.</li>
-          <li>Contact support if there are any issues with the deposit.</li>
-        </>
-      ) : (
-        <>
-          <li>Verify the phone number associated with your withdrawal account.</li>
-          <li>Enter the correct reference number for your withdrawal.</li>
-          <li>Withdraw only the amount you selected.</li>
-          <li>Ensure you have sufficient balance for the withdrawal amount.</li>
-          <li>Do not save phone numbers to avoid potential security issues.</li>
-        </>
-      )}
-    </ul>
-  </p>
-</div>
+
+      {/* Instructions */}
+      <div style={{ backgroundColor: '#455271', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem' }}>
+        <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
+        <p className="text-sm">
+          Dear member, to speed up your {selectedTab} process:
+          <ul className="list-disc list-inside mt-2">
+            {selectedTab === 'deposit' ? (
+              <>
+                <li>Ensure you have selected the correct deposit method.</li>
+                <li>Enter the exact amount you wish to deposit.</li>
+                <li>Confirm your transaction details before proceeding.</li>
+                <li>Attach the successful payment slip as proof.</li>
+                <li>Contact support if there are any issues with the deposit.</li>
+              </>
+            ) : (
+              <>
+                <li>Verify the phone number associated with your withdrawal account.</li>
+                <li>Enter the correct reference number for your withdrawal.</li>
+                <li>Withdraw only the amount you selected.</li>
+                <li>Ensure you have sufficient balance for the withdrawal amount.</li>
+                <li>Do not save phone numbers to avoid potential security issues.</li>
+              </>
+            )}
+          </ul>
+        </p>
+      </div>
 
       <button
         className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md"
@@ -283,63 +325,61 @@ function DepositWithdrawContent({
         </div>
       </div>
 
-     {selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
-  <div className="bg-gray-800 p-4 rounded-lg mb-4">
-    <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
-    
-    <Select
-      fullWidth
-      value={selectedCountry || ''}
-      onChange={handleCountryChange}
-      displayEmpty
-      className="mb-4"
-      style={{ backgroundColor: '#374151', color: 'white' }} // Dark background and white text for the select box
-      MenuProps={{
-        PaperProps: {
-          style: {
-            backgroundColor: '#374151', // Dark background for dropdown menu
-            color: 'white' // White text for dropdown menu
-          }
-        }
-      }}
-    >
-      <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Country</MenuItem>
-      {countries.map((country) => (
-        <MenuItem key={country} value={country} style={{ color: 'white' }}>
-          {country}
-        </MenuItem>
-      ))}
-    </Select>
+      {selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
+        <div className="bg-gray-800 p-4 rounded-lg mb-4">
+          <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
+          <Select
+            fullWidth
+            value={selectedCountry || ''}
+            onChange={handleCountryChange}
+            displayEmpty
+            className="mb-4"
+            style={{ backgroundColor: '#374151', color: 'white' }}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  backgroundColor: '#374151',
+                  color: 'white'
+                }
+              }
+            }}
+          >
+            <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Country</MenuItem>
+            {countries.map((country) => (
+              <MenuItem key={country} value={country} style={{ color: 'white' }}>
+                {country}
+              </MenuItem>
+            ))}
+          </Select>
 
-    {selectedCountry && (
-      <Select
-        fullWidth
-        value={selectedReseller || ''}
-        onChange={handleResellerChange}
-        displayEmpty
-        className="mb-4"
-        style={{ backgroundColor: '#374151', color: 'white' }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              backgroundColor: '#374151',
-              color: 'white'
-            }
-          }
-        }}
-      >
-        <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Reseller</MenuItem>
-        {resellers.map((reseller) => (
-          <MenuItem key={reseller.id} value={reseller.username} style={{ color: 'white' }}>
-            <Avatar src={reseller.profile_picture || ''} alt={reseller.username} className="mr-2" />
-            {`${reseller.first_name} ${reseller.last_name}`}
-          </MenuItem>
-        ))}
-      </Select>
-    )}
-  </div>
-)}
-
+          {selectedCountry && (
+            <Select
+              fullWidth
+              value={selectedReseller || ''}
+              onChange={handleResellerChange}
+              displayEmpty
+              className="mb-4"
+              style={{ backgroundColor: '#374151', color: 'white' }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    backgroundColor: '#374151',
+                    color: 'white'
+                  }
+                }
+              }}
+            >
+              <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>Select Reseller</MenuItem>
+              {resellers.map((reseller) => (
+                <MenuItem key={reseller.id} value={reseller.username} style={{ color: 'white' }}>
+                  <Avatar src={reseller.profile_picture || ''} alt={reseller.username} className="mr-2" />
+                  {`${reseller.first_name} ${reseller.last_name}`}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        </div>
+      )}
 
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <label htmlFor="manualAmount" className="block text-sm mb-2">

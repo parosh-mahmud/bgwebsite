@@ -17,6 +17,8 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import axios from "axios";
 import toast from "react-hot-toast";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+
 
 interface HeaderProps {
   navfix: boolean;
@@ -90,6 +92,10 @@ const Header: FC<HeaderProps> = ({
           {userDetails ? (
             // Display user details after login
             <div className="flex items-center gap-2 relative">
+               {/* Notification Icon */}
+              <button className="flex items-center justify-center">
+                <NotificationsIcon className="w-5 h-5 rounded-full text-white" />
+              </button>
               <button
                 onClick={() => fetchUserDetails(userDetails?.user?.id)}
                 className="flex items-center justify-center"

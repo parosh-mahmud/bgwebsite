@@ -21,13 +21,20 @@ interface UserDetails {
   user: {
     username: string;
     bgcoin: number;
+    isReseller: boolean; // Ensure default value for isReseller
   };
 }
 
 const BottomNavBar = () => {
   const [value, setValue] = useState(0);
   const [showAccountScreen, setShowAccountScreen] = useState(false);
-  const [userDetails, setUserDetails] = useState<UserDetails>({ user: { username: '', bgcoin: 0 } });
+const [userDetails, setUserDetails] = useState<UserDetails>({
+  user: {
+    username: '',
+    bgcoin: 0,
+    isReseller: false, // Ensure default value for isReseller
+  },
+});
   const router = useRouter();
  const [showReferralProgram, setShowReferralProgram] = useState(false);
   const handleLogout = () => {
@@ -91,7 +98,21 @@ const BottomNavBar = () => {
           <>
         {/* Sticky Header */}
         <div className="flex justify-between items-center p-4 bg-gray-900">
-          <h2 className="text-lg font-semibold">{userDetails.user.username}</h2>
+           <div className="flex items-center space-x-2">
+    <h2 className="text-lg font-semibold">{userDetails.user.username}</h2>
+    {userDetails.user.isReseller && (
+      <span
+        className="text-xs font-bold text-green-500 px-2 py-1 rounded-full bg-gradient-to-r from-green-400 to-green-600"
+        style={{
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          color: 'red',
+        }}
+      >
+        Reseller
+      </span>
+    )}
+  </div>
           <button onClick={() => setShowAccountScreen(false)} className="text-white text-2xl">
             &times;
           </button>

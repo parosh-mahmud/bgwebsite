@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
+import { Avatar } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
+
+interface Reseller {
+  id: number;
+  username: string;
+  profile_picture: string | null;
+  country: string;
+}
 
 interface PaymentDetailsProps {
-  resellers: { id: number; name: string; country: string }[];
+  resellers: Reseller[];
+  amount: number;
   onSubmit: (data: {
     resellerId: number;
     amount: number;
@@ -11,9 +21,8 @@ interface PaymentDetailsProps {
   onBack: () => void;
 }
 
-const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) => {
+const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, amount, onSubmit, onBack }) => {
   const [resellerId, setResellerId] = useState<number | null>(null);
-  const [amount, setAmount] = useState('');
   const [transactionId, setTransactionId] = useState('');
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [error, setError] = useState('');
@@ -27,7 +36,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!resellerId || !amount || !transactionId) {
+    if (!resellerId || !transactionId) {
       setError('Please fill all required fields.');
       return;
     }
@@ -35,7 +44,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) 
     setError('');
     onSubmit({
       resellerId,
-      amount: parseFloat(amount),
+      amount,
       transactionId,
       screenshot,
     });
@@ -43,7 +52,12 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) 
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg w-full max-w-lg mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Payment Details</h2>
+      <div className="flex items-center mb-4">
+        <button onClick={onBack} className="p-2 text-gray-400 hover:text-white">
+          <ArrowBack className="h-6 w-6" />
+        </button>
+        <h2 className="text-xl font-semibold flex-1 text-center">Payment Details</h2>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Reseller Dropdown */}
@@ -62,13 +76,29 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) 
             </option>
             {resellers.map((reseller) => (
               <option key={reseller.id} value={reseller.id}>
-                {reseller.name} - {reseller.country}
+                {reseller.username} - {reseller.country}
               </option>
             ))}
           </select>
+          {/* Display selected reseller with profile picture */}
+          {resellerId && (
+            <div className="mt-4 flex items-center">
+              {resellers
+                .filter((reseller) => reseller.id === resellerId)
+                .map((reseller) => (
+                  <React.Fragment key={reseller.id}>
+                    <Avatar src={reseller.profile_picture || ''} alt={reseller.username} className="mr-2" />
+                    <div>
+                      <p className="text-sm font-medium">{reseller.username}</p>
+                      <p className="text-xs text-gray-400">{reseller.country}</p>
+                    </div>
+                  </React.Fragment>
+                ))}
+            </div>
+          )}
         </div>
 
-        {/* Amount Input */}
+        {/* Amount Display */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium mb-1">
             Amount
@@ -77,9 +107,8 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, onSubmit }) 
             id="amount"
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="w-full p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring focus:ring-blue-500"
+            readOnly
+            className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none"
           />
         </div>
 

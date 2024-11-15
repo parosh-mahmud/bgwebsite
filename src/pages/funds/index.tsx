@@ -10,15 +10,24 @@ import axios from 'axios';
 import Image from 'next/image';
 import PaymentDetails from '../../components/payments/paymentDetails';
 
+
 type PaymentMethod = {
   id: string;
   name: string;
   iconUrl: string;
   fee: string;
 };
-type PaymentDetailsProps = {
+interface PaymentDetailsProps {
+  resellers: Reseller[];
+  amount: number;
+  onSubmit: (data: {
+    resellerId: number;
+    amount: number;
+    transactionId: string;
+    screenshot: File | null;
+  }) => void;
   onBack: () => void;
-};
+}
 type Reseller = {
   country: any;
   id: number;
@@ -52,6 +61,45 @@ export default function FundsComponent() {
   const [resellers, setResellers] = useState<Reseller[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showPaymentDetails, setShowPaymentDetails] = useState<boolean>(false);
+const [convertedAmountDetails, setConvertedAmountDetails] = useState<{
+  bgcoin_amount: number;
+  usd_equivalent: number;
+  currency: string;
+  currency_amount: number;
+} | null>(null);
+
+const handleAmountConversion = async (inputAmount: number, country: string) => {
+  try {
+    const userDetailsString = localStorage.getItem('userDetails');
+    if (!userDetailsString) throw new Error('User details not found in localStorage.');
+    const { token } = JSON.parse(userDetailsString);
+
+    const requestData = {
+      amount: inputAmount,
+      country_or_currency: country,
+    };
+
+    console.log("Request Data:", requestData); // Log the request data before sending
+
+    const response = await axios.post(
+      'https://api.bazigaar.com/wallet_app/api/v1/user/amout/country-wise-convert-to-bgcoin/',
+      requestData,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+
+    console.log("Response Data:", response.data); // Log the response data
+
+    setConvertedAmountDetails(response.data);
+  } catch (error) {
+    console.error('Error converting amount:', error);
+    setConvertedAmountDetails(null);
+  }
+};
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -85,14 +133,17 @@ export default function FundsComponent() {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchResellers = async () => {
+useEffect(() => {
+  if (selectedCountry) {
+    const fetchResellersForCountry = async () => {
       try {
-        const token = localStorage.getItem('authToken');
-        if (!token) throw new Error('Token not found');
+        const userDetailsString = localStorage.getItem('userDetails');
+        if (!userDetailsString) throw new Error('User details not found in localStorage.');
+        const { token } = JSON.parse(userDetailsString);
+        if (!token) throw new Error('Token not found in user details.');
 
         const response = await axios.get<Reseller[]>(
-          'https://api.bazigaar.com/reseller/ResellerList/',
+          `https://api.bazigaar.com/wallet_app/api/v1/user/country-wise-reseller/?country=${selectedCountry}`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -106,15 +157,20 @@ export default function FundsComponent() {
         setLoading(false);
       }
     };
-    fetchResellers();
-  }, []);
+    fetchResellersForCountry();
+  } else {
+    setResellers([]);
+  }
+}, [selectedCountry]);
+
 
   const handleTabSwitch = (tab: string) => setSelectedTab(tab);
 
-  const handleCountryChange = (event: SelectChangeEvent<string>) => {
-    setSelectedCountry(event.target.value);
-    setSelectedReseller(null);
-  };
+const handleCountryChange = (event: SelectChangeEvent<string>) => {
+  setSelectedCountry(event.target.value);
+  setSelectedReseller(null);
+  setResellers([]); // Clear resellers when country changes
+};
 
   const handleResellerChange = (event: SelectChangeEvent<string>) => setSelectedReseller(event.target.value);
 
@@ -122,7 +178,17 @@ export default function FundsComponent() {
 
   const handleAmountSelect = (amount: number) => setAmount(amount.toString());
 
-  const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setAmount(e.target.value);
+const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputValue = e.target.value;
+  setAmount(inputValue);
+
+  const inputAmount = parseFloat(inputValue);
+  if (!isNaN(inputAmount) && selectedCountry) {
+    handleAmountConversion(inputAmount, selectedCountry);
+  } else {
+    setConvertedAmountDetails(null); // Clear conversion details if input is invalid
+  }
+};
 
   const handleSubmit = () => {
     const selectedAmount = parseFloat(amount) || 0;
@@ -164,10 +230,17 @@ const handlePaymentDetailsSubmit = (data: {
       }));
 
 
-    return <PaymentDetails  resellers={resellerList}
+
+  return (
+    <PaymentDetails
+      resellers={resellers}
+      amount={parseFloat(amount)}
       onBack={() => setShowPaymentDetails(false)}
-        onSubmit={handlePaymentDetailsSubmit} />;
-  }
+      onSubmit={handlePaymentDetailsSubmit}
+    />
+  );
+}
+
 
   return (
     <div className="p-4 bg-gray-900 text-white min-h-screen">
@@ -232,6 +305,7 @@ const handlePaymentDetailsSubmit = (data: {
         selectedReseller={selectedReseller}
         handleResellerChange={handleResellerChange}
         resellers={resellers}
+         convertedAmountDetails={convertedAmountDetails}
       />
 
       {/* Instructions */}
@@ -271,7 +345,6 @@ const handlePaymentDetailsSubmit = (data: {
     </div>
   );
 }
-
 function DepositWithdrawContent({
   selectedTab,
   selectedPayment,
@@ -286,7 +359,8 @@ function DepositWithdrawContent({
   handleCountryChange,
   selectedReseller,
   handleResellerChange,
-  resellers
+  resellers,
+  convertedAmountDetails // Correctly include this prop here
 }: {
   selectedTab: string;
   selectedPayment: string;
@@ -302,7 +376,14 @@ function DepositWithdrawContent({
   selectedReseller: string | null;
   handleResellerChange: (event: SelectChangeEvent<string>) => void;
   resellers: Reseller[];
+  convertedAmountDetails: {
+    bgcoin_amount: number;
+    usd_equivalent: number;
+    currency: string;
+    currency_amount: number;
+  } | null; // Define the type of convertedAmountDetails
 }) {
+
   return (
     <>
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
@@ -328,6 +409,7 @@ function DepositWithdrawContent({
       {selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
           <h2 className="text-lg font-semibold mb-4">Select Country & Reseller</h2>
+       
           <Select
             fullWidth
             value={selectedCountry || ''}
@@ -401,6 +483,20 @@ function DepositWithdrawContent({
             value={amount}
             onChange={handleAmountInputChange}
           />
+          {convertedAmountDetails && (
+  <div className="bg-gray-700 p-4 mt-2 rounded-lg">
+    <h3 className="text-sm font-semibold text-green-400 mb-2">Conversion Details:</h3>
+    <ul className="text-sm">
+      <li><strong>BG Coin Amount:</strong> {convertedAmountDetails.bgcoin_amount}</li>
+      <li><strong>USD Equivalent:</strong> ${convertedAmountDetails.usd_equivalent.toFixed(2)}</li>
+      <li>
+        <strong>{convertedAmountDetails.currency} Amount:</strong> 
+        {convertedAmountDetails.currency_amount.toFixed(2)} {convertedAmountDetails.currency}
+      </li>
+    </ul>
+  </div>
+)}
+
         </div>
       </div>
 

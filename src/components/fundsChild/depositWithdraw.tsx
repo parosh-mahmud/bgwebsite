@@ -1,5 +1,5 @@
 // DepositWithdrawContent.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Image from 'next/image';
 import clsx from 'clsx';
@@ -24,13 +24,14 @@ type Props = {
   setWithdrawPhoneNumber?: (value: string) => void;
   selectedCountry: string | null;
   handleCountryChange: (event: SelectChangeEvent<string>) => void;
-  selectedReseller: string | null;
+   selectedReseller: Reseller | null;
   handleResellerChange: (event: SelectChangeEvent<string>) => void;
   resellers: Reseller[];
   convertedAmountDetails: ConvertedAmountDetails;
   countrySearchQuery: string;
   handleCountrySearch: (query: string) => void;
   filteredCountries: CountryData[];
+  
 };
 
 const DepositWithdrawContent: React.FC<Props> = ({
@@ -54,6 +55,13 @@ const DepositWithdrawContent: React.FC<Props> = ({
   filteredCountries,
   
 }) => {
+  const [isValidAmount, setIsValidAmount] = useState(false);
+
+  // Validate amount whenever it changes
+  useEffect(() => {
+    const numericAmount = parseInt(amount, 10);
+    setIsValidAmount(numericAmount >= 100);
+  }, [amount]);
   return (
     <>
       {/* Payment Method Selection */}
@@ -129,8 +137,8 @@ const DepositWithdrawContent: React.FC<Props> = ({
     {selectedCountry && (
       <Select
         fullWidth
-        value={selectedReseller || ''}
-        onChange={handleResellerChange}
+         value={selectedReseller?.username || ''}
+  onChange={handleResellerChange}
         displayEmpty
         className="mb-4"
         style={{
@@ -172,7 +180,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
 )}
 
 
-      {/* Amount Input and Conversion Details */}
+       {/* Amount Input and Conversion Details */}
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <label htmlFor="manualAmount" className="block text-sm mb-2">
           {selectedTab === 'deposit' ? 'Enter Deposit Coin Amount' : 'Enter Withdrawal Amount'}
@@ -191,21 +199,30 @@ const DepositWithdrawContent: React.FC<Props> = ({
             placeholder={`Enter ${selectedTab} amount`}
             className="w-full p-2 pl-10 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
             value={amount}
-            onChange={handleAmountInputChange}
+            onChange={(e) => {
+              handleAmountInputChange(e); // Update amount
+              const numericValue = parseInt(e.target.value, 10);
+              setIsValidAmount(numericValue >= 100); // Update validation state
+            }}
           />
         </div>
 
-        {convertedAmountDetails && (
-        <div className="bg-gray-700 p-4 mt-2 rounded-lg">
-  <h3 className="text-sm font-semibold text-green-400 mb-2">
-    Equivalent Local Currency: {' '}
-    <strong className="text-yellow-500">
-      {convertedAmountDetails.currency_amount.toFixed(2)}{' '}
-      {convertedAmountDetails.currency}
-    </strong>
-  </h3>
-</div>
+        {!isValidAmount && (
+          <p className="text-xs text-red-400 mt-2">
+            Amount must be at least three digits to proceed.
+          </p>
+        )}
 
+        {convertedAmountDetails && (
+          <div className="bg-gray-700 p-4 mt-2 rounded-lg">
+            <h3 className="text-sm font-semibold text-green-400 mb-2">
+              Equivalent Local Currency:{' '}
+              <strong className="text-yellow-500">
+                {convertedAmountDetails.currency_amount.toFixed(2)}{' '}
+                {convertedAmountDetails.currency}
+              </strong>
+            </h3>
+          </div>
         )}
       </div>
 
@@ -238,7 +255,10 @@ const DepositWithdrawContent: React.FC<Props> = ({
                         ? 'bg-green-700 text-white'
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                     )}
-                    onClick={() => handleAmountSelect(option)}
+                    onClick={() => {
+                      handleAmountSelect(option);
+                      setIsValidAmount(option >= 100); // Update validation state
+                    }}
                   >
                     <span>{option.toLocaleString()}</span>
                     {extraPercentage && (

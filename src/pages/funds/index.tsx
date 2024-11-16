@@ -26,7 +26,7 @@ const FundsComponent: React.FC = () => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState('deposit');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [selectedReseller, setSelectedReseller] = useState<string | null>(null);
+const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<string>('bkash');
   const [amount, setAmount] = useState<string>('');
   const [withdrawPhoneNumber, setWithdrawPhoneNumber] = useState('');
@@ -118,7 +118,9 @@ const FundsComponent: React.FC = () => {
   };
 
   const handleResellerChange = (event: SelectChangeEvent<string>) => {
-    setSelectedReseller(event.target.value as string);
+    const selectedUsername = event.target.value as string;
+    const reseller = resellers.find((r) => r.username === selectedUsername);
+    setSelectedReseller(reseller || null);
   };
 
   const handlePaymentSelect = (id: string) => setSelectedPayment(id);
@@ -164,10 +166,10 @@ const FundsComponent: React.FC = () => {
     const selectedAmount = parseFloat(amount) || 0;
     if (selectedTab === 'deposit') {
       // Handle deposit logic here
-      alert(`Deposited ${selectedAmount} via ${selectedPayment} to ${selectedReseller}`);
+     
     } else {
       // Handle withdrawal logic here
-      alert(`Withdrawn ${selectedAmount} via ${selectedPayment} to ${withdrawPhoneNumber}`);
+      
     }
     // Show PaymentDetails component
     setShowPaymentDetails(true);
@@ -186,14 +188,21 @@ const FundsComponent: React.FC = () => {
 
   if (showPaymentDetails) {
     return (
-      <PaymentDetails
+       <PaymentDetails
         resellers={resellers}
         amount={parseFloat(amount)}
         onBack={() => setShowPaymentDetails(false)}
         onSubmit={handlePaymentDetailsSubmit}
-          selectedReseller={{ id: 1, username: 'JohnDoe', profile_picture: null, country: 'Bangladesh' }}
-  equivalentCurrency={{ value: 1000.00, currency: 'INR' }}
-  selectedPayment="bKash"
+        selectedReseller={selectedReseller}
+        equivalentCurrency={
+          convertedAmountDetails
+            ? {
+                value: convertedAmountDetails.currency_amount,
+                currency: convertedAmountDetails.currency,
+              }
+            : null
+        }
+        selectedPayment={selectedPayment}
       />
     );
   }

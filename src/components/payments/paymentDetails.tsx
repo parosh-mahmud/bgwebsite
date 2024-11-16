@@ -20,6 +20,7 @@ interface PaymentDetailsProps {
     amount: number;
     transactionId: string;
     screenshot: File | null;
+     
   }) => void;
   onBack: () => void;
 }

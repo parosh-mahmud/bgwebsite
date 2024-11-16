@@ -12,6 +12,9 @@ interface Reseller {
 interface PaymentDetailsProps {
   resellers: Reseller[];
   amount: number;
+  equivalentCurrency: { value: number; currency: string } | null;
+  selectedPayment: string;
+  selectedReseller: Reseller | null;
   onSubmit: (data: {
     resellerId: number;
     amount: number;
@@ -21,8 +24,15 @@ interface PaymentDetailsProps {
   onBack: () => void;
 }
 
-const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, amount, onSubmit, onBack }) => {
-  const [resellerId, setResellerId] = useState<number | null>(null);
+const PaymentDetails: React.FC<PaymentDetailsProps> = ({
+  resellers,
+  amount,
+  equivalentCurrency,
+  selectedPayment,
+  selectedReseller,
+  onSubmit,
+  onBack,
+}) => {
   const [transactionId, setTransactionId] = useState('');
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [error, setError] = useState('');
@@ -36,14 +46,14 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, amount, onSu
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!resellerId || !transactionId) {
+    if (!selectedReseller || !transactionId) {
       setError('Please fill all required fields.');
       return;
     }
 
     setError('');
     onSubmit({
-      resellerId,
+      resellerId: selectedReseller.id,
       amount,
       transactionId,
       screenshot,
@@ -60,56 +70,56 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({ resellers, amount, onSu
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Reseller Dropdown */}
+        {/* Selected Reseller */}
         <div>
           <label htmlFor="reseller" className="block text-sm font-medium mb-1">
-            Select Reseller
+            Selected Reseller
           </label>
-          <select
-            id="reseller"
-            value={resellerId || ''}
-            onChange={(e) => setResellerId(Number(e.target.value))}
-            className="w-full p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring focus:ring-blue-500"
-          >
-            <option value="" disabled>
-              Choose a reseller
-            </option>
-            {resellers.map((reseller) => (
-              <option key={reseller.id} value={reseller.id}>
-                {reseller.username} - {reseller.country}
-              </option>
-            ))}
-          </select>
-          {/* Display selected reseller with profile picture */}
-          {resellerId && (
-            <div className="mt-4 flex items-center">
-              {resellers
-                .filter((reseller) => reseller.id === resellerId)
-                .map((reseller) => (
-                  <React.Fragment key={reseller.id}>
-                    <Avatar src={reseller.profile_picture || ''} alt={reseller.username} className="mr-2" />
-                    <div>
-                      <p className="text-sm font-medium">{reseller.username}</p>
-                      <p className="text-xs text-gray-400">{reseller.country}</p>
-                    </div>
-                  </React.Fragment>
-                ))}
+          {selectedReseller ? (
+            <div className="mt-2 flex items-center">
+              <Avatar
+                src={selectedReseller.profile_picture || ''}
+                alt={selectedReseller.username}
+                className="mr-2"
+              />
+              <div>
+                <p className="text-sm font-medium">{selectedReseller.username}</p>
+                <p className="text-xs text-gray-400">{selectedReseller.country}</p>
+              </div>
             </div>
+          ) : (
+            <p className="text-sm text-red-400">No reseller selected. Go back to select a reseller.</p>
           )}
         </div>
 
-        {/* Amount Display */}
+        {/* Amount and Equivalent Local Currency */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium mb-1">
             Amount
           </label>
-          <input
-            id="amount"
-            type="number"
-            value={amount}
-            readOnly
-            className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none"
-          />
+          <div className="w-full p-2 rounded-lg bg-gray-700 text-white border border-gray-600">
+            <p>
+              {amount} BG Coin
+              {equivalentCurrency && (
+                <span className="text-sm text-green-400 ml-2">
+                  (~ {equivalentCurrency.value.toFixed(2)} {equivalentCurrency.currency})
+                </span>
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* Selected Payment Method */}
+        <div>
+          <label htmlFor="paymentMethod" className="block text-sm font-medium mb-1">
+            Selected Payment Method
+          </label>
+          <div
+            id="paymentMethod"
+            className="w-full p-2 rounded-lg bg-gray-800 text-white border border-gray-700"
+          >
+            {selectedPayment}
+          </div>
         </div>
 
         {/* Transaction ID Input */}

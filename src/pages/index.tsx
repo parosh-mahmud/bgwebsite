@@ -98,7 +98,7 @@ const Home = () => {
   <span className="w-5 h-5 mr-2">
     <TicketIcon />
   </span>
-  Buy Tickets
+  All Lottery Packages
 </Link>
 
 

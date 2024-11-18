@@ -20,6 +20,7 @@ import android from "../assets/LandingPage/SVG/GooglePlaySilver.svg";
 import ImageCarousel from "../components/common/Slider/imageCarousel";
 import LoadingSpinner from "../components/common/loadingSpinner/LoadingSpinner";
 import Link from "next/link";
+import MainTabComponent from "../components/mainTabs/mainTabComponent";
 
 const images = [
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943693/Buylottery_vn0b0p.jpg",
@@ -113,7 +114,7 @@ const Home = () => {
 </div>
 
 
-
+<MainTabComponent />
         {/* Top Slider */}
         <div className="mt-8">
           <MainSlider
@@ -121,7 +122,7 @@ const Home = () => {
             bodyStyle="!flex items-center py-2 lg:py-3 gap-3"
           />
         </div>
-
+          
         {/* Counter Section */}
         <div className="container py-8 sm:py-12">
           <div className="shadow-jackpot bg-[#222222] rounded-2xl">

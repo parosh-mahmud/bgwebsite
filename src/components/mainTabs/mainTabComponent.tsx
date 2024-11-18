@@ -8,7 +8,7 @@ const tabs = [
   { name: 'Special Lotteries', id: 'specialLotteries' },
   { name: 'Giveaways', id: 'giveaways' },
   { name: 'Results', id: 'results' },
-  { name: 'Upcoming Lottery Packages', id: 'upcomingLotteries' },
+  { name: 'Upcoming Events and Lotteris', id: 'upcomingLotteries' },
 ];
 
 const MainTabComponent = () => {

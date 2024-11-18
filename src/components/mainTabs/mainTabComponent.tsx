@@ -7,8 +7,10 @@ const tabs = [
   { name: 'Quick Lottery', id: 'quickLottery' },
   { name: 'Special Lotteries', id: 'specialLotteries' },
   { name: 'Giveaways', id: 'giveaways' },
+  { name: 'Scratchcards', id: 'Scratchcards' },
   { name: 'Results', id: 'results' },
   { name: 'Upcoming Events and Lotteris', id: 'upcomingLotteries' },
+  
 ];
 
 const MainTabComponent = () => {
@@ -30,6 +32,8 @@ const MainTabComponent = () => {
         return <div>Results Content</div>;
       case 'upcomingLotteries':
         return <div>Upcoming Lottery Packages Content</div>;
+         case 'Scratchcards':
+        return <div>Scratchcards</div>;
       default:
         return null;
     }

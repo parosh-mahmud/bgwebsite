@@ -25,6 +25,7 @@ export type Reseller = {
   profile_picture: string | null;
   first_name: string;
   last_name: string;
+  phone_number: string;
 };
 
 export type ConvertedAmountDetails = {

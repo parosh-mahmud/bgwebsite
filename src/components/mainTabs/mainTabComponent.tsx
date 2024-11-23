@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import QuickLotterySection from './quickLottery';
+import ScratchCardContainer from './scratchCard/scractchCardContainer';
 
 const tabs = [
   { name: 'Quick Lottery', id: 'quickLottery' },
@@ -33,7 +34,7 @@ const MainTabComponent = () => {
       case 'upcomingLotteries':
         return <div>Upcoming Lottery Packages Content</div>;
          case 'Scratchcards':
-        return <div>Scratchcards</div>;
+        return <div><ScratchCardContainer/></div>;
       default:
         return null;
     }

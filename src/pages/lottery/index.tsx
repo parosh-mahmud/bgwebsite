@@ -6,6 +6,7 @@ import { Breadcrumbs, Typography, Link } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import LoadingSpinner from "../../components/common/loadingSpinner/LoadingSpinner";
+import LotteryCard from "../../components/Lottery/lotteryCard";
 
 interface Ticket {
   id: number;
@@ -18,7 +19,26 @@ const LotteryPage = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
-
+const lotteries = [
+  {
+    id: 1,
+    lotteryName: "Mega Lottery",
+    price: 5,
+    drawStatus: "Ongoing",
+    numberOfTickets: 500,
+    prizeImage:
+      "https://sgp1.digitaloceanspaces.com/bazigaar/media/image/firstPrize/iPhone-17-Plus-Feature.jpeg",
+  },
+  {
+    id: 2,
+    lotteryName: "Super Saver Lottery",
+    price: 10,
+    drawStatus: "Completed",
+    numberOfTickets: 300,
+    prizeImage:
+      "https://sgp1.digitaloceanspaces.com/bazigaar/media/image/secondPrize/iphoneimage-removebg-preview.png",
+  },
+];
   const fetchTickets = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -31,6 +51,7 @@ const LotteryPage = () => {
         headers: { Authorization: `Token ${token}` },
       });
       setTickets(response.data.results);
+      console.log(response.data.results)
     } catch (error) {
       console.error("Failed to fetch tickets:", error);
     } finally {
@@ -78,34 +99,20 @@ const LotteryPage = () => {
 
       {/* Tickets Grid */}
       <div className="container mx-auto p-6 lg:p-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              className="border border-gray-700 rounded-lg p-4 shadow-lg bg-gray-800 hover:bg-gray-700 transition duration-200"
-            >
-              <Image
-                src={ticket.prizeImage || "/placeholder-image.png"}
-                alt={`${ticket.LotteryName} Prize`}
-                width={400}
-                height={250}
-                className="rounded-lg object-cover w-full h-48"
-              />
-              <h1 className="text-center text-xl lg:text-2xl text-yellow-100 font-extrabold mt-4">
-                {ticket.LotteryName}
-              </h1>
-              <p className="text-center text-yellow-300 font-medium text-lg mt-2">
-                Price: <span className="font-semibold">${ticket.price.toFixed(2)}</span>
-              </p>
-              <button
-                className="mt-4 w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-gray-900 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200"
-                onClick={() => setSelectedTicketId(ticket.id)}
-              >
-                View Ticket Details
-              </button>
-            </div>
-          ))}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+   {lotteries.map((lottery) => (
+          <LotteryCard
+            key={lottery.id}
+            lotteryName={lottery.lotteryName}
+            price={lottery.price}
+            drawStatus={lottery.drawStatus}
+            numberOfTickets={lottery.numberOfTickets}
+            prizeImage={lottery.prizeImage}
+            onViewDetails={() => alert(`Viewing details for ${lottery.lotteryName}`)}
+          />
+        ))}
+</div>
+
       </div>
     </div>
   );

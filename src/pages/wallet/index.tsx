@@ -138,7 +138,7 @@ export default function Wallet() {
   
   {/* Balance Display */}
   <Box display="flex" alignItems="center">
-    <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+ <Image src="/images/bgcoin.svg" alt="BG Coin" width={25} height={25} />
     <Typography
       variant="h4"
       style={{

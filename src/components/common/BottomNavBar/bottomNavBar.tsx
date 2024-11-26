@@ -124,7 +124,7 @@ const [userDetails, setUserDetails] = useState<UserDetails>({
           <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
             <p className="text-gray-400 text-left">Main Wallet</p>
             <div className="flex items-center justify-center space-x-2">
-              <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+ <Image src="/images/bgcoin.svg" alt="BG Coin" width={50} height={50} />
               <span style={{ color: '#FFD700', marginLeft: '8px' }} className="text-4xl font-semibold">
                 {userDetails.user.bgcoin}
               </span>

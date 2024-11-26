@@ -1,0 +1,22 @@
+<svg width="200px" height="200px" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle for coin border with a gold gradient -->
+  <defs>
+    <radialGradient id="gold-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD700; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500; stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="url(#gold-gradient)" stroke="#DAA520" stroke-width="2"/>
+
+  <!-- Inner circle for layered coin effect with a lighter gold shade -->
+  <defs>
+    <radialGradient id="inner-gold-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFACD; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700; stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="80" fill="url(#inner-gold-gradient)" stroke="#B8860B" stroke-width="1"/>
+
+  <!-- Centered bold "BG" text with a vibrant color and subtle white outline for contrast -->
+  <text x="100" y="125" font-size="70px" font-family="Georgia" font-weight="bold" text-anchor="middle" fill="#4B0082" stroke="white" stroke-width="1.5">BG</text>
+</svg>

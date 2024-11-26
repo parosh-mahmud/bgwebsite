@@ -82,7 +82,7 @@ const Header: FC<HeaderProps> = ({
         {/* Left Side: Logo */}
         <div className="flex items-center">
           <Link href="/">
-            <Image src={HeaderLogo} alt="Header Logo" />
+             <Image src="/images/BazigaarLogo.svg" alt="BG Coin" width={150} height={70} />
           </Link>
         </div>
 
@@ -105,8 +105,8 @@ const Header: FC<HeaderProps> = ({
            <div
   className="flex items-center gap-1 md:gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-[#E65E09] to-[#F2BA56] shadow-md"
 >
-  <Image src={Bgcoin} alt="BG Coin" width={25} height={25} />
-  <span className="font-semibold text-xs md:text-lg text-black">
+ <Image src="/images/bgcoin.svg" alt="BG Coin" width={25} height={25} />
+   <span className="font-semibold text-xs md:text-lg text-black">
     {userDetails.user.bgcoin}
   </span>
 </div>

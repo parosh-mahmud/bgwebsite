@@ -24,6 +24,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
   });
   const [countries, setCountries] = useState<{ value: string; label: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Loading state
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [verificationKey, setVerificationKey] = useState('');
 
@@ -65,6 +66,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
       return;
     }
 
+    setLoading(true); // Start loading
     try {
       const response = await axios.post('https://api.bazigaar.com/user/auth/registration/custom/', {
         email: formData.email,
@@ -81,6 +83,8 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
       setOtpModalOpen(true); // Open OTP modal after successful registration
     } catch (err: any) {
       setError('Registration failed. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -197,8 +201,14 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
                 />
               </div>
 
-              <button type="submit" className="bg-green-500 text-white py-2 rounded-lg font-bold mt-4">
-                Sign Up
+              <button
+                type="submit"
+                className={`${
+                  loading ? 'bg-gray-400' : 'bg-green-500'
+                } text-white py-2 rounded-lg font-bold mt-4`}
+                disabled={loading}
+              >
+                {loading ? 'Please wait...' : 'Sign Up'}
               </button>
             </form>
 

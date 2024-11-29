@@ -7,7 +7,7 @@ interface Reseller {
   username: string;
   profile_picture: string | null;
   country: string;
-  phone_number: string; // Added phone_number field
+  phone_number: string; // Optional field for fallback
 }
 
 interface PaymentDetailsProps {
@@ -16,6 +16,7 @@ interface PaymentDetailsProps {
   equivalentCurrency: { value: number; currency: string } | null;
   selectedPayment: string;
   selectedReseller: Reseller | null;
+  resellerPaymentNumbers: { id: number; number: string; bankName: string }[];
   onSubmit: (data: {
     resellerId: number;
     amount: number;
@@ -31,6 +32,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   equivalentCurrency,
   selectedPayment,
   selectedReseller,
+  resellerPaymentNumbers,
   onSubmit,
   onBack,
 }) => {
@@ -86,16 +88,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
               <div>
                 <p className="text-sm font-medium">{selectedReseller.username}</p>
                 <p className="text-xs text-gray-400">{selectedReseller.country}</p>
-                {/* Display Reseller's Phone Number */}
-               <div className="mt-4 p-3 rounded-md bg-gray-800 border border-gray-700">
-  <p className="text-sm font-medium text-gray-300">
-  Send Money to this Number:{" "}
-  <span className="text-yellow-400 font-bold">0176587548</span>
-</p>
-
-  <p className="text-2xl font-semibold text-blue-400 mt-1">{selectedReseller.phone_number}</p>
-</div>
-
               </div>
             </div>
           ) : (
@@ -104,6 +96,28 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
             </p>
           )}
         </div>
+
+        {/* Reseller Payment Numbers */}
+<div className="mt-4 p-3 rounded-md bg-gray-800 border border-gray-700">
+  <h3 className="text-sm font-semibold text-gray-300 mb-2">Send Money Number:</h3>
+  {resellerPaymentNumbers.length > 0 &&
+  resellerPaymentNumbers.some((bank) => bank.bankName.toLowerCase() === selectedPayment.toLowerCase()) ? (
+    resellerPaymentNumbers
+      .filter((bank) => bank.bankName.toLowerCase() === selectedPayment.toLowerCase())
+      .map((bank) => (
+        <div key={bank.id} className="mb-2">
+          <p className="text-sm text-gray-400">
+            <span className="font-bold text-yellow-400">{bank.bankName}</span>: {bank.number}
+          </p>
+        </div>
+      ))
+  ) : (
+    <p className="text-sm text-red-400">No payment number available for the selected method.</p>
+  )}
+</div>
+
+
+
 
         {/* Amount and Equivalent Local Currency */}
         <div>
@@ -169,28 +183,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
 
         {/* Error Message */}
         {error && <p className="text-sm text-red-500">{error}</p>}
-
-        {/* Instructions */}
-        <div
-          style={{
-            backgroundColor: '#455271',
-            padding: '1rem',
-            borderRadius: '0.5rem',
-            marginBottom: '1rem',
-          }}
-        >
-          <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
-          <p className="text-sm">
-            Dear member, to speed up your payment process:
-            <ul className="list-disc list-inside mt-2">
-              <li>Ensure you have selected the correct payment method.</li>
-              <li>Send the exact amount to the reseller's phone number above.</li>
-              <li>Enter the correct transaction ID.</li>
-              <li>Attach the successful payment screenshot as proof.</li>
-              <li>Contact support if there are any issues with the payment.</li>
-            </ul>
-          </p>
-        </div>
 
         {/* Submit Button */}
         <button

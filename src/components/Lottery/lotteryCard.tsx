@@ -49,7 +49,7 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
       <div className="p-4">
         <button
           onClick={onViewDetails}
-          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-gray-900 py-2 rounded-lg font-bold hover:opacity-90 transition duration-200"
+          className="w-full  bg-gradient-to-r from-yellow-500 to-orange-500 text-gray-900 py-2 rounded-lg font-bold hover:opacity-90 transition duration-200"
         >
           View Ticket Details
         </button>

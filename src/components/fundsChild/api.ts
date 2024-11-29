@@ -15,6 +15,19 @@ export const fetchBalance = async (userId: string, token: string): Promise<numbe
     return 0;
   }
 };
+export const fetchResellerPaymentDetails = async (resellerId: number, token: string) => {
+  try {
+    const response = await axios.get(`https://api.bazigaar.com/user/user_details/${resellerId}`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.data.user.mobileBanks;
+  } catch (error) {
+    console.error('Error fetching reseller payment details:', error);
+    return [];
+  }
+};
 
 export const fetchResellersForCountry = async (
   country: string,

@@ -187,7 +187,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
         </label>
         <div className="relative">
           <Image
-            src={Bgcoin}
+            src="/images/bgcoin.svg"
             alt="BG Coin"
             width={24}
             height={24}

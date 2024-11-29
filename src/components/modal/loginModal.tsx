@@ -20,9 +20,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick,
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     try {
       // Step 1: Log in and get basic details and token
       const loginResponse = await axios.post('https://api.bazigaar.com/lottery/user-login/', {
@@ -35,8 +37,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick,
       // Step 2: Use the token to fetch full user details
       const userDetailsResponse = await axios.get(`https://api.bazigaar.com/user/user_details/${id}`, {
         headers: {
-          Authorization: `Token ${token}`
-        }
+          Authorization: `Token ${token}`,
+        },
       });
 
       // Combine token with full user details
@@ -46,8 +48,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick,
       };
 
       // Save full user details and token to localStorage
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("userDetails", JSON.stringify(fullUserDetails));
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userDetails', JSON.stringify(fullUserDetails));
 
       // Pass full details to parent component
       onLoginSuccess(fullUserDetails);
@@ -55,6 +57,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick,
       onClose();
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -119,9 +123,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSignUpClick,
           {/* Login Button */}
           <button
             type="submit"
-            className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-bold py-2 rounded-lg mt-2 shadow-md hover:shadow-lg transition-all duration-200"
+            className={`${
+              loading ? 'bg-gray-400' : 'bg-gradient-to-r from-yellow-400 to-yellow-600'
+            } text-white font-bold py-2 rounded-lg mt-2 shadow-md hover:shadow-lg transition-all duration-200`}
+            disabled={loading}
           >
-            Login now
+            {loading ? 'Please wait...' : 'Login now'}
           </button>
         </form>
 

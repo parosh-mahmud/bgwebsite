@@ -11,6 +11,7 @@ import {
   fetchBalance,
   fetchResellersForCountry,
   convertAmountToLocalCurrency,
+  fetchResellerPaymentDetails
 } from '../../components/fundsChild/api';
 import DepositWithdrawContent from '../../components/fundsChild/depositWithdraw';
 import PaymentDetails from '../../components/payments/paymentDetails';
@@ -38,7 +39,9 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
   const [countryList, setCountryList] = useState<CountryData[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<CountryData[]>([]);
   const [countrySearchQuery, setCountrySearchQuery] = useState('');
-
+const [resellerPaymentNumbers, setResellerPaymentNumbers] = useState<
+  { id: number; number: string; bankName: string }[]
+>([]);
   // Fetch user details and balance
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -74,7 +77,18 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
       setResellers([]);
     }
   }, [selectedCountry]);
+// Fetch reseller payment numbers when reseller changes
+useEffect(() => {
+  if (selectedReseller) {
+    const userDetailsString = localStorage.getItem('userDetails');
+    if (!userDetailsString) return;
+    const { token } = JSON.parse(userDetailsString);
 
+    fetchResellerPaymentDetails(selectedReseller.id, token).then(setResellerPaymentNumbers);
+  } else {
+    setResellerPaymentNumbers([]);
+  }
+}, [selectedReseller]);
   // Fetch countries and currencies from REST Countries API
   useEffect(() => {
     const fetchCountriesAndCurrencies = async () => {
@@ -189,21 +203,23 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
   if (showPaymentDetails) {
     return (
        <PaymentDetails
-        resellers={resellers}
-        amount={parseFloat(amount)}
-        onBack={() => setShowPaymentDetails(false)}
-        onSubmit={handlePaymentDetailsSubmit}
-        selectedReseller={selectedReseller}
-        equivalentCurrency={
-          convertedAmountDetails
-            ? {
-                value: convertedAmountDetails.currency_amount,
-                currency: convertedAmountDetails.currency,
-              }
-            : null
+  resellers={resellers}
+  amount={parseFloat(amount)}
+  onBack={() => setShowPaymentDetails(false)}
+  onSubmit={handlePaymentDetailsSubmit}
+  selectedReseller={selectedReseller}
+  equivalentCurrency={
+    convertedAmountDetails
+      ? {
+          value: convertedAmountDetails.currency_amount,
+          currency: convertedAmountDetails.currency,
         }
-        selectedPayment={selectedPayment}
-      />
+      : null
+  }
+  selectedPayment={selectedPayment}
+  resellerPaymentNumbers={resellerPaymentNumbers} // Pass this state here
+/>
+
     );
   }
 
@@ -228,7 +244,7 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
             <AccountBalanceWallet className="text-white h-6 w-6" />
           </div>
           <div className="flex justify-center items-center text-4xl font-bold mt-2">
-            <Image src={Bgcoin} alt="BG Coin" width={40} height={40} />
+            <Image src="/images/bgcoin.svg" alt="BG Coin" width={40} height={40} />
             <span style={{ color: '#FFD700', marginLeft: '8px' }}>
               {balance !== null ? balance.toFixed(2) : 'Loading...'}
             </span>

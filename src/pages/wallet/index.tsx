@@ -58,58 +58,68 @@ export default function Wallet() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchWalletData = async () => {
-      const userDetailsString = localStorage.getItem("userDetails");
-      if (userDetailsString) {
-        const userDetails = JSON.parse(userDetailsString);
-        const token = userDetails.token;
-        console.log(token)
-        const userId = userDetails.user.id;
-        console.log(isReseller)
-        try {
-          // Fetch user details to check if the user is a reseller
-          const userDetailsResponse = await axios.get(
-            `https://api.bazigaar.com/user/user_details/${userId}`,
+  const fetchWalletData = async () => {
+    const userDetailsString = localStorage.getItem("userDetails");
+    if (userDetailsString) {
+      const userDetails = JSON.parse(userDetailsString);
+      const token = userDetails.token;
+      const userId = userDetails.user.id;
+      console.log("User ID:", userId);
+      console.log("Token:", token);
+
+      try {
+        // Fetch user details to check if the user is a reseller
+        const userDetailsResponse = await axios.get(
+          `https://api.bazigaar.com/user/user_details/${userId}`,
+          { headers: { Authorization: `Token ${token}` } }
+        );
+        const userApiDetails = userDetailsResponse.data;
+        console.log("User API Details:", userApiDetails);
+
+        const isUserReseller = userApiDetails.user.isReseller;
+        setIsReseller(isUserReseller);
+        console.log("Is Reseller:", isUserReseller);
+
+        // Fetch balance
+        const balanceResponse = await axios.get<BgcoinResponse>(
+          "https://api.bazigaar.com/user/api/v1/user/bgcoin",
+          { headers: { Authorization: `Token ${token}` } }
+        );
+        setBalance(balanceResponse.data.bgcoin);
+        console.log("Balance:", balanceResponse.data.bgcoin);
+
+        if (isUserReseller) {
+          // Fetch deposit requests for resellers
+          const depositRequestResponse = await axios.get<DepositRequestResponse>(
+            "https://api.bazigaar.com/reseller_app/api/v1/user/reseller-my-walle/deposit-request-list/",
             { headers: { Authorization: `Token ${token}` } }
           );
-          const userApiDetails = userDetailsResponse.data;
-          console.log("User API details:", userApiDetails.user.isReseller);
-          setIsReseller(userApiDetails.user.isReseller);
-
-          // Fetch balance
-          const balanceResponse = await axios.get<BgcoinResponse>(
-            "https://api.bazigaar.com/user/api/v1/user/bgcoin",
+          console.log("Deposit Request Response Data:", depositRequestResponse.data);
+          setDepositRequests(depositRequestResponse.data.results || []);
+        } else {
+          // Fetch transaction history for regular users
+          const transactionResponse = await axios.get<TransactionResponse>(
+            "https://api.bazigaar.com/wallet_app/api/v1/user/my-wallet-profile",
             { headers: { Authorization: `Token ${token}` } }
           );
-          setBalance(balanceResponse.data.bgcoin);
-
-          if (userApiDetails.user.isReseller) {
-            // Fetch deposit requests if user is a reseller
-            const depositRequestResponse =
-              await axios.get<DepositRequestResponse>(
-                "https://api.bazigaar.com/wallet_app/api/v1/user/my-walle/deposit-request-list/",
-                { headers: { Authorization: `Token ${token}` } }
-              );
-            setDepositRequests(depositRequestResponse.data.results);
-            console.log(depositRequestResponse)
-          } else {
-            // Fetch transaction history if user is not a reseller
-            const transactionResponse = await axios.get<TransactionResponse>(
-              "https://api.bazigaar.com/wallet_app/api/v1/user/my-wallet-profile",
-              { headers: { Authorization: `Token ${token}` } }
-            );
-            setTransactionHistory(transactionResponse.data.transactions);
-          }
-        } catch (error) {
-          console.error("Failed to fetch wallet data:", error);
+          console.log("Transaction Response Data:", transactionResponse.data);
+          setTransactionHistory(transactionResponse.data.transactions || []);
         }
-      } else {
-        console.warn("No userDetails found in localStorage.");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios error:", error.response?.data || error.message);
+        } else {
+          console.error("Unexpected error:", error);
+        }
       }
-    };
+    } else {
+      console.warn("No userDetails found in localStorage.");
+    }
+  };
 
-    fetchWalletData();
-  }, []);
+  fetchWalletData();
+}, []);
+
 
   return (
     <Card

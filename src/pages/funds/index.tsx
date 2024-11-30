@@ -42,6 +42,93 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
 const [resellerPaymentNumbers, setResellerPaymentNumbers] = useState<
   { id: number; number: string; bankName: string }[]
 >([]);
+
+const handleWithdraw = async () => {
+  const selectedAmount = parseFloat(amount) || 0;
+
+  if (balance === null || balance < 200) {
+    alert('You need at least 200 BG Coins to make a withdrawal.');
+    return;
+  }
+
+  if (selectedAmount > balance) {
+    alert('Insufficient balance for this withdrawal.');
+    return;
+  }
+
+  const userDetailsString = localStorage.getItem('userDetails');
+  if (!userDetailsString) {
+    alert('User details not found. Please log in again.');
+    return;
+  }
+
+  const { token } = JSON.parse(userDetailsString);
+
+  // Construct the payload based on the selected payment method
+  let payload: any = {};
+  if (selectedPayment === 'bkash' || selectedPayment === 'rocket' || selectedPayment === 'nagad') {
+    // Mobile Bank Withdrawal
+    payload = {
+      type: 'MobileBank',
+      amount: selectedAmount.toFixed(2),
+      bankName: selectedPayment.toUpperCase(),
+      number: withdrawPhoneNumber,
+    };
+  } else if (selectedPayment === 'bank') {
+    // Bank Withdrawal
+    payload = {
+      type: 'Bank',
+      amount: selectedAmount.toFixed(2),
+      accountNumber: '1234567890', // Replace with dynamic input
+      accountHolderName: 'John Doe', // Replace with dynamic input
+      bankName: 'Bank of Example', // Replace with dynamic input
+      branchName: 'Main Branch', // Replace with dynamic input
+    };
+  } else if (selectedPayment === 'crypto') {
+    // Crypto Withdrawal
+    payload = {
+      type: 'Crypto',
+      amount: selectedAmount.toFixed(2),
+      address: 'crypto_wallet_address', // Replace with dynamic input
+      networkName: 'Ethereum', // Replace with dynamic input
+      cryptoName: 'ETH', // Replace with dynamic input
+    };
+  }
+
+  console.log('Withdrawal Payload:', payload);
+
+  // Send withdrawal request to the backend
+  try {
+    const response = await fetch(
+      'https://api.bazigaar.com/wallet_app/api/v1/user/my-walle/withdrawal-request/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Withdrawal Success:', data);
+      alert('Withdrawal request submitted successfully.');
+      setBalance((prevBalance) => (prevBalance !== null ? prevBalance - selectedAmount : null));
+      setAmount('');
+      setWithdrawPhoneNumber('');
+    } else {
+      const errorData = await response.json();
+      console.error('Withdrawal Error:', errorData);
+      alert(`Failed to submit withdrawal request: ${errorData.message || 'Unknown error'}`);
+    }
+  } catch (error) {
+    console.error('Withdrawal Request Failed:', error);
+    alert('An error occurred while submitting your withdrawal request.');
+  }
+};
+
   // Fetch user details and balance
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

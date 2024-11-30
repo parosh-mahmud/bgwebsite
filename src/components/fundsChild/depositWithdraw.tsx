@@ -86,98 +86,96 @@ const DepositWithdrawContent: React.FC<Props> = ({
       </div>
 
       {/* Country & Reseller Selection */}
-      {selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
-  <div className="bg-gray-800 p-4 rounded-lg mb-4">
-    <h2 className="text-lg font-semibold mb-4 text-green-400">Select Country & Reseller</h2>
+     {/* Country & Reseller Selection (Only for Deposit) */}
+      {selectedTab === 'deposit' && selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
+        <div className="bg-gray-800 p-4 rounded-lg mb-4">
+          <h2 className="text-lg font-semibold mb-4 text-green-400">Select Country & Reseller</h2>
 
-    {/* Country Dropdown */}
-    <div className="relative mb-4">
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search for a country"
-        value={countrySearchQuery}
-        onChange={(e) => handleCountrySearch(e.target.value)}
-        className="w-full p-3 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
-      />
+          {/* Country Dropdown */}
+          <div className="relative mb-4">
+            <input
+              type="text"
+              placeholder="Search for a country"
+              value={countrySearchQuery}
+              onChange={(e) => handleCountrySearch(e.target.value)}
+              className="w-full p-3 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+            />
+            <Select
+              fullWidth
+              value={selectedCountry || ''}
+              onChange={handleCountryChange}
+              displayEmpty
+              className="mt-4"
+              style={{
+                backgroundColor: '#374151',
+                color: 'white',
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    backgroundColor: '#374151',
+                    color: 'white',
+                    maxHeight: '150px',
+                  },
+                },
+              }}
+            >
+              <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
+                Select Country
+              </MenuItem>
+              {filteredCountries.map((country) => (
+                <MenuItem key={country.name} value={country.name} style={{ color: 'white' }}>
+                  {country.name} ({country.currencyCode})
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
 
-      <Select
-        fullWidth
-        value={selectedCountry || ''}
-        onChange={handleCountryChange}
-        displayEmpty
-        className="mt-4"
-        style={{
-          backgroundColor: '#374151',
-          color: 'white',
-        }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              backgroundColor: '#374151',
-              color: 'white',
-              maxHeight: '150px', // Restrict height for dropdown
-            },
-          },
-        }}
-      >
-        {/* Default Countries */}
-        <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
-          Select Country
-        </MenuItem>
-        {(countrySearchQuery.trim() === '' ? [{ name: 'Bangladesh', currencyCode: 'BDT' }, { name: 'India', currencyCode: 'INR' }, { name: 'Nepal', currencyCode: 'NPR' }] : filteredCountries.slice(0, 3)).map((country) => (
-          <MenuItem key={country.name} value={country.name} style={{ color: 'white' }}>
-            {country.name} ({country.currencyCode})
-          </MenuItem>
-        ))}
-      </Select>
-    </div>
-
-    {/* Reseller Dropdown */}
-    {selectedCountry && (
-      <Select
-        fullWidth
-         value={selectedReseller?.username || ''}
-  onChange={handleResellerChange}
-        displayEmpty
-        className="mb-4"
-        style={{
-          backgroundColor: '#374151',
-          color: 'white',
-        }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              backgroundColor: '#374151',
-              color: 'white',
-              maxHeight: '150px', // Restrict height for dropdown
-            },
-          },
-        }}
-      >
-        <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
-          Select Reseller
-        </MenuItem>
-        {resellers.map((reseller) => (
-          <MenuItem
-            key={reseller.id}
-            value={reseller.username}
-            style={{ color: 'white' }}
-          >
-            <div className="flex items-center">
-              <Avatar
-                src={reseller.profile_picture || ''}
-                alt={reseller.username}
-                className="mr-2"
-              />
-              {`${reseller.first_name} ${reseller.last_name}`}
-            </div>
-          </MenuItem>
-        ))}
-      </Select>
-    )}
-  </div>
-)}
+          {/* Reseller Dropdown */}
+          {selectedCountry && (
+            <Select
+              fullWidth
+              value={selectedReseller?.username || ''}
+              onChange={handleResellerChange}
+              displayEmpty
+              className="mb-4"
+              style={{
+                backgroundColor: '#374151',
+                color: 'white',
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    backgroundColor: '#374151',
+                    color: 'white',
+                    maxHeight: '150px',
+                  },
+                },
+              }}
+            >
+              <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
+                Select Reseller
+              </MenuItem>
+              {resellers.map((reseller) => (
+                <MenuItem
+                  key={reseller.id}
+                  value={reseller.username}
+                  style={{ color: 'white' }}
+                >
+                  <div className="flex items-center">
+                    <Avatar
+                      src={reseller.profile_picture || ''}
+                      alt={reseller.username}
+                      className="mr-2"
+                    />
+                    {`${reseller.first_name} ${reseller.last_name}`}
+                  </div>
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        </div>
+      )}
 
 
        {/* Amount Input and Conversion Details */}

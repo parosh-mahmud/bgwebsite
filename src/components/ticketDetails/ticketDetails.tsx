@@ -121,20 +121,20 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
   if (showTicket && ticketData) {
     return (
       <Ticket
-        lotteryName={ticketData.LotteryName}
-        ticketId={ticketId}
-        luckyNumbers={luckyNumbers}
-        drawDate={ticketData.drawStatus} // Assuming drawStatus contains draw date; replace if different
-        price={totalPrice}
-        prizeImage={ticketData.prizeImage} // New property
-        firstPrizeName={ticketData.firstPrizeName} // New property
-        firstPrize={ticketData.firstPrize} // New property
-        secondPrizeName={ticketData.secondPrizeName} // New property
-        secondPrize={ticketData.secondPrize} // New property
-        thirdPrizeName={ticketData.thirdPrizeName} // New property
-        thirdPrize={ticketData.thirdPrize} // New property
-         onBackToHistory={onBack}
-      />
+      lotteryName={ticketData.LotteryName}
+      ticketId={ticketId}
+      luckyNumbers={luckyNumbers}
+      drawDate={ticketData.drawStatus} // Update this with the actual draw date if different
+      price={totalPrice}
+      prizeImage={ticketData.prizeImage}
+      firstPrizeName={ticketData.firstPrizeName}
+      firstPrize={ticketData.firstPrize}
+      secondPrizeName={ticketData.secondPrizeName}
+      secondPrize={ticketData.secondPrize}
+      thirdPrizeName={ticketData.thirdPrizeName}
+      thirdPrize={ticketData.thirdPrize}
+      onBackToHistory={onBack} // Ensure this navigates back to the package list
+    />
     );
   }
 
@@ -151,19 +151,20 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticketId, onBack }) => {
       {/* Breadcrumb Navigation */}
       <div className="container mx-auto p-4">
         <Breadcrumbs aria-label="breadcrumb" style={{ color: "white" }}>
-          <Link color="inherit" onClick={onBack} className="flex text-white items-center cursor-pointer">
-            <HomeIcon fontSize="small" className="mr-1" />
-            Lottery Home
-          </Link>
-          <Link color="inherit" onClick={onBack} className="flex text-white items-center cursor-pointer">
-            <ConfirmationNumberIcon fontSize="small" className="mr-1" />
-            Packages
-          </Link>
-          <Typography  className="flex text-white items-center">
-            <EventNoteIcon fontSize="small" className="mr-1" />
-            Ticket Details
-          </Typography>
-        </Breadcrumbs>
+  <Link
+    color="inherit"
+    onClick={onBack}
+    className="flex text-white items-center cursor-pointer"
+  >
+    <HomeIcon fontSize="small" className="mr-1" />
+    Lottery Home
+  </Link>
+  <Typography className="flex text-white items-center">
+    <ConfirmationNumberIcon fontSize="small" className="mr-1" />
+    Ticket Details
+  </Typography>
+</Breadcrumbs>
+
       </div>
 
       {/* Ticket Details */}

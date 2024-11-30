@@ -11,7 +11,15 @@ import {
   ListItem,
   ListItemText,
   Box,
-  Chip,
+  
+   Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import {
   AccountBalanceWallet,
@@ -27,11 +35,13 @@ interface BgcoinResponse {
 }
 
 interface Transaction {
-  id: string;
-  transaction_type: "Deposit" | "Withdrawal";
+  transaction_type: "deposit" | "withdrawal";
   amount: string;
-  date: string;
+  currency: string;
+  payment_status: string;
+  payment_at: string | null;
 }
+
 
 interface DepositRequest {
   id: number;
@@ -43,6 +53,13 @@ interface DepositRequest {
 }
 
 interface TransactionResponse {
+  wallet: {
+    wallet_id: string;
+    user: {
+      id: number;
+      bgcoin: string;
+    };
+  };
   transactions: Transaction[];
 }
 
@@ -103,7 +120,9 @@ export default function Wallet() {
             { headers: { Authorization: `Token ${token}` } }
           );
           console.log("Transaction Response Data:", transactionResponse.data);
-          setTransactionHistory(transactionResponse.data.transactions || []);
+           // Update balance and transaction history
+        setBalance(parseFloat(transactionResponse.data.wallet.user.bgcoin));
+        setTransactionHistory(transactionResponse.data.transactions || []);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -204,6 +223,7 @@ export default function Wallet() {
             variant="contained"
             startIcon={<ArrowDownward />}
             style={{ backgroundColor: "#4CAF50", color: "#FFFFFF" }}
+             onClick={() => router.push('/funds?type=deposit')}
           >
             Deposit
           </Button>
@@ -211,6 +231,7 @@ export default function Wallet() {
             variant="contained"
             startIcon={<ArrowUpward />}
             style={{ backgroundColor: "#FF5722", color: "#FFFFFF" }}
+             onClick={() => router.push('/funds?type=withdrawal')}
           >
             Withdraw
           </Button>
@@ -256,31 +277,70 @@ export default function Wallet() {
         ) : (
           // Show transaction history for regular users
           <div>
-            <Typography
-              variant="h6"
-              className="mt-6 mb-4"
-              style={{ color: "#FFFFFF" }}
-            >
-              Transaction History
-            </Typography>
-            <List style={{ backgroundColor: "#455271", borderRadius: 8 }}>
-              {transactionHistory.map((transaction) => (
-                <ListItem
-                  key={transaction.id}
-                  style={{ borderBottom: "1px solid #AAB4BE" }}
-                >
-                  <ListItemText
-                    primary={`Type: ${transaction.transaction_type} | Amount: ${transaction.amount}`}
-                    secondary={`Date: ${new Date(
-                      transaction.date
-                    ).toLocaleDateString()}`}
-                    primaryTypographyProps={{ style: { color: "#FFFFFF" } }}
-                    secondaryTypographyProps={{ style: { color: "#AAB4BE" } }}
+    <Typography variant="h6" className="mt-6 mb-4" style={{ color: "#FFFFFF" }}>
+      Transaction History
+    </Typography>
+    <TableContainer
+      component={Paper}
+      style={{ backgroundColor: "#455271", borderRadius: 8 }}
+    >
+      <Table aria-label="transaction history table">
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ color: "#AAB4BE" }}>Type</TableCell>
+            <TableCell style={{ color: "#AAB4BE" }}>Amount</TableCell>
+            <TableCell style={{ color: "#AAB4BE" }}>Currency</TableCell>
+            <TableCell style={{ color: "#AAB4BE" }}>Date</TableCell>
+            <TableCell style={{ color: "#AAB4BE" }}>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {transactionHistory.map((transaction, index) => (
+            <TableRow key={index}>
+              <TableCell style={{ color: "#FFFFFF" }}>
+                {transaction.transaction_type === "deposit" ? (
+                  <ArrowDownward
+                    style={{ color: "#4CAF50", verticalAlign: "middle" }}
                   />
-                </ListItem>
-              ))}
-            </List>
-          </div>
+                ) : (
+                  <ArrowUpward
+                    style={{ color: "#FF5722", verticalAlign: "middle" }}
+                  />
+                )}{" "}
+                {transaction.transaction_type.charAt(0).toUpperCase() +
+                  transaction.transaction_type.slice(1)}
+              </TableCell>
+              <TableCell style={{ color: "#FFFFFF" }}>
+                {parseFloat(transaction.amount).toFixed(2)}
+              </TableCell>
+              <TableCell style={{ color: "#FFFFFF" }}>
+                {transaction.currency}
+              </TableCell>
+              <TableCell style={{ color: "#FFFFFF" }}>
+                {transaction.payment_at
+                  ? new Date(transaction.payment_at).toLocaleDateString()
+                  : "N/A"}
+              </TableCell>
+              <TableCell style={{ color: "#FFFFFF" }}>
+                {transaction.payment_status ? (
+                  <Chip
+                    label={transaction.payment_status.toUpperCase()}
+                    color={
+                      transaction.payment_status.toLowerCase() === "pending"
+                        ? "warning"
+                        : "success"
+                    }
+                  />
+                ) : (
+                  "N/A"
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </div>
         )}
       </CardContent>
     </Card>

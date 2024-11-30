@@ -24,14 +24,27 @@ type Props = {
   setWithdrawPhoneNumber?: (value: string) => void;
   selectedCountry: string | null;
   handleCountryChange: (event: SelectChangeEvent<string>) => void;
-   selectedReseller: Reseller | null;
+  selectedReseller: Reseller | null;
   handleResellerChange: (event: SelectChangeEvent<string>) => void;
   resellers: Reseller[];
   convertedAmountDetails: ConvertedAmountDetails;
   countrySearchQuery: string;
   handleCountrySearch: (query: string) => void;
   filteredCountries: CountryData[];
-  
+  accountNumber: string;
+  setAccountNumber: (value: string) => void;
+  accountHolderName: string;
+  setAccountHolderName: (value: string) => void;
+  bankNameInput: string;
+  setBankNameInput: (value: string) => void;
+  branchName: string;
+  setBranchName: (value: string) => void;
+  cryptoAddress: string;
+  setCryptoAddress: (value: string) => void;
+  networkName: string;
+  setNetworkName: (value: string) => void;
+  cryptoName: string;
+  setCryptoName: (value: string) => void;
 };
 
 const DepositWithdrawContent: React.FC<Props> = ({
@@ -53,7 +66,20 @@ const DepositWithdrawContent: React.FC<Props> = ({
   countrySearchQuery,
   handleCountrySearch,
   filteredCountries,
-  
+  accountNumber,
+  setAccountNumber,
+  accountHolderName,
+  setAccountHolderName,
+  bankNameInput,
+  setBankNameInput,
+  branchName,
+  setBranchName,
+  cryptoAddress,
+  setCryptoAddress,
+  networkName,
+  setNetworkName,
+  cryptoName,
+  setCryptoName,
 }) => {
   const [isValidAmount, setIsValidAmount] = useState(false);
 
@@ -85,10 +111,58 @@ const DepositWithdrawContent: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* Country & Reseller Selection */}
+     
+     
+
+
+
+
+{selectedTab === "withdrawal" && 
+  (selectedPayment === "crypto" || selectedPayment === "usdt" || selectedPayment === "bitcoin") && (
+    <div className="bg-gray-800 p-4 rounded-lg mb-4">
+      <label htmlFor="cryptoAddress" className="block text-sm mb-2">
+        Crypto Wallet Address
+      </label>
+      <input
+        id="cryptoAddress"
+        type="text"
+        placeholder="Enter crypto wallet address"
+        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+        value={cryptoAddress}
+        onChange={(e) => setCryptoAddress(e.target.value)}
+      />
+      <label htmlFor="networkName" className="block text-sm mb-2 mt-4">
+        Network Name
+      </label>
+      <input
+        id="networkName"
+        type="text"
+        placeholder="Enter network name (e.g., TRC20)"
+        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+        value={networkName}
+        onChange={(e) => setNetworkName(e.target.value)}
+      />
+      <label htmlFor="cryptoName" className="block text-sm mb-2 mt-4">
+        Cryptocurrency Name
+      </label>
+      <input
+        id="cryptoName"
+        type="text"
+        placeholder="Enter cryptocurrency name (e.g., Bitcoin)"
+        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+        value={cryptoName}
+        onChange={(e) => setCryptoName(e.target.value)}
+      />
+    </div>
+  )
+}
+
+
+
      {/* Country & Reseller Selection (Only for Deposit) */}
-      {selectedTab === 'deposit' && selectedPayment !== 'usdt_trc20' && selectedPayment !== 'bitcoin' && (
+      {selectedTab === 'deposit' && selectedPayment !== 'usdt' && selectedPayment !== 'bitcoin' && (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
+
           <h2 className="text-lg font-semibold mb-4 text-green-400">Select Country & Reseller</h2>
 
           {/* Country Dropdown */}

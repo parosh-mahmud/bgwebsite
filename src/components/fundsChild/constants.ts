@@ -21,7 +21,7 @@ export const paymentMethods = [
     fee: '',
   },
   {
-    id: 'usdt_trc20',
+    id: 'usdt',
     name: 'USDT TRC20',
     iconUrl: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
     fee: '',

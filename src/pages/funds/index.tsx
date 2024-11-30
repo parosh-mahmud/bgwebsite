@@ -42,20 +42,41 @@ const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
 const [resellerPaymentNumbers, setResellerPaymentNumbers] = useState<
   { id: number; number: string; bankName: string }[]
 >([]);
+// Add state variables for bank and crypto details
+const [accountNumber, setAccountNumber] = useState('');
+const [accountHolderName, setAccountHolderName] = useState('');
+const [bankNameInput, setBankNameInput] = useState('');
+const [branchName, setBranchName] = useState('');
+
+const [cryptoAddress, setCryptoAddress] = useState('');
+const [networkName, setNetworkName] = useState('');
+const [cryptoName, setCryptoName] = useState('');
+useEffect(() => {
+  console.log("Selected Payment:", selectedPayment);
+}, [selectedPayment]);
 
 const handleWithdraw = async () => {
   const selectedAmount = parseFloat(amount) || 0;
 
-  if (balance === null || balance < 200) {
-    alert('You need at least 200 BG Coins to make a withdrawal.');
+  // Input validation
+  if (!selectedAmount || selectedAmount < 100) {
+    alert('Please enter a valid amount (minimum 100 BG Coins).');
     return;
   }
 
-  if (selectedAmount > balance) {
+  if (balance === null || balance < selectedAmount) {
     alert('Insufficient balance for this withdrawal.');
     return;
   }
 
+  if (selectedPayment === 'bkash' || selectedPayment === 'rocket' || selectedPayment === 'nagad') {
+    if (!withdrawPhoneNumber) {
+      alert('Please enter your withdrawal phone number.');
+      return;
+    }
+  }
+
+  // Retrieve user token
   const userDetailsString = localStorage.getItem('userDetails');
   if (!userDetailsString) {
     alert('User details not found. Please log in again.');
@@ -64,7 +85,7 @@ const handleWithdraw = async () => {
 
   const { token } = JSON.parse(userDetailsString);
 
-  // Construct the payload based on the selected payment method
+  // Construct the payload
   let payload: any = {};
   if (selectedPayment === 'bkash' || selectedPayment === 'rocket' || selectedPayment === 'nagad') {
     // Mobile Bank Withdrawal
@@ -76,28 +97,31 @@ const handleWithdraw = async () => {
     };
   } else if (selectedPayment === 'bank') {
     // Bank Withdrawal
+    // Collect necessary bank details from the user (you need to add input fields for these)
     payload = {
       type: 'Bank',
       amount: selectedAmount.toFixed(2),
-      accountNumber: '1234567890', // Replace with dynamic input
-      accountHolderName: 'John Doe', // Replace with dynamic input
-      bankName: 'Bank of Example', // Replace with dynamic input
-      branchName: 'Main Branch', // Replace with dynamic input
+      accountNumber: 'account_number', // Replace with dynamic input
+      accountHolderName: 'account_holder_name', // Replace with dynamic input
+      bankName: 'bank_name', // Replace with dynamic input
+      branchName: 'branch_name', // Replace with dynamic input
     };
   } else if (selectedPayment === 'crypto') {
     // Crypto Withdrawal
+    // Collect necessary crypto details from the user (you need to add input fields for these)
     payload = {
       type: 'Crypto',
       amount: selectedAmount.toFixed(2),
       address: 'crypto_wallet_address', // Replace with dynamic input
-      networkName: 'Ethereum', // Replace with dynamic input
-      cryptoName: 'ETH', // Replace with dynamic input
+      networkName: 'network_name', // Replace with dynamic input
+      cryptoName: 'crypto_name', // Replace with dynamic input
     };
+  } else {
+    alert('Invalid payment method selected.');
+    return;
   }
 
-  console.log('Withdrawal Payload:', payload);
-
-  // Send withdrawal request to the backend
+  // Make the API call
   try {
     const response = await fetch(
       'https://api.bazigaar.com/wallet_app/api/v1/user/my-walle/withdrawal-request/',
@@ -115,9 +139,12 @@ const handleWithdraw = async () => {
       const data = await response.json();
       console.log('Withdrawal Success:', data);
       alert('Withdrawal request submitted successfully.');
+
+      // Update the balance
       setBalance((prevBalance) => (prevBalance !== null ? prevBalance - selectedAmount : null));
       setAmount('');
       setWithdrawPhoneNumber('');
+      // Reset other inputs if necessary
     } else {
       const errorData = await response.json();
       console.error('Withdrawal Error:', errorData);
@@ -128,6 +155,7 @@ const handleWithdraw = async () => {
     alert('An error occurred while submitting your withdrawal request.');
   }
 };
+
 
   // Fetch user details and balance
   useEffect(() => {
@@ -224,7 +252,11 @@ useEffect(() => {
     setSelectedReseller(reseller || null);
   };
 
-  const handlePaymentSelect = (id: string) => setSelectedPayment(id);
+const handlePaymentSelect = (id: string) => {
+  console.log("Payment selected:", id); // Add this
+  setSelectedPayment(id);
+};
+
 
   const handleAmountSelect = (amount: number) => setAmount(amount.toString());
 
@@ -263,18 +295,18 @@ useEffect(() => {
     setCountrySearchQuery(query);
   };
 
-  const handleSubmit = () => {
-    const selectedAmount = parseFloat(amount) || 0;
-    if (selectedTab === 'deposit') {
-      // Handle deposit logic here
-     
-    } else {
-      // Handle withdrawal logic here
-      
-    }
-    // Show PaymentDetails component
+ const handleSubmit = () => {
+  const selectedAmount = parseFloat(amount) || 0;
+  if (selectedTab === 'deposit') {
+    // Handle deposit logic here
+    // For example, navigate to the deposit confirmation page
     setShowPaymentDetails(true);
-  };
+  } else if (selectedTab === 'withdrawal') {
+    // Call handleWithdraw to process the withdrawal
+    handleWithdraw();
+  }
+};
+
 
   const handlePaymentDetailsSubmit = (data: {
     resellerId: number;
@@ -311,6 +343,7 @@ useEffect(() => {
   }
 
   return (
+    <>
     <div className="p-4 bg-gray-900 text-white min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 p-2 bg-gray-800 rounded-lg">
@@ -381,6 +414,21 @@ useEffect(() => {
         countrySearchQuery={countrySearchQuery}
         handleCountrySearch={handleCountrySearch}
         filteredCountries={filteredCountries}
+
+        accountNumber={accountNumber}
+  setAccountNumber={setAccountNumber}
+  accountHolderName={accountHolderName}
+  setAccountHolderName={setAccountHolderName}
+  bankNameInput={bankNameInput}
+  setBankNameInput={setBankNameInput}
+  branchName={branchName}
+  setBranchName={setBranchName}
+  cryptoAddress={cryptoAddress}
+  setCryptoAddress={setCryptoAddress}
+  networkName={networkName}
+  setNetworkName={setNetworkName}
+  cryptoName={cryptoName}
+  setCryptoName={setCryptoName}
       />
 
       {/* Instructions */}
@@ -426,6 +474,7 @@ useEffect(() => {
         Submit
       </button>
     </div>
+    </>
   );
 };
 

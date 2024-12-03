@@ -80,20 +80,20 @@ const Ticket: React.FC<TicketProps> = ({
       <div className="flex justify-center items-center">
         <div
           ref={ticketRef}
-          className="bg-white p-6 shadow-lg rounded-lg w-full max-w-lg text-center border-2 border-gray-300 relative"
+          className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 p-8 shadow-lg rounded-lg w-full max-w-lg text-center border-2 border-gray-300 relative"
         >
           {/* Ticket Header */}
-          <h2 className="text-xl font-bold mb-2 text-gray-800">{lotteryName}</h2>
-          <p className="text-gray-600">Ticket ID: #{ticketId}</p>
+          <h2 className="text-2xl font-bold mb-2 text-white">{lotteryName}</h2>
+          <p className="text-white text-sm">Ticket ID: #{ticketId}</p>
 
           {/* Lucky Numbers */}
           <div className="mt-4">
-            <h3 className="text-lg font-semibold text-gray-700">Your Lucky Numbers</h3>
+            <h3 className="text-lg font-semibold text-white">Your Lucky Numbers</h3>
             <div className="flex justify-center space-x-2 mt-2">
               {luckyNumbers.map((num, index) => (
                 <span
                   key={index}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold text-lg"
+                  className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-700 text-white font-bold text-lg shadow-md"
                 >
                   {num}
                 </span>
@@ -103,19 +103,19 @@ const Ticket: React.FC<TicketProps> = ({
 
           {/* Draw Date */}
           <div className="mt-6">
-            <p className="text-gray-600">Draw Date:</p>
-            <p className="text-lg font-semibold text-gray-800">{drawDate}</p>
+            <p className="text-white">Draw Date:</p>
+            <p className="text-xl font-semibold text-white">{drawDate}</p>
           </div>
 
           {/* Price */}
           <div className="mt-6">
-            <p className="text-gray-600">Ticket Price:</p>
-            <p className="text-lg font-semibold text-gray-800">${price.toFixed(2)}</p>
+            <p className="text-white">Ticket Price:</p>
+            <p className="text-xl font-semibold text-white">${price.toFixed(2)}</p>
           </div>
 
           {/* Prize Details */}
           <div className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-700">Prizes</h3>
+            <h3 className="text-lg font-semibold text-white">Prizes</h3>
             <div className="flex justify-center gap-4 mt-4">
               {/* First Prize */}
               <div className="text-center">
@@ -126,7 +126,7 @@ const Ticket: React.FC<TicketProps> = ({
                   height={80}
                   className="rounded-lg"
                 />
-                <p className="text-sm mt-2 font-semibold">{firstPrizeName}</p>
+                <p className="text-sm mt-2 font-semibold text-white">{firstPrizeName}</p>
               </div>
               {/* Second Prize */}
               <div className="text-center">
@@ -137,7 +137,7 @@ const Ticket: React.FC<TicketProps> = ({
                   height={80}
                   className="rounded-lg"
                 />
-                <p className="text-sm mt-2 font-semibold">{secondPrizeName}</p>
+                <p className="text-sm mt-2 font-semibold text-white">{secondPrizeName}</p>
               </div>
               {/* Third Prize */}
               <div className="text-center">
@@ -148,25 +148,26 @@ const Ticket: React.FC<TicketProps> = ({
                   height={80}
                   className="rounded-lg"
                 />
-                <p className="text-sm mt-2 font-semibold">{thirdPrizeName}</p>
+                <p className="text-sm mt-2 font-semibold text-white">{thirdPrizeName}</p>
               </div>
             </div>
           </div>
-
-          {/* Download Button */}
-          <Button
-            variant="contained"
-            color="primary"
-            className="mt-6"
-            onClick={handleDownloadTicket}
-            style={{
-              background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-              color: "#fff",
-            }}
-          >
-            Download Ticket
-          </Button>
         </div>
+      </div>
+
+      {/* Download Button */}
+      <div className="flex justify-center mt-8">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleDownloadTicket}
+          style={{
+            background: "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
+            color: "#fff",
+          }}
+        >
+          Download Ticket
+        </Button>
       </div>
     </div>
   );

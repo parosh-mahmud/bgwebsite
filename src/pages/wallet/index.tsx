@@ -201,8 +201,8 @@ export default function Wallet() {
             <Image
               src="/images/bgcoin.svg"
               alt="BG Coin"
-              width={25}
-              height={25}
+              width={40}
+              height={35}
             />
             <Typography
               variant="h4"

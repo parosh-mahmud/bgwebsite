@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import axios from 'axios';
-
+import DepositConfirmation from './depositConfirmation';
 interface Reseller {
   id: number;
   username: string;
@@ -133,19 +133,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
 
   if (isSubmitted) {
     return (
-      <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg w-full max-w-lg mx-auto text-center">
-        <h2 className="text-xl font-semibold mb-4">Deposit Request Submitted</h2>
-        <p className="text-sm mb-4">
-          Your deposit request has been submitted successfully. Check your transaction history for
-          updates.
-        </p>
-        <button
-          onClick={onBack}
-          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition"
-        >
-          Back to Funds
-        </button>
-      </div>
+      <DepositConfirmation />
     );
   }
 

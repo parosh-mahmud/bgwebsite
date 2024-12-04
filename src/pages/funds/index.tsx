@@ -258,9 +258,13 @@ const handlePaymentSelect = (id: string) => {
 };
 
 
-  const handleAmountSelect = (amount: number) => setAmount(amount.toString());
-
- const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+// Update the handleAmountSelect function
+const handleAmountSelect = (amount: number) => {
+  setAmount(amount.toString());
+  handleAmountInputChange({ target: { value: amount.toString() } } as React.ChangeEvent<HTMLInputElement>);
+};
+// Update the handleAmountInputChange function
+const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const inputValue = e.target.value;
   setAmount(inputValue);
 
@@ -273,11 +277,6 @@ const handlePaymentSelect = (id: string) => {
     // Get the currency code for the selected country
     const countryData = countryList.find((c) => c.name === selectedCountry);
     const currencyCode = countryData?.currencyCode || 'USD';
-
-    // Log the token, input amount, and currency code
-    console.log('Token:', token);
-    console.log('Input Amount:', inputAmount);
-    console.log('Country Code:', currencyCode);
 
     // Call the API to get the conversion
     convertAmountToLocalCurrency(inputAmount, currencyCode, token).then((data) => {

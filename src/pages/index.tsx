@@ -77,44 +77,40 @@ const Home = () => {
   return (
     <HomeLayout>
       <main className="mt-20">
-<div className="container mx-auto pt-4 px-4 sm:px-6 md:px-8 flex flex-col-reverse lg:flex-row items-center">
-  {/* Buy Ticket Section */}
-  <div className="w-full lg:w-1/2 mt-4 lg:mt-0 lg:pl-8">
-    <div className="text-center lg:text-left">
-      <p className="uppercase font-semibold text-base sm:text-lg text-teal-200">
-        Play Anytime & Anywhere
-      </p>
-      <h1 className="font-semibold text-2xl sm:text-3xl text-yellow-100 py-2">
-        Win  Latest iPhone!
-      </h1>
-     
-  <Link
-  href="/lottery"
-  style={{
-    background: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)", // Right to left gradient
-  }}
-  className="text-black font-bold py-2 px-4 text-base sm:text-lg flex items-center justify-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 max-w-xs mx-auto lg:mx-0" // Centered for mobile
->
-  <span className="w-5 h-5 mr-2">
-    <TicketIcon />
-  </span>
-  All Lottery Packages
-</Link>
+        <div className="container mx-auto pt-4 px-4 sm:px-6 md:px-8 flex flex-col-reverse lg:flex-row items-center">
+          {/* Buy Ticket Section */}
+          <div className="w-full lg:w-1/2 mt-4 lg:mt-0 lg:pl-8">
+            <div className="text-center lg:text-left">
+              <p className="uppercase font-semibold text-base sm:text-lg text-teal-200">
+                Play Anytime & Anywhere
+              </p>
+              <h1 className="font-semibold text-2xl sm:text-3xl text-yellow-100 py-2">
+                Win Latest iPhone!
+              </h1>
+              <Link
+                href="/lottery"
+                style={{
+                  background: "linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)", // Right to left gradient
+                }}
+                className="text-gray-800 font-bold py-2 px-4 text-base sm:text-lg flex items-center justify-center rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 max-w-xs mx-auto lg:mx-0"
+              >
+                <span className="w-5 h-5 mr-2">
+                  <TicketIcon />
+                </span>
+                All Lottery Packages
+              </Link>
+            </div>
+          </div>
 
+          {/* Carousel Section */}
+          <div className="w-full lg:w-1/2">
+            <div className={`w-full`}>
+              <ImageCarousel images={images} />
+            </div>
+          </div>
+        </div>
 
-    </div>
-  </div>
-
-  {/* Carousel Section */}
-  <div className="w-full lg:w-1/2">
-    <div className={`w-full`}>
-      <ImageCarousel images={images} />
-    </div>
-  </div>
-</div>
-
-
-<MainTabComponent />
+        <MainTabComponent />
         {/* Top Slider */}
         <div className="mt-8">
           <MainSlider
@@ -122,17 +118,17 @@ const Home = () => {
             bodyStyle="!flex items-center py-2 lg:py-3 gap-3"
           />
         </div>
-          
+
         {/* Counter Section */}
         <div className="container py-8 sm:py-12">
-          <div className="shadow-jackpot bg-[#222222] rounded-2xl">
+          <div className="shadow-jackpot bg-gradient-to-r from-orange-500 to-yellow-600 rounded-2xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-primary py-8 px-6 sm:px-10">
               <div className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
-                     <span style={iconGradientStyle}>
+                <span style={iconGradientStyle}>
                   <Trophy />
                 </span>
                 <div>
-                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
+                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-gray-100">
                     ${numCounter}
                   </p>
                   <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primaryText">
@@ -154,7 +150,7 @@ const Home = () => {
               <div className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
                 <Player />
                 <div>
-                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-white">
+                  <p className="font-bold text-2xl sm:text-3xl lg:text-5xl pb-2 text-gray-100">
                     5500
                   </p>
                   <h3 className="uppercase font-bold text-lg sm:text-xl lg:text-2xl text-primaryText">
@@ -168,8 +164,8 @@ const Home = () => {
 
         {/* Available Games Section */}
         <div className="container">
-          <div className="bg-black py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
-            <h3 className="font-semibold text-2xl lg:text-4xltext-primaryText text-center">
+          <div className="bg-gradient-to-r from-orange-400 to-yellow-500 py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
+            <h3 className="font-semibold text-2xl lg:text-4xl text-primaryText text-center">
               Available Games
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 justify-items-center items-center gap-8 py-8">
@@ -231,7 +227,7 @@ const Home = () => {
         </div>
 
         {/* Download Section */}
-        <div className={`${styles.downloadBG} py-10 mt-12`}>
+        <div className={`${styles.downloadBG} py-10 mt-12`}> 
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row items-center">
               <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
@@ -269,7 +265,7 @@ const Home = () => {
                 <hr className="my-4 border-gray-600" />
                 <p className="text-center lg:text-left">
                   <a
-                    className="text-white font-regular"
+                    className="text-gray-100 font-regular"
                     rel="noreferrer"
                     target="_blank"
                     href="https://bazigaar.com"

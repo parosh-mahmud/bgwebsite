@@ -10,8 +10,7 @@ const tabs = [
   { name: 'Giveaways', id: 'giveaways' },
   { name: 'Scratchcards', id: 'Scratchcards' },
   { name: 'Results', id: 'results' },
-  { name: 'Upcoming Events and Lotteris', id: 'upcomingLotteries' },
-  
+  { name: 'Upcoming Events and Lotteries', id: 'upcomingLotteries' },
 ];
 
 const MainTabComponent = () => {
@@ -24,7 +23,7 @@ const MainTabComponent = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'quickLottery':
-        return <div><QuickLotterySection/></div>;
+        return <div><QuickLotterySection /></div>;
       case 'specialLotteries':
         return <div>Special Lotteries Content</div>;
       case 'giveaways':
@@ -33,26 +32,26 @@ const MainTabComponent = () => {
         return <div>Results Content</div>;
       case 'upcomingLotteries':
         return <div>Upcoming Lottery Packages Content</div>;
-         case 'Scratchcards':
-        return <div><ScratchCardContainer/></div>;
+      case 'Scratchcards':
+        return <div><ScratchCardContainer /></div>;
       default:
         return null;
     }
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-12 px-4">
       {/* Tab Buttons */}
-      <div className="flex flex-wrap justify-center">
+      <div className="flex flex-wrap justify-center border-b-2 border-gray-300 pb-4">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
-            className={`px-4 py-2 m-2 text-sm sm:text-base font-semibold rounded-full focus:outline-none transition-colors duration-300
+            className={`px-6 py-3 m-2 text-sm sm:text-base font-semibold rounded-full focus:outline-none transition-all duration-300 transform 
               ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-orange-500 to-yellow-400 text-black'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-orange-500 to-yellow-600 text-gray-100 shadow-lg scale-105'
+                  : 'bg-gradient-to-r from-orange-400 to-yellow-500 text-gray-800 hover:bg-gradient-to-r hover:from-orange-500 hover:to-yellow-600 hover:text-gray-100 hover:shadow-md'
               }`}
           >
             {tab.name}
@@ -61,9 +60,9 @@ const MainTabComponent = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="mt-6">
+      <div className="mt-10">
         <div
-          className="transition-opacity duration-500"
+          className="transition-opacity duration-500 ease-in-out bg-gradient-to-b from-blue-900 to-gray-900 p-6 rounded-lg shadow-md"
           key={activeTab}
         >
           {renderContent()}

@@ -167,19 +167,7 @@ export default function ProfileModal({ user, cards, open, onClose }: ProfileModa
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Statistics</Typography>
-              <Grid container spacing={2}>
-                {cards.map((card, index) => (
-                  <Grid item xs={12} sm={6} md={3} key={index}>
-                    <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                      <Typography variant="h6">{card.header}</Typography>
-                      <Typography variant="h4">{card.value}</Typography>
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+          
           </Grid>
         </Box>
       </DialogContent>

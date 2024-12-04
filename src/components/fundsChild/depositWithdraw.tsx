@@ -1,4 +1,3 @@
-// DepositWithdrawContent.tsx
 import React, { useEffect, useState } from 'react';
 import { Avatar, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Image from 'next/image';
@@ -88,6 +87,12 @@ const DepositWithdrawContent: React.FC<Props> = ({
     const numericAmount = parseInt(amount, 10);
     setIsValidAmount(numericAmount >= 100);
   }, [amount]);
+
+   const handleCountrySearchUpdate = (query: string) => {
+    console.log('Country search query:', query);
+    handleCountrySearch(query);
+};
+
   return (
     <>
       {/* Payment Method Selection */}
@@ -111,58 +116,48 @@ const DepositWithdrawContent: React.FC<Props> = ({
         </div>
       </div>
 
-     
-     
+      {selectedTab === "withdrawal" && 
+        (selectedPayment === "crypto" || selectedPayment === "usdt" || selectedPayment === "bitcoin") && (
+          <div className="bg-gray-800 p-4 rounded-lg mb-4">
+            <label htmlFor="cryptoAddress" className="block text-sm mb-2">
+              Crypto Wallet Address
+            </label>
+            <input
+              id="cryptoAddress"
+              type="text"
+              placeholder="Enter crypto wallet address"
+              className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+              value={cryptoAddress}
+              onChange={(e) => setCryptoAddress(e.target.value)}
+            />
+            <label htmlFor="networkName" className="block text-sm mb-2 mt-4">
+              Network Name
+            </label>
+            <input
+              id="networkName"
+              type="text"
+              placeholder="Enter network name (e.g., TRC20)"
+              className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+              value={networkName}
+              onChange={(e) => setNetworkName(e.target.value)}
+            />
+            <label htmlFor="cryptoName" className="block text-sm mb-2 mt-4">
+              Cryptocurrency Name
+            </label>
+            <input
+              id="cryptoName"
+              type="text"
+              placeholder="Enter cryptocurrency name (e.g., Bitcoin)"
+              className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
+              value={cryptoName}
+              onChange={(e) => setCryptoName(e.target.value)}
+            />
+          </div>
+      )}
 
-
-
-
-{selectedTab === "withdrawal" && 
-  (selectedPayment === "crypto" || selectedPayment === "usdt" || selectedPayment === "bitcoin") && (
-    <div className="bg-gray-800 p-4 rounded-lg mb-4">
-      <label htmlFor="cryptoAddress" className="block text-sm mb-2">
-        Crypto Wallet Address
-      </label>
-      <input
-        id="cryptoAddress"
-        type="text"
-        placeholder="Enter crypto wallet address"
-        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
-        value={cryptoAddress}
-        onChange={(e) => setCryptoAddress(e.target.value)}
-      />
-      <label htmlFor="networkName" className="block text-sm mb-2 mt-4">
-        Network Name
-      </label>
-      <input
-        id="networkName"
-        type="text"
-        placeholder="Enter network name (e.g., TRC20)"
-        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
-        value={networkName}
-        onChange={(e) => setNetworkName(e.target.value)}
-      />
-      <label htmlFor="cryptoName" className="block text-sm mb-2 mt-4">
-        Cryptocurrency Name
-      </label>
-      <input
-        id="cryptoName"
-        type="text"
-        placeholder="Enter cryptocurrency name (e.g., Bitcoin)"
-        className="w-full p-2 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500"
-        value={cryptoName}
-        onChange={(e) => setCryptoName(e.target.value)}
-      />
-    </div>
-  )
-}
-
-
-
-     {/* Country & Reseller Selection (Only for Deposit) */}
+      {/* Country & Reseller Selection (Only for Deposit) */}
       {selectedTab === 'deposit' && selectedPayment !== 'usdt' && selectedPayment !== 'bitcoin' && (
         <div className="bg-gray-800 p-4 rounded-lg mb-4">
-
           <h2 className="text-lg font-semibold mb-4 text-green-400">Select Country & Reseller</h2>
 
           {/* Country Dropdown */}
@@ -171,7 +166,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
               type="text"
               placeholder="Search for a country"
               value={countrySearchQuery}
-              onChange={(e) => handleCountrySearch(e.target.value)}
+              onChange={(e) => handleCountrySearchUpdate(e.target.value)}
               className="w-full p-3 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
             />
             <Select
@@ -197,7 +192,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
               <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
                 Select Country
               </MenuItem>
-              {filteredCountries.map((country) => (
+              {filteredCountries.slice(0, 4).map((country) => (
                 <MenuItem key={country.name} value={country.name} style={{ color: 'white' }}>
                   {country.name} ({country.currencyCode})
                 </MenuItem>
@@ -251,8 +246,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
         </div>
       )}
 
-
-       {/* Amount Input and Conversion Details */}
+      {/* Amount Input and Conversion Details */}
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <label htmlFor="manualAmount" className="block text-sm mb-2">
           {selectedTab === 'deposit' ? 'Enter Deposit Coin Amount' : 'Enter Withdrawal Amount'}

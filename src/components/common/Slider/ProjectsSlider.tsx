@@ -104,7 +104,7 @@ const ProjectsSlider: FC<types> = ({ sliderData }) => {
               return (
                 <div
                   key={data.id}
-                  className="p-3 lg:p-5 mx-[-4px] lg:mx-1 my-3 bg-secondary shadow-package rounded-lg">
+                  className="p-3 lg:p-5 mx-[-4px] lg:mx-1 my-3 bg-gradient-to-r from-orange-500 to-yellow-600 shadow-package rounded-lg">
                   <div className="flex items-center gap-4">
                     <Image
                       src={data.img}
@@ -114,7 +114,7 @@ const ProjectsSlider: FC<types> = ({ sliderData }) => {
                       // className="!w-full !h-full"
                     />
                     <div>
-                      <h1 className="pb-2 font-semiBold text-base md:text-xl lg:text-2xl text-primary">
+                      <h1 className="pb-2 font-semiBold text-base md:text-xl lg:text-2xl text-white">
                         ${data.price}
                       </h1>
                       <p className="font-regular text-white text-sm md:text-base">
@@ -126,8 +126,8 @@ const ProjectsSlider: FC<types> = ({ sliderData }) => {
                     <h1 className="pt-4 font-semiBold text-xl lg:text-2xl text-white">
                       {data.title}
                     </h1>
-                    <p className="py-3 text-[#999999]">{data.des}</p>
-                    <button className="px-4 py-2 font-medium text-sm text-[#222] bg-primary rounded-md">
+                    <p className="py-3 text-gray-300">{data.des}</p>
+                    <button className="px-4 py-2 font-medium text-sm text-black bg-gradient-to-r from-yellow-500 to-orange-500 rounded-md">
                       Buy Ticket ${data.btnPrice}{" "}
                     </button>
                   </div>

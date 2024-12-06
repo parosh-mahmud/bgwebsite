@@ -19,7 +19,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
-
 interface HeaderProps {
   navfix: boolean;
   userDetails: any;
@@ -75,123 +74,137 @@ const Header: FC<HeaderProps> = ({
 
   return (
     <nav
-      className="w-full"
-      style={{ background: "rgba(26, 26, 64, 0.4)" }}
+      className={`w-full ${navfix ? "fixed top-0 left-0 z-50" : ""}`}
+      style={{ background: "rgba(26, 26, 64, 0.8)" }}
     >
-      <div className="container flex items-center justify-between py-5">
+      <div className="container mx-auto flex items-center justify-between px-4 py-4">
         {/* Left Side: Logo */}
         <div className="flex items-center">
           <Link href="/">
-             <Image src="/images/BazigaarLogo.svg" alt="BG Coin" width={150} height={70} />
+            <Image
+              src="/images/BazigaarLogo.svg"
+              alt="Bazigaar Logo"
+              width={150}
+              height={70}
+              className="cursor-pointer"
+            />
           </Link>
         </div>
 
         {/* Right Side: Buttons */}
-        <div className="flex items-center gap-4">
-        
+        <div className="flex items-center gap-2 md:gap-4">
           {userDetails ? (
-            // Display user details after login
-            <div className="flex items-center gap-2 relative">
-               {/* Notification Icon */}
-              <button className="flex items-center justify-center">
-                <NotificationsIcon className="w-5 h-5 rounded-full text-white" />
+            <div className="flex items-center gap-4 md:gap-6">
+              {/* Notification Icon */}
+              <button
+                className="relative p-1 md:p-2 hover:bg-gray-700 rounded-full"
+                title="Notifications"
+              >
+                <NotificationsIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+                  3
+                </span>
               </button>
+
+              {/* Refresh Button */}
               <button
                 onClick={() => fetchUserDetails(userDetails?.user?.id)}
-                className="flex items-center justify-center"
+                className="p-1 md:p-2 hover:bg-gray-700 rounded-full"
+                title="Refresh Balance"
               >
-                <RefreshIcon className="w-5 h-5 rounded-full text-white" />
+                <RefreshIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </button>
-           <div
-  className="flex items-center gap-1 md:gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-[#E65E09] to-[#F2BA56] shadow-md"
->
- <Image src="/images/bgcoin.svg" alt="BG Coin" width={25} height={25} />
-   <span className="font-semibold text-xs md:text-lg text-black">
-    {userDetails.user.bgcoin}
-  </span>
-</div>
 
+              {/* BG Coin Balance */}
+              <div className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-4 md:py-2 rounded-full bg-gradient-to-r from-[#0B1E37] to-[#455271] shadow-lg">
+                <Image
+                  src="/images/bgcoin.svg"
+                  alt="BG Coin"
+                  width={20}
+                  height={20}
+                />
+                <span className="font-semibold text-xs md:text-sm text-white">
+                  {userDetails.user.bgcoin}
+                </span>
+                <button
+                  className="ml-1 md:ml-2 bg-white p-1 rounded-full shadow hover:shadow-md hover:bg-gray-200"
+                  title="Increase BG Coin"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-3 h-3 md:w-4 md:h-4 text-[#0B1E37]"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
+                  </svg>
+                </button>
+              </div>
 
-
-              <div className="flex items-center gap-2 relative">
+              {/* User Dropdown */}
+              <div className="relative">
                 <div
-                  className="flex items-center gap-1 md:gap-2 relative cursor-pointer"
+                  className="flex items-center gap-1 md:gap-2 cursor-pointer"
                   onClick={toggleDropdown}
                 >
-                  <div className="relative">
-                    <img
-                      src={
-                        userDetails.user.profile_picture ||
-                        "/default-profile.png"
-                      }
-                      alt="Profile"
-                      className="w-8 h-8 md:w-8 md:h-8 rounded-full border-2 border-white"
-                    />
-                    <ArrowDropDownIcon
-                      className="absolute bottom-0 right-0 w-3 h-3 md:w-4 md:h-4 text-white"
-                    />
-                  </div>
+                  <img
+                    src={
+                      userDetails.user.profile_picture || "/default-profile.png"
+                    }
+                    alt="Profile"
+                    className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-white"
+                  />
+                  <ArrowDropDownIcon className="text-white" />
                 </div>
-
-                {/* Dropdown menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-40 md:w-48 bg-white shadow-md rounded-lg py-2">
                     <button
                       onClick={handleProfileClick}
                       className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full"
                     >
-                      <AccountCircleIcon className="w-5 h-5" /> Profile
+                      <AccountCircleIcon /> Profile
                     </button>
                     <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                      <HistoryIcon className="w-5 h-5" /> Lottery History
+                      <HistoryIcon /> Lottery History
                     </button>
-                    <Link href="/chat" passHref>
+                    <Link href="/chat">
                       <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                        <ChatIcon className="w-5 h-5" /> Chat
+                        <ChatIcon /> Chat
                       </button>
                     </Link>
                     <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                      <SportsEsportsIcon className="w-5 h-5" /> Games
+                      <SportsEsportsIcon /> Games
                     </button>
                     <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                      <StarIcon className="w-5 h-5" /> Level
+                      <StarIcon /> Level
                     </button>
                     <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                      <HelpOutlineIcon className="w-5 h-5" /> Help
+                      <HelpOutlineIcon /> Help
                     </button>
                     <hr className="my-2" />
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-gray-100 w-full"
                     >
-                      <ExitToAppIcon className="w-5 h-5" /> Logout
+                      <ExitToAppIcon /> Logout
                     </button>
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            // Show Sign Up and Log In buttons if not logged in
-            <div className="hidden sm:flex gap-0">
+            <div className="flex gap-1 md:gap-2">
               <button
                 onClick={() => setSignUpOpen(true)}
-                style={{
-                  background:
-                    "linear-gradient(90deg, #F2BA56 0%, #E65E09 100%)",
-                  borderTopLeftRadius: "9999px",
-                  borderBottomLeftRadius: "9999px",
-                }}
-                className="text-white font-bold py-1 px-2 md:py-2 md:px-4 text-xs md:text-sm"
+                className="py-1 px-3 md:py-2 md:px-4 bg-gradient-to-r from-[#F2BA56] to-[#E65E09] text-white rounded-l-full font-semibold text-xs md:text-sm"
               >
                 Sign Up
               </button>
               <button
                 onClick={() => setLoginOpen(true)}
-                style={{
-                  backgroundColor: "#DFF4E4",
-                  marginLeft: "-1px",
-                }}
-                className="text-black font-bold py-1 px-2 md:py-2 md:px-4 rounded-r-full text-xs md:text-sm"
+                className="py-1 px-3 md:py-2 md:px-4 bg-gray-100 text-black rounded-r-full font-semibold text-xs md:text-sm"
               >
                 Log In
               </button>

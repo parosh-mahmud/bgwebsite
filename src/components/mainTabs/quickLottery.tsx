@@ -32,9 +32,9 @@ const lotteries = [
 const QuickLotterySection = () => {
   return (
     <div className="container mx-auto py-12">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-white">
+      {/* <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-white">
         Quick Draws
-      </h2>
+      </h2> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
         {lotteries.map((lottery) => (
           <div

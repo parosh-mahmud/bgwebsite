@@ -84,7 +84,7 @@ const Home = () => {
               <p className="uppercase font-semibold text-base sm:text-lg text-teal-200">
                 Play Anytime & Anywhere
               </p>
-              <h1 className="font-semibold text-2xl sm:text-3xl text-yellow-100 py-2">
+              <h1 className="font-semibold text-4xl sm:text-3xl text-yellow-100 py-2">
                 Win Latest iPhone!
               </h1>
               <Link

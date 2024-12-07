@@ -18,7 +18,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import axios from "axios";
 import toast from "react-hot-toast";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
+import { useRouter } from "next/router";
 interface HeaderProps {
   navfix: boolean;
   userDetails: any;
@@ -39,7 +39,7 @@ const Header: FC<HeaderProps> = ({
   handleLogout,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+const router = useRouter();
   // Fetch latest user details to update balance
   const fetchUserDetails = async (userId: string | number) => {
     const token = localStorage.getItem("authToken");
@@ -129,6 +129,7 @@ const Header: FC<HeaderProps> = ({
                 <button
                   className="ml-1 md:ml-2 bg-white p-1 rounded-full shadow hover:shadow-md hover:bg-gray-200"
                   title="Increase BG Coin"
+                  onClick={() => router.push('/funds?type=deposit')}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -28,7 +28,7 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 import Image from "next/image";
-
+import ReusableBottomBar from "../../components/common/BottomNavBar/reuseableBottomBar";
 interface BgcoinResponse {
   user_id: number;
   bgcoin: number;
@@ -158,6 +158,7 @@ export default function Wallet() {
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
         }}
       >
+      
         <ArrowBack
           style={{ color: "#AAB4BE", cursor: "pointer" }}
           onClick={() => router.back()}

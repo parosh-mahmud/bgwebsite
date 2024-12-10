@@ -26,7 +26,6 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
   const [timeLeft, setTimeLeft] = useState<string>("");
 
   useEffect(() => {
-    // Calculate the demo closing time (30 days from now)
     const demoClosingTime = new Date();
     demoClosingTime.setDate(demoClosingTime.getDate() + 30);
 
@@ -58,21 +57,21 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
   }, []);
 
   return (
-    <div className="relative bg-red-500 rounded-lg shadow-lg p-8 w-full max-w-5xl mx-auto text-center">
+    <div className="relative bg-gradient-to-r from-blue-500 to-indigo-700 rounded-lg shadow-lg p-4 w-full max-w-lg mx-auto text-center text-gray-100">
       {/* Countdown Timer */}
-      <div className="absolute top-4 right-4 bg-white text-red-500 font-bold  rounded shadow-md text-sm">
-        {timeLeft !== "Expired" ? `Draw time: ${timeLeft}` : "Lottery Closed"}
+      <div className="absolute top-2 right-2  text-white font-thin  rounded text-xs">
+        {timeLeft !== "Expired" ? ` ${timeLeft}` : "Draw Closed"}
       </div>
 
       {/* Lottery Name */}
-      <h2 className="text-3xl font-bold text-white mb-6">{lotteryName}</h2>
+      <h2 className="text-2xl font-extrabold mb-4 tracking-wide">{lotteryName}</h2>
 
       {/* Prizes Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-2">
         {/* First Prize */}
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-          <h3 className="text-lg font-bold text-red-500 mb-2">1ST PRIZE</h3>
-          <div className="relative w-28 h-28 mb-2">
+        <div className="bg-white rounded-lg shadow-md p-2 flex flex-col items-center">
+          <h3 className="text-sm font-bold text-blue-700 mb-1">1ST PRIZE</h3>
+          <div className="relative w-16 h-16 mb-1">
             <Image
               src={firstPrize}
               alt={`${firstPrizeName}`}
@@ -81,13 +80,15 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
               className="rounded"
             />
           </div>
-          <p className="text-base font-semibold text-black">{firstPrizeName}</p>
+          <p className="text-xs font-semibold text-gray-800 text-center">
+            {firstPrizeName}
+          </p>
         </div>
 
         {/* Second Prize */}
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-          <h3 className="text-lg font-bold text-red-500 mb-2">2ND PRIZE</h3>
-          <div className="relative w-28 h-28 mb-2">
+        <div className="bg-white rounded-lg shadow-md p-2 flex flex-col items-center">
+          <h3 className="text-sm font-bold text-blue-700 mb-1">2ND PRIZE</h3>
+          <div className="relative w-16 h-16 mb-1">
             <Image
               src={secondPrize}
               alt={`${secondPrizeName}`}
@@ -96,13 +97,15 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
               className="rounded"
             />
           </div>
-          <p className="text-base font-semibold text-black">{secondPrizeName}</p>
+          <p className="text-xs font-semibold text-gray-800 text-center">
+            {secondPrizeName}
+          </p>
         </div>
 
         {/* Third Prize */}
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-          <h3 className="text-lg font-bold text-red-500 mb-2">3RD PRIZE</h3>
-          <div className="relative w-28 h-28 mb-2">
+        <div className="bg-white rounded-lg shadow-md p-2 flex flex-col items-center">
+          <h3 className="text-sm font-bold text-blue-700 mb-1">3RD PRIZE</h3>
+          <div className="relative w-16 h-16 mb-1">
             <Image
               src={thirdPrize}
               alt={`${thirdPrizeName}`}
@@ -111,14 +114,16 @@ const LotteryCard: React.FC<LotteryCardProps> = ({
               className="rounded"
             />
           </div>
-          <p className="text-base font-semibold text-black">{thirdPrizeName}</p>
+          <p className="text-xs font-semibold text-gray-800 text-center">
+            {thirdPrizeName}
+          </p>
         </div>
       </div>
 
       {/* View Details Button */}
       <button
         onClick={onViewDetails}
-        className="mt-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-8 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200"
+        className="mt-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-4 py-2 rounded-lg font-bold hover:shadow-xl hover:scale-105 transition duration-300"
       >
         View Package Details
       </button>

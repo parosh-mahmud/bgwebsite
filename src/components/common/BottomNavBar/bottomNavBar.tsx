@@ -124,15 +124,35 @@ const BottomNavBar = () => {
             {/* Content Wrapper */}
             <div className="flex-1 min-h-0 overflow-y-auto bg-primary pb-24"> {/* Added bottom padding to ensure logout button visibility */}
               {/* Wallet Section */}
-              <div className="bg-gray-700 p-3 rounded-md mb-4 mx-4">
-                <p className="text-gray-400 text-left">Main Wallet</p>
-                <div className="flex items-center justify-center space-x-2">
-                  <Image src="/images/bgcoin.svg" alt="BG Coin" width={50} height={50} />
-                  <span style={{ color: '#FFD700', marginLeft: '8px' }} className="text-4xl font-semibold">
-                    {userDetails.user.bgcoin}
-                  </span>
-                </div>
-              </div>
+              <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-6 rounded-lg shadow-lg mb-6 mx-4 border border-gray-600">
+  <p className="text-gray-400 text-sm font-medium uppercase tracking-wide mb-4">Main Balance</p>
+  <div className="flex items-center justify-between">
+    <div className="flex items-center space-x-3">
+      <Image
+        src="/images/bgcoin.svg"
+        alt="BG Coin"
+        width={60}
+        height={60}
+        className="rounded-full shadow-md"
+      />
+      <div>
+        <span
+          className="text-4xl font-extrabold text-transparent bg-clip-text"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, #FFD700 0%, #FFC700 100%)',
+          }}
+        >
+          {userDetails.user.bgcoin}
+        </span>
+        <p className="text-sm text-gray-500 mt-1">BG Coins</p>
+      </div>
+    </div>
+    <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-semibold text-sm rounded-lg shadow">
+      Transaction History
+    </button>
+  </div>
+</div>
+
 
               {/* Sections with Dividers */}
               <div className="space-y-6 px-4">

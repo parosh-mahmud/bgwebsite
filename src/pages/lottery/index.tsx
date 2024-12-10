@@ -62,30 +62,30 @@ const LotteryPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen py-6">
-      <h1 className="text-5xl text-center font-bold text-white mb-6">
+    <div className="min-h-screen py-6 bg-gray-900 text-white">
+      <h1 className="text-3xl md:text-5xl text-center font-bold mb-6">
         Available Lottery Packages
       </h1>
-      <div className="container mx-auto p-4">
-        <Breadcrumbs aria-label="breadcrumb" style={{ color: "white" }}>
-          <Link href="/" className="flex items-center" style={{ color: "white" }}>
+      <div className="container mx-auto px-4">
+        <Breadcrumbs aria-label="breadcrumb" separator={<span style={{ color: '#ffcc00' }}> &gt; </span>} className="text-gray-400">
+          <Link href="/" className="flex items-center text-gray-400">
             <HomeIcon fontSize="small" className="mr-1" />
             Home
           </Link>
-          <Typography className="flex items-center" style={{ color: "white" }}>
+          <Typography className="flex items-center text-gray-400">
             <ConfirmationNumberIcon fontSize="small" className="mr-1" />
             Lottery Packages
           </Typography>
         </Breadcrumbs>
       </div>
-      <div>
+      <div className="mt-6">
         {selectedLottery ? (
           <TicketDetails
             ticketId={selectedLottery}
             onBack={handleBackToLottery}
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container mx-auto">
             {tickets.map((ticket) => (
               <LotteryCard
                 key={ticket.id}

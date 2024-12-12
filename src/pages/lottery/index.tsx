@@ -6,6 +6,8 @@ import { Breadcrumbs, Typography, Link } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import TicketDetails from "../../components/ticketDetails/ticketDetails";
+import ReusableBottomBar from "../../components/common/BottomNavBar/reuseableBottomBar";
+
 
 interface Ticket {
   id: number;
@@ -102,6 +104,7 @@ const LotteryPage: React.FC = () => {
           </div>
         )}
       </div>
+      <ReusableBottomBar />
     </div>
   );
 };

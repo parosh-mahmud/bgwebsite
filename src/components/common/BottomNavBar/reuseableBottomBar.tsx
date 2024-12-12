@@ -15,7 +15,7 @@ const ReusableBottomBar = () => {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        router.push('/home'); // Update with your home route
+        router.push('/'); // Update with your home route
         break;
       case 1:
         router.push('/wallet'); // Update with your wallet route

@@ -341,6 +341,7 @@ export default function Wallet() {
         </TableBody>
       </Table>
     </TableContainer>
+    <ReusableBottomBar />
   </div>
         )}
       </CardContent>

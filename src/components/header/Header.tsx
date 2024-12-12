@@ -1,5 +1,5 @@
 // components/header/Header.tsx
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import HeaderLogo from "../../assets/LandingPage/SVG/BazigaarLogo.svg";
@@ -19,6 +19,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useRouter } from "next/router";
+import NotificationsModal from "../notifications/NotificationsModal";
+
 interface HeaderProps {
   navfix: boolean;
   userDetails: any;
@@ -40,6 +42,8 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 const router = useRouter();
+ const [isModalOpen, setModalOpen] = useState(false);
+ const notificationRef = useRef(null);
   // Fetch latest user details to update balance
   const fetchUserDetails = async (userId: string | number) => {
     const token = localStorage.getItem("authToken");
@@ -96,15 +100,25 @@ const router = useRouter();
           {userDetails ? (
             <div className="flex items-center gap-4 md:gap-6">
               {/* Notification Icon */}
-              <button
-                className="relative p-1 md:p-2 hover:bg-gray-700 rounded-full"
-                title="Notifications"
-              >
-                <NotificationsIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
-                  3
-                </span>
-              </button>
+             <button
+          ref={notificationRef} // Attach the ref here
+          className="relative p-1 md:p-2 hover:bg-gray-700 rounded-full"
+          title="Notifications"
+          onClick={() => setModalOpen(!isModalOpen)}
+        >
+          <NotificationsIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+            3
+          </span>
+        </button>
+
+        {/* Pass the ref to the modal */}
+        <NotificationsModal
+          isOpen={isModalOpen}
+          setIsOpen={setModalOpen}
+          positionRef={notificationRef}
+        />
+             
 
               {/* Refresh Button */}
               <button

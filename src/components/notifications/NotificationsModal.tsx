@@ -10,7 +10,7 @@ interface Notification {
 }
 
 const notifications: Notification[] = [
-  { id: 1, title: 'Deposit Successful', description: 'Your deposit of 500 coin has been successfully processed.', type: 'transaction', buttonText: 'Transaction History' },
+  { id: 1, title: 'Deposit Successful', description: 'Your deposit of $500 has been successfully processed.', type: 'transaction', buttonText: 'Transaction History' },
   { id: 2, title: 'New Promotion!', description: 'Don’t miss our upcoming promotional event starting tomorrow.', type: 'promotion' },
   { id: 3, title: 'Scheduled Maintenance', description: 'Our system will undergo maintenance this weekend from 2 AM to 5 AM.', type: 'info' },
   { id: 4, title: 'Lottery Update', description: 'Your recent lottery entry has been confirmed.', type: 'lottery', buttonText: 'Lottery History' }
@@ -31,16 +31,19 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({ isOpen, setIsOp
         setPositionStyle({
           top: '50%',
           left: '50%',
-          transform: 'translate(-50%, -0%)',
+          transform: 'translate(-50%, -50%)',
           width: '90%',
+          maxHeight: '80vh', // Allows more height
+          padding: '1rem',
         });
       } else if (positionRef.current) {
         const rect = positionRef.current.getBoundingClientRect();
         const left = rect.right - 384; // Adjust this value based on your modal width to align the right edges
         setPositionStyle({
-          top: `${rect.bottom + window.scrollY}px`,
+          top: `${rect.bottom + window.scrollY + 10}px`, // Adds spacing below the button
           left: `${left}px`,
           width: '384px', // Set a fixed width or base it on content/viewport
+         
         });
       }
     }
@@ -48,7 +51,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({ isOpen, setIsOp
 
   return (
     <div
-      className={`absolute bg-white shadow-xl rounded-lg p-4 transition-opacity duration-300 z-50 ${isOpen ? 'block' : 'hidden'}`}
+      className={`fixed bg-white shadow-xl rounded-lg p-4 transition-opacity duration-300 z-50 ${isOpen ? 'block' : 'hidden'}`}
       style={positionStyle}
     >
       <div className="flex justify-between items-center border-b pb-2 mb-3">
@@ -57,7 +60,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({ isOpen, setIsOp
           <CloseIcon fontSize="small" />
         </button>
       </div>
-      <div className="max-h-64 overflow-y-auto">
+      <div className="max-h-[80vh] overflow-y-auto">
         <ul className="space-y-4">
           {notifications.map(notification => (
             <li

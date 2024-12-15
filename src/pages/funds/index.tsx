@@ -17,7 +17,7 @@ import DepositWithdrawContent from '../../components/fundsChild/depositWithdraw'
 import PaymentDetails from '../../components/payments/paymentDetails';
 import Bgcoin from '../../assets/LandingPage/SVG/bgcoin.svg';
 import { SelectChangeEvent } from '@mui/material';
-
+import { getTokenFromStorage, getUserDetailsFromStorage } from '../../../utils/localStorageUtils';
 type CountryData = {
   name: string;
   currencyCode: string;
@@ -51,6 +51,7 @@ const [branchName, setBranchName] = useState('');
 const [cryptoAddress, setCryptoAddress] = useState('');
 const [networkName, setNetworkName] = useState('');
 const [cryptoName, setCryptoName] = useState('');
+const token = getTokenFromStorage();
 useEffect(() => {
   console.log("Selected Payment:", selectedPayment);
 }, [selectedPayment]);
@@ -76,14 +77,7 @@ const handleWithdraw = async () => {
     }
   }
 
-  // Retrieve user token
-  const userDetailsString = localStorage.getItem('userDetails');
-  if (!userDetailsString) {
-    alert('User details not found. Please log in again.');
-    return;
-  }
 
-  const { token } = JSON.parse(userDetailsString);
 
   // Construct the payload
   let payload: any = {};
@@ -207,24 +201,32 @@ useEffect(() => {
   // Fetch countries and currencies from REST Countries API
   useEffect(() => {
     const fetchCountriesAndCurrencies = async () => {
-      try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
+  try {
+    const response = await fetch('https://countriesnow.space/api/v0.1/countries/currency');
+    const data = await response.json();
 
-        const countryCurrencyData: CountryData[] = data.map((country: any) => ({
-          name: country.name.common,
-          currencyCode: Object.keys(country.currencies || {})[0] || 'USD',
-        }));
+    console.log('Raw API Response:', data); // Log the raw API response
 
-        // Sort countries alphabetically
-        countryCurrencyData.sort((a, b) => a.name.localeCompare(b.name));
+    if (data && data.data) {
+      const countryCurrencyData = data.data.map((item: { name: any; currency: any; }) => ({
+        name: item.name,
+        currencyCode: item.currency,
+      }));
 
-        setCountryList(countryCurrencyData);
-        setFilteredCountries(countryCurrencyData);
-      } catch (error) {
-        console.error('Error fetching countries and currencies:', error);
-      }
-    };
+      console.log('Mapped Country-Currency Data:', countryCurrencyData); // Log the mapped country and currency data
+
+      // Assuming you are using state to store and filter countries
+      setCountryList(countryCurrencyData);
+      setFilteredCountries(countryCurrencyData);
+    } else {
+      console.error('Invalid API response structure:', data);
+    }
+  } catch (error) {
+    console.error('Error fetching countries and currencies:', error);
+  }
+};
+
+
 
     fetchCountriesAndCurrencies();
   }, []);
@@ -407,13 +409,14 @@ const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         selectedCountry={selectedCountry}
         handleCountryChange={handleCountryChange}
         selectedReseller={selectedReseller}
+        setSelectedReseller={setSelectedReseller}
         handleResellerChange={handleResellerChange}
         resellers={resellers}
         convertedAmountDetails={convertedAmountDetails}
         countrySearchQuery={countrySearchQuery}
         handleCountrySearch={handleCountrySearch}
         filteredCountries={filteredCountries}
-
+           setSelectedCountry={setSelectedCountry}
         accountNumber={accountNumber}
   setAccountNumber={setAccountNumber}
   accountHolderName={accountHolderName}

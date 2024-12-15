@@ -29,6 +29,7 @@ import {
 import axios from "axios";
 import Image from "next/image";
 import ReusableBottomBar from "../../components/common/BottomNavBar/reuseableBottomBar";
+import { getTokenFromStorage, getUserDetailsFromStorage } from "../../../utils/localStorageUtils";
 interface BgcoinResponse {
   user_id: number;
   bgcoin: number;
@@ -73,29 +74,31 @@ export default function Wallet() {
   const [depositRequests, setDepositRequests] = useState<DepositRequest[]>([]);
   const [isReseller, setIsReseller] = useState<boolean>(false);
   const router = useRouter();
+const [loading, setLoading] = useState<boolean>(false); 
 
-  useEffect(() => {
+
+ const token = getTokenFromStorage();
+ console.log(token)
+ useEffect(() => {
+    fetchWalletData();
+  }, []);
+
   const fetchWalletData = async () => {
+    setLoading(true);
     const userDetailsString = localStorage.getItem("userDetails");
+
     if (userDetailsString) {
       const userDetails = JSON.parse(userDetailsString);
-      const token = userDetails.token;
       const userId = userDetails.user.id;
-      console.log("User ID:", userId);
-      console.log("Token:", token);
 
       try {
-        // Fetch user details to check if the user is a reseller
+        // Fetch user details
         const userDetailsResponse = await axios.get(
           `https://api.bazigaar.com/user/user_details/${userId}`,
           { headers: { Authorization: `Token ${token}` } }
         );
-        const userApiDetails = userDetailsResponse.data;
-        console.log("User API Details:", userApiDetails);
-
-        const isUserReseller = userApiDetails.user.isReseller;
+        const isUserReseller = userDetailsResponse.data.user.isReseller;
         setIsReseller(isUserReseller);
-        console.log("Is Reseller:", isUserReseller);
 
         // Fetch balance
         const balanceResponse = await axios.get<BgcoinResponse>(
@@ -103,42 +106,51 @@ export default function Wallet() {
           { headers: { Authorization: `Token ${token}` } }
         );
         setBalance(balanceResponse.data.bgcoin);
-        console.log("Balance:", balanceResponse.data.bgcoin);
 
         if (isUserReseller) {
-          // Fetch deposit requests for resellers
+          // Fetch deposit requests
           const depositRequestResponse = await axios.get<DepositRequestResponse>(
-            "https://api.bazigaar.com/reseller_app/api/v1/user/reseller-my-walle/deposit-request-list/",
+            "https://api.bazigaar.com/reseller_app/api/v1/user/reseller-my-wallet/deposit-request-list/",
             { headers: { Authorization: `Token ${token}` } }
           );
-          console.log("Deposit Request Response Data:", depositRequestResponse.data);
           setDepositRequests(depositRequestResponse.data.results || []);
+          console.log(depositRequestResponse.data.results )
         } else {
-          // Fetch transaction history for regular users
+          // Fetch transaction history
           const transactionResponse = await axios.get<TransactionResponse>(
             "https://api.bazigaar.com/wallet_app/api/v1/user/my-wallet-profile",
             { headers: { Authorization: `Token ${token}` } }
           );
-          console.log("Transaction Response Data:", transactionResponse.data);
-           // Update balance and transaction history
-        setBalance(parseFloat(transactionResponse.data.wallet.user.bgcoin));
-        setTransactionHistory(transactionResponse.data.transactions || []);
+          setBalance(parseFloat(transactionResponse.data.wallet.user.bgcoin));
+          setTransactionHistory(transactionResponse.data.transactions || []);
         }
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error("Axios error:", error.response?.data || error.message);
-        } else {
-          console.error("Unexpected error:", error);
-        }
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      console.warn("No userDetails found in localStorage.");
     }
   };
 
-  fetchWalletData();
-}, []);
+  const updateRequestStatus = async (id: number, status: "accepted" | "denied") => {
+    try {
+      await axios.post(
+        "https://api.bazigaar.com/reseller_app/api/v1/user/reseller-my-wallet/deposit-request-status-update/",
+        { id, status },
+        { headers: { Authorization: `Token ${token}` } }
+      );
 
+      // Update the status locally
+      setDepositRequests((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === id ? { ...request, status } : request
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update request status:", error);
+      alert("Failed to update request. Please try again.");
+    }
+  };
 
   return (
     <Card
@@ -250,27 +262,34 @@ export default function Wallet() {
               Coin Requests
             </Typography>
             <List style={{ backgroundColor: "#455271", borderRadius: 8 }}>
-              {depositRequests.map((request) => (
-                <ListItem
-                  key={request.id}
-                  style={{ borderBottom: "1px solid #AAB4BE" }}
-                >
+               {depositRequests.map((request) => (
+                <ListItem key={request.id} style={{ borderBottom: "1px solid #AAB4BE" }}>
                   <ListItemText
                     primary={`Amount: ${request.amount} | Medium: ${request.transactionMedium}`}
-                    secondary={`Status: ${
-                      request.status
-                    } | Date: ${new Date(
-                      request.created_at
-                    ).toLocaleDateString()}`}
+                    secondary={`Date: ${new Date(request.created_at).toLocaleDateString()}`}
                     primaryTypographyProps={{ style: { color: "#FFFFFF" } }}
                     secondaryTypographyProps={{ style: { color: "#AAB4BE" } }}
                   />
-                  <Chip
-                    label={request.status.toUpperCase()}
-                    color={
-                      request.status === "pending" ? "warning" : "success"
-                    }
-                  />
+                  <Chip label={request.status.toUpperCase()} color="default" style={{ marginRight: "8px" }} />
+                  {request.status === "pending" && (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        style={{ marginRight: "8px" }}
+                        onClick={() => updateRequestStatus(request.id, "accepted")}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => updateRequestStatus(request.id, "denied")}
+                      >
+                        Deny
+                      </Button>
+                    </>
+                  )}
                 </ListItem>
               ))}
             </List>
@@ -348,3 +367,5 @@ export default function Wallet() {
     </Card>
   );
 }
+
+

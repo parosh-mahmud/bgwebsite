@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { Reseller, ConvertedAmountDetails } from './types';
 import { paymentMethods, amountOptions } from './constants';
 import Bgcoin from '../../assets/LandingPage/SVG/bgcoin.svg';
-
+import dynamic from 'next/dynamic';
 type CountryData = {
   name: string;
   currencyCode: string;
@@ -15,6 +15,7 @@ type Props = {
   selectedTab: string;
   selectedPayment: string;
   amount: string;
+   setSelectedCountry: (value: string) => void;
   handlePaymentSelect: (id: string) => void;
   handleAmountSelect: (amount: number) => void;
   handleAmountInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,6 +25,7 @@ type Props = {
   selectedCountry: string | null;
   handleCountryChange: (event: SelectChangeEvent<string>) => void;
   selectedReseller: Reseller | null;
+   setSelectedReseller: (reseller: Reseller | null) => void;
   handleResellerChange: (event: SelectChangeEvent<string>) => void;
   resellers: Reseller[];
   convertedAmountDetails: ConvertedAmountDetails;
@@ -64,6 +66,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
   convertedAmountDetails,
   countrySearchQuery,
   handleCountrySearch,
+  setSelectedCountry,
   filteredCountries,
   accountNumber,
   setAccountNumber,
@@ -72,6 +75,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
   bankNameInput,
   setBankNameInput,
   branchName,
+  setSelectedReseller,
   setBranchName,
   cryptoAddress,
   setCryptoAddress,
@@ -156,95 +160,89 @@ const DepositWithdrawContent: React.FC<Props> = ({
       )}
 
       {/* Country & Reseller Selection (Only for Deposit) */}
-      {selectedTab === 'deposit' && selectedPayment !== 'usdt' && selectedPayment !== 'bitcoin' && (
-        <div className="bg-gray-800 p-4 rounded-lg mb-4">
-          <h2 className="text-lg font-semibold mb-4 text-green-400">Select Country & Reseller</h2>
+{selectedTab === 'deposit' && selectedPayment !== 'usdt' && selectedPayment !== 'bitcoin' && (
+  <div className="bg-gray-800 p-6 rounded-lg mb-6 shadow-lg">
+    <h2 className="text-xl font-semibold mb-6 text-green-400">Select Country & Reseller</h2>
 
-          {/* Country Dropdown */}
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Search for a country"
-              value={countrySearchQuery}
-              onChange={(e) => handleCountrySearchUpdate(e.target.value)}
-              className="w-full p-3 bg-gray-700 text-white rounded-md outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
-            />
-            <Select
-              fullWidth
-              value={selectedCountry || ''}
-              onChange={handleCountryChange}
-              displayEmpty
-              className="mt-4"
-              style={{
-                backgroundColor: '#374151',
-                color: 'white',
-              }}
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    backgroundColor: '#374151',
-                    color: 'white',
-                    maxHeight: '150px',
-                  },
-                },
-              }}
-            >
-              <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
-                Select Country
-              </MenuItem>
-              {filteredCountries.slice(0, 4).map((country) => (
-                <MenuItem key={country.name} value={country.name} style={{ color: 'white' }}>
-                  {country.name} ({country.currencyCode})
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
+    {/* Country Search Dropdown */}
+    <div className="relative mb-6">
+      <label className="block text-sm font-medium text-gray-300 mb-2">Search Country</label>
+      <input
+        type="text"
+        placeholder="Type to search..."
+        value={countrySearchQuery}
+        onChange={(e) => handleCountrySearch(e.target.value)}
+        className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+      />
+      <div className="mt-2 bg-gray-900 rounded-lg overflow-hidden shadow-lg max-h-60 overflow-y-auto">
+        {filteredCountries.length > 0 ? (
+    filteredCountries
+      .filter((country) => !selectedCountry || country.name === selectedCountry) // Only show selected country
+      .map((country) => (
+        <button
+          key={country.name}
+          onClick={() => {
+            setSelectedCountry(country.name);
+            handleCountryChange({ target: { value: country.name } } as SelectChangeEvent<string>);
+          }}
+          className={`block w-full text-left px-4 py-2 hover:bg-gray-700 transition ${
+            selectedCountry === country.name ? 'bg-gray-700' : ''
+          }`}
+        >
+          {country.name} ({country.currencyCode})
+        </button>
+      ))
+  ) : (
+    <p className="text-center text-gray-400 py-4">No countries found</p>
+  )}
+      </div>
+    </div>
 
-          {/* Reseller Dropdown */}
-          {selectedCountry && (
-            <Select
-              fullWidth
-              value={selectedReseller?.username || ''}
-              onChange={handleResellerChange}
-              displayEmpty
-              className="mb-4"
-              style={{
-                backgroundColor: '#374151',
-                color: 'white',
+    {/* Reseller List */}
+   {selectedCountry && (
+  <div className="relative">
+    <label className="block text-sm font-medium text-gray-300 mb-2">Select Reseller</label>
+    {resellers.length > 0 ? (
+      <div className="bg-gray-900 rounded-lg shadow-lg max-h-60 overflow-y-auto p-2">
+        {resellers
+          .filter((reseller) => selectedReseller === null || reseller.id === selectedReseller.id) // Filter resellers
+          .map((reseller) => (
+            <div
+              key={reseller.id}
+              onClick={() => {
+                setSelectedReseller(reseller);
+                handleResellerChange({
+                  target: { value: reseller.username },
+                } as SelectChangeEvent<string>);
               }}
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    backgroundColor: '#374151',
-                    color: 'white',
-                    maxHeight: '150px',
-                  },
-                },
-              }}
+              className={`flex items-center justify-between p-4 rounded-lg cursor-pointer hover:bg-gray-700 transition ${
+                selectedReseller?.id === reseller.id ? 'bg-gray-700' : ''
+              }`}
             >
-              <MenuItem value="" disabled style={{ color: '#9CA3AF' }}>
-                Select Reseller
-              </MenuItem>
-              {resellers.map((reseller) => (
-                <MenuItem
-                  key={reseller.id}
-                  value={reseller.username}
-                  style={{ color: 'white' }}
-                >
-                  <div className="flex items-center">
-                    <Avatar
-                      src={reseller.profile_picture || ''}
-                      alt={reseller.username}
-                      className="mr-2"
-                    />
-                    {`${reseller.first_name} ${reseller.last_name}`}
-                  </div>
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        </div>
-      )}
+              <div className="flex items-center">
+                <img
+                  src={reseller.profile_picture || '/images/default-avatar.png'}
+                  alt={reseller.username}
+                  className="w-10 h-10 rounded-full mr-4"
+                />
+                <div>
+                  <p className="text-sm font-medium text-white">{`${reseller.first_name} ${reseller.last_name}`}</p>
+                  <p className="text-xs text-gray-400">{reseller.username}</p>
+                </div>
+              </div>
+              <p className="text-sm text-green-400">Verified</p>
+            </div>
+          ))}
+      </div>
+    ) : (
+      <p className="text-center text-gray-400 py-4">No resellers available</p>
+    )}
+  </div>
+)}
+
+  </div>
+)}
+
 
       {/* Amount Input and Conversion Details */}
       <div className="bg-gray-800 p-4 rounded-lg mb-4">

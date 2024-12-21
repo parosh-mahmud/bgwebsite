@@ -10,7 +10,7 @@ interface Notification {
 }
 
 const notifications: Notification[] = [
-  { id: 1, title: 'Deposit Successful', description: 'Your deposit of $500 has been successfully processed.', type: 'transaction', buttonText: 'Transaction History' },
+  { id: 1, title: 'Deposit Successful', description: 'Your deposit of 500 coin has been successfully processed.', type: 'transaction', buttonText: 'Transaction History' },
   { id: 2, title: 'New Promotion!', description: 'Don’t miss our upcoming promotional event starting tomorrow.', type: 'promotion' },
   { id: 3, title: 'Scheduled Maintenance', description: 'Our system will undergo maintenance this weekend from 2 AM to 5 AM.', type: 'info' },
   { id: 4, title: 'Lottery Update', description: 'Your recent lottery entry has been confirmed.', type: 'lottery', buttonText: 'Lottery History' }

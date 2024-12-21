@@ -29,25 +29,42 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onLoginClick
   const [verificationKey, setVerificationKey] = useState('');
 
   // Fetch country list when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      const fetchCountries = async () => {
-        try {
-          const response = await axios.get('https://restcountries.com/v3.1/all');
-          const countryOptions = response.data
-            .map((country: any) => ({
-              value: country.name.common,
-              label: country.name.common,
-            }))
-            .sort((a: any, b: any) => a.label.localeCompare(b.label));
-          setCountries(countryOptions);
-        } catch (error) {
-          console.error('Error fetching countries:', error);
+ interface CountryOption {
+  value: string;
+  label: string;
+  currency: string;
+}
+
+
+useEffect(() => {
+  if (isOpen) {
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get('https://countriesnow.space/api/v0.1/countries/currency');
+        if (response.data.error) {
+          throw new Error(response.data.msg);
         }
-      };
-      fetchCountries();
-    }
-  }, [isOpen]);
+
+        const countryOptions = response.data.data
+          .map((country: { name: string; currency: string }) => ({
+            value: country.name,
+            label: country.name,
+            currency: country.currency
+          }))
+          .sort((a: CountryOption, b: CountryOption) => 
+            a.label.localeCompare(b.label)
+          );
+
+        setCountries(countryOptions);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+        // Optional: Add error state handling here
+        setCountries([]);
+      }
+    };
+    fetchCountries();
+  }
+}, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

@@ -104,7 +104,7 @@ const LotteryPage: React.FC = () => {
           </div>
         )}
       </div>
-      <ReusableBottomBar />
+      <ReusableBottomBar value={0} onChange={() => {}} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { ArrowBack, HelpOutline } from "@mui/icons-material";
 import {
   Button,
@@ -29,7 +29,11 @@ import {
 import axios from "axios";
 import Image from "next/image";
 import ReusableBottomBar from "../../components/common/BottomNavBar/reuseableBottomBar";
-import { getTokenFromStorage, getUserDetailsFromStorage } from "../../../utils/localStorageUtils";
+import {
+  getTokenFromStorage,
+  getUserDetailsFromStorage,
+} from "../../../utils/localStorageUtils";
+import CoinRequests from "../../components/walletComponent/coinRequests";
 interface BgcoinResponse {
   user_id: number;
   bgcoin: number;
@@ -75,7 +79,7 @@ export default function Wallet() {
   const [isReseller, setIsReseller] = useState<boolean>(false);
   const router = useRouter();
 const [loading, setLoading] = useState<boolean>(false); 
-
+const [value, setValue] = useState(0);
 
  const token = getTokenFromStorage();
  console.log(token)
@@ -253,47 +257,10 @@ const [loading, setLoading] = useState<boolean>(false);
         {/* Conditional Rendering Based on Reseller Status */}
         {isReseller ? (
           // Show deposit requests for resellers
-          <div>
-            <Typography
-              variant="h6"
-              className="mt-6 mb-4"
-              style={{ color: "#FFFFFF" }}
-            >
-              Coin Requests
-            </Typography>
-            <List style={{ backgroundColor: "#455271", borderRadius: 8 }}>
-               {depositRequests.map((request) => (
-                <ListItem key={request.id} style={{ borderBottom: "1px solid #AAB4BE" }}>
-                  <ListItemText
-                    primary={`Amount: ${request.amount} | Medium: ${request.transactionMedium}`}
-                    secondary={`Date: ${new Date(request.created_at).toLocaleDateString()}`}
-                    primaryTypographyProps={{ style: { color: "#FFFFFF" } }}
-                    secondaryTypographyProps={{ style: { color: "#AAB4BE" } }}
-                  />
-                  <Chip label={request.status.toUpperCase()} color="default" style={{ marginRight: "8px" }} />
-                  {request.status === "pending" && (
-                    <>
-                      <Button
-                        variant="contained"
-                        color="success"
-                        style={{ marginRight: "8px" }}
-                        onClick={() => updateRequestStatus(request.id, "accepted")}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => updateRequestStatus(request.id, "denied")}
-                      >
-                        Deny
-                      </Button>
-                    </>
-                  )}
-                </ListItem>
-              ))}
-            </List>
-          </div>
+          <CoinRequests
+            depositRequests={depositRequests}
+            updateRequestStatus={updateRequestStatus}
+          />
         ) : (
           // Show transaction history for regular users
           <div>
@@ -360,7 +327,7 @@ const [loading, setLoading] = useState<boolean>(false);
         </TableBody>
       </Table>
     </TableContainer>
-    <ReusableBottomBar />
+    <ReusableBottomBar value={value} onChange={(event, newValue) => setValue(newValue)} />
   </div>
         )}
       </CardContent>

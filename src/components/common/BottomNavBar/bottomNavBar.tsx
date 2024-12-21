@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { BottomNavigation, BottomNavigationAction, Box, IconButton, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -17,6 +17,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import Image from 'next/image';
 import ReferralProgram from '../../referral/referralMain';
+import ReuseableBottomBar from './reuseableBottomBar';
 
 interface UserDetails {
   user: {
@@ -44,15 +45,30 @@ const BottomNavBar = () => {
     router.push('/login');
   };
 
-  const handleChange = (event: any, newValue: any) => {
+const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    if (newValue === 1) {
-      router.push('/wallet');
-    } else if (newValue === 4) {
-      setShowAccountScreen((prev) => !prev);
-      window.scrollTo(0, 0); // Scroll to top when showing account screen
-    } else {
-      setShowAccountScreen(false);
+    setShowAccountScreen(newValue === 4); // Assuming the account tab is at index 4
+
+    // Navigate based on tab index
+    switch (newValue) {
+      case 0:
+        router.push('/home');
+        break;
+      case 1:
+        router.push('/wallet');
+        break;
+      case 2:
+        router.push('/games');
+        break;
+      case 3:
+        router.push('/chats');
+        break;
+      case 4:
+        // Directly toggle the account screen visibility
+        break;
+      default:
+        setShowAccountScreen(false);
+        break;
     }
   };
 
@@ -72,8 +88,9 @@ const BottomNavBar = () => {
 
   return (
     <>
+    <ReuseableBottomBar value={value} onChange={handleChange} />
       {/* Bottom Navigation */}
-      <BottomNavigation
+      {/* <BottomNavigation
         value={value}
         onChange={handleChange}
         showLabels
@@ -89,7 +106,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction label="Games" icon={<SportsEsportsIcon />} />
         <BottomNavigationAction label="Chats" icon={<ChatIcon />} />
         <BottomNavigationAction sx={{ whiteSpace: 'nowrap' }} label="My Account" icon={<AccountCircleIcon />} />
-      </BottomNavigation>
+      </BottomNavigation> */}
 
       {/* Slide-up Account Screen */}
       <div

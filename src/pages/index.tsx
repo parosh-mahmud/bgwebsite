@@ -21,7 +21,7 @@ import ImageCarousel from "../components/common/Slider/imageCarousel";
 import LoadingSpinner from "../components/common/loadingSpinner/LoadingSpinner";
 import Link from "next/link";
 import MainTabComponent from "../components/mainTabs/mainTabComponent";
-
+import {COLORS} from "../styles/theme";
 const images = [
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943693/Buylottery_vn0b0p.jpg",
   "https://res.cloudinary.com/dpudfjkoq/image/upload/v1729943692/1stdepositebonus_jykk47.jpg",
@@ -77,7 +77,7 @@ const Home = () => {
   return (
     <HomeLayout>
       <main className="mt-20">
-        <div className="container mx-auto pt-4 px-4 sm:px-6 md:px-8 flex flex-col-reverse lg:flex-row items-center">
+        <div  className="container mx-auto pt-4 px-4 sm:px-6 md:px-8 flex flex-col-reverse lg:flex-row items-center">
           {/* Buy Ticket Section */}
           <div className="w-full lg:w-1/2 mt-4 lg:mt-0 lg:pl-8">
             <div className="text-center lg:text-left">
@@ -120,10 +120,10 @@ const Home = () => {
         </div>
 
         {/* Counter Section */}
-        <div className="container py-8 sm:py-12">
-          <div className="shadow-jackpot bg-gradient-to-r from-orange-500 to-yellow-600 rounded-2xl">
-            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-primary py-8 px-6 sm:px-10">
-              <div className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
+        <div  className="container py-8 sm:py-12">
+          <div style={{ background: COLORS.primary.main }} className="shadow-jackpot bg-gradient-to-r from-orange-500 to-yellow-600 rounded-2xl">
+            <div  className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-primary py-8 px-6 sm:px-10">
+              <div  className="flex items-center gap-6 sm:gap-8 py-4 sm:py-0">
                 <span style={iconGradientStyle}>
                   <Trophy />
                 </span>
@@ -164,7 +164,7 @@ const Home = () => {
 
         {/* Available Games Section */}
         <div className="container">
-          <div className="bg-gradient-to-r from-orange-400 to-yellow-500 py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
+          <div style={{ background: COLORS.primary.main }} className="bg-gradient-to-r from-orange-400 to-yellow-500 py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
             <h3 className="font-semibold text-2xl lg:text-4xl text-primaryText text-center">
               Available Games
             </h3>

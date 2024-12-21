@@ -20,6 +20,8 @@ import toast from "react-hot-toast";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useRouter } from "next/router";
 import NotificationsModal from "../notifications/NotificationsModal";
+import { Chip } from "@mui/material";
+import { COLORS } from "../../styles/theme";
 
 interface HeaderProps {
   navfix: boolean;
@@ -44,6 +46,7 @@ const Header: FC<HeaderProps> = ({
 const router = useRouter();
  const [isModalOpen, setModalOpen] = useState(false);
  const notificationRef = useRef(null);
+ console.log(userDetails);
   // Fetch latest user details to update balance
   const fetchUserDetails = async (userId: string | number) => {
     const token = localStorage.getItem("authToken");
@@ -94,9 +97,22 @@ const router = useRouter();
             />
           </Link>
         </div>
-
+   
         {/* Right Side: Buttons */}
         <div className="flex items-center gap-2 md:gap-4">
+           {userDetails?.user.country && (
+              <Chip
+                label={userDetails.user.country}
+                size="small"
+                sx={{
+                  backgroundColor: COLORS.primary.light,
+                  color: COLORS.text.primary,
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold',
+                  height: '20px'
+                }}
+              />
+            )}
           {userDetails ? (
             <div className="flex items-center gap-4 md:gap-6">
               {/* Notification Icon */}
@@ -126,7 +142,13 @@ const router = useRouter();
                 className="p-1 md:p-2 hover:bg-gray-700 rounded-full"
                 title="Refresh Balance"
               >
-                <RefreshIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <RefreshIcon 
+          sx={{ 
+            fontSize: '1rem',  // Smaller size
+              // Additional right spacing
+            color: COLORS.text.primary 
+          }} 
+        />
               </button>
 
               {/* BG Coin Balance */}

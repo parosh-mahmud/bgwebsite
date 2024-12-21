@@ -3,6 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image, { StaticImageData } from "next/image";
 import Slider from "react-slick";
+import { COLORS } from "../../../styles/theme";
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -97,14 +98,15 @@ const ProjectsSlider: FC<types> = ({ sliderData }) => {
   };
   return (
     <Fragment>
-      <div className="mx-4 pt-[50px] lg:pt-[80px]">
+      <div style={{ background: COLORS.primary.main }} className="mx-4 pt-[50px] lg:pt-[80px]">
         <div className="container mx-auto py-3">
           <Slider {...settings}>
             {sliderData.map((data) => {
               return (
                 <div
                   key={data.id}
-                  className="p-3 lg:p-5 mx-[-4px] lg:mx-1 my-3 bg-gradient-to-r from-orange-500 to-yellow-600 shadow-package rounded-lg">
+                  style={{ background: COLORS.background.gradient }}
+                  className="p-3 lg:p-5 mx-[-4px] lg:mx-1 my-3  shadow-package rounded-lg">
                   <div className="flex items-center gap-4">
                     <Image
                       src={data.img}

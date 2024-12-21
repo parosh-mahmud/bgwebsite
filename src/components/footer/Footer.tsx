@@ -11,21 +11,25 @@ import Image from "next/image";
 import WhatsappIcon from "../../assets/LandingPage/SVG/WhatsApp.svg";
 import android from "../../assets/LandingPage/SVG/GooglePlayGolden.svg";
 import apple from "../../assets/LandingPage/SVG/AppleStoreGolden.svg";
+import { COLORS } from "../../styles/theme";
 const Footer = () => {
   return (
     <Fragment>
       {/* top footer  */}
-      <div className="bg-black py-16 lg:py-28 mt-12 lg:mt-20">
+      <div style={{ backgroundColor: COLORS.background.main }} className=" py-16 lg:py-28 mt-12 lg:mt-20">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row gap-5 justify-between items-center">
-            <Image src={footerLogo} alt="Footer Logo" />
+            <Image src="/images/BazigaarLogo.svg"
+              alt="Bazigaar Logo"
+              width={150}
+              height={70} />
             <div>
               <p className="text-white font-semiBold text-[16px] lg:text-[18px] pb-4 text-center md:text-left">
                 Download Our Apps
               </p>
               <div className="flex items-center gap-3 pb-4">
-                <Image src={android} alt="android" />
-                <Image src={apple} alt="apple" />
+               <Image src="/images/GooglePlayGolden.svg" alt="android" width={150} height={50} />
+                <Image src="/images/AppleStoreGolden.svg" alt="apple" width={150} height={50} />
               </div>
               <div className="flex items-center gap-3 pb-4 divide-x divide-[#999]">
                 <Link className="text-white" href="/privacy-policy">

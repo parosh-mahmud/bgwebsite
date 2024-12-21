@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import QuickLotterySection from './quickLottery';
 import ScratchCardContainer from './scratchCard/scractchCardContainer';
 import SpecialLottery from './specialLotteris/specialLottery';
+import Giveaway from './giveaways/giveAways';
 
 const tabs = [
   { name: 'Quick Play', id: 'quickPlay' },
@@ -28,7 +29,7 @@ const MainTabComponent = () => {
       case 'specialLotteries':
         return <div><SpecialLottery/></div>;
       case 'giveaways':
-        return <div>Giveaways Content</div>;
+        return <div><Giveaway/></div>;
       case 'results':
         return <div>Results Content</div>;
       case 'upcomingLotteries':

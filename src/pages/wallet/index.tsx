@@ -77,10 +77,11 @@ export default function Wallet() {
   const [transactionHistory, setTransactionHistory] = useState<Transaction[]>([]);
   const [depositRequests, setDepositRequests] = useState<DepositRequest[]>([]);
   const [isReseller, setIsReseller] = useState<boolean>(false);
+  console.log(transactionHistory)
   const router = useRouter();
 const [loading, setLoading] = useState<boolean>(false); 
 const [value, setValue] = useState(0);
-
+console.log(depositRequests)
  const token = getTokenFromStorage();
  console.log(token)
  useEffect(() => {

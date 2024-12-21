@@ -1,83 +1,107 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
   Grid,
-  CircularProgress
+  Typography,
+  Box,
+  Breadcrumbs,
+  Link,
 } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import LotteryCard from '../../Lottery/lotteryCard';
+import LoadingSpinner from '../../common/loadingSpinner/LoadingSpinner';
+import TicketDetails from '../../ticketDetails/ticketDetails';
 
 interface LotteryTicket {
-  id: string;
-  number: string;
-  purchaseDate: string;
+  id: number;
+  LotteryName: string;
+  price: number;
+  drawPriceAmount: number;
+  numberOfWinner: number;
+  firstPrize: string;
+  secondPrize: string;
+  thirdPrize: string;
+  firstPrizeName: string;
+  secondPrizeName: string;
+  thirdPrizeName: string;
+  type: string;
 }
 
 const SpecialLottery: React.FC = () => {
   const [tickets, setTickets] = useState<LotteryTicket[]>([]);
-  const [timeLeft, setTimeLeft] = useState<string>('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [selectedLottery, setSelectedLottery] = useState<number | null>(null);
+
+  const fetchTickets = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("User not authenticated");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        "https://api.bazigaar.com/ticket_draw_app/ticketList/",
+        {
+          headers: { Authorization: `Token ${token}` },
+        }
+      );
+      console.log("API Response:", response.data); // Console log response data
+      const specialTickets = response.data.results.filter((ticket: LotteryTicket) => ticket.type === 'Special');
+      setTickets(specialTickets);
+    } catch (error) {
+      console.error("Failed to fetch tickets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+
+  const handleViewDetails = (ticketId: number) => {
+    setSelectedLottery(ticketId);
+  };
+
+  const handleBackToLottery = () => {
+    setSelectedLottery(null);
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <Box sx={{ color: 'white' }}>
-      <Grid container spacing={3}>
-        {/* Prize Pool Section */}
-        <Grid item xs={12}>
-          <Card sx={{ bgcolor: '#2A3441', color: 'white' }}>
-            <CardContent>
-              <Typography variant="h4" gutterBottom>
-                Current Prize Pool: 1,000,000 BGC
-              </Typography>
-              <Typography variant="h6">
-                Next Draw: {timeLeft}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box padding={2} className="min-h-screen bg-gray-900 text-white">
+    
+       
 
-        {/* Ticket Purchase Section */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ bgcolor: '#2A3441', color: 'white' }}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Buy Tickets
-              </Typography>
-              <Button 
-                variant="contained" 
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-              >
-                Purchase Ticket (100 BGC)
-              </Button>
-            </CardContent>
-          </Card>
+      {selectedLottery ? (
+        <TicketDetails
+          ticketId={selectedLottery}
+          onBack={handleBackToLottery}
+        />
+      ) : (
+        <Grid container spacing={3} className="mt-6">
+          {tickets.map((ticket) => (
+            <Grid item xs={12} sm={6} md={4} key={ticket.id}>
+              <LotteryCard
+                lotteryName={ticket.LotteryName}
+                firstPrize={ticket.firstPrize}
+                secondPrize={ticket.secondPrize}
+                thirdPrize={ticket.thirdPrize}
+                firstPrizeName={ticket.firstPrizeName}
+                secondPrizeName={ticket.secondPrizeName}
+                thirdPrizeName={ticket.thirdPrizeName}
+                onViewDetails={() => handleViewDetails(ticket.id)}
+              />
+            </Grid>
+          ))}
         </Grid>
-
-        {/* My Tickets Section */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ bgcolor: '#2A3441', color: 'white' }}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                My Tickets
-              </Typography>
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                tickets.map(ticket => (
-                  <Box key={ticket.id} sx={{ mb: 1 }}>
-                    <Typography>
-                      Ticket #{ticket.number}
-                    </Typography>
-                  </Box>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      )}
     </Box>
   );
 };

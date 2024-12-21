@@ -119,7 +119,50 @@ const DepositWithdrawContent: React.FC<Props> = ({
           ))}
         </div>
       </div>
+{/* Conditional Input Options for Crypto */}
+      {selectedPayment === 'usdt' && (
+        <div className="bg-gray-800 p-4 rounded-lg mb-4">
+          <h2 className="text-lg font-semibold mb-2">USDT Payment Details</h2>
+          <div className="mb-2">
+            <label className="block text-sm font-medium mb-1">USDT Wallet Address</label>
+            <input
+              type="text"
+              className="w-full p-2 rounded-lg bg-gray-700 text-white"
+              placeholder="Enter your USDT wallet address"
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium mb-1">Amount</label>
+            <input
+              type="number"
+              className="w-full p-2 rounded-lg bg-gray-700 text-white"
+              placeholder="Enter amount in USDT"
+            />
+          </div>
+        </div>
+      )}
 
+      {selectedPayment === 'bitcoin' && (
+        <div className="bg-gray-800 p-4 rounded-lg mb-4">
+          <h2 className="text-lg font-semibold mb-2">Bitcoin Payment Details</h2>
+          <div className="mb-2">
+            <label className="block text-sm font-medium mb-1">Bitcoin Wallet Address</label>
+            <input
+              type="text"
+              className="w-full p-2 rounded-lg bg-gray-700 text-white"
+              placeholder="Enter your Bitcoin wallet address"
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium mb-1">Amount</label>
+            <input
+              type="number"
+              className="w-full p-2 rounded-lg bg-gray-700 text-white"
+              placeholder="Enter amount in Bitcoin"
+            />
+          </div>
+        </div>
+      )}
       {selectedTab === "withdrawal" && 
         (selectedPayment === "crypto" || selectedPayment === "usdt" || selectedPayment === "bitcoin") && (
           <div className="bg-gray-800 p-4 rounded-lg mb-4">

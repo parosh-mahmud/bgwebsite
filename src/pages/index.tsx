@@ -163,7 +163,7 @@ const Home = () => {
         </div>
 
         {/* Available Games Section */}
-        <div className="container">
+        {/* <div className="container">
           <div style={{ background: COLORS.primary.main }} className="bg-gradient-to-r from-orange-400 to-yellow-500 py-8 lg:py-12 px-6 sm:px-8 lg:px-16 rounded-2xl lg:rounded-3xl">
             <h3 className="font-semibold text-2xl lg:text-4xl text-primaryText text-center">
               Available Games
@@ -193,10 +193,10 @@ const Home = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Lottery Package Section */}
-        <div className="container py-12">
+        {/* <div className="container py-12">
           <div>
             <h3 className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-primaryText text-center">
               Lottery Package
@@ -209,7 +209,7 @@ const Home = () => {
               <ProjectsSlider sliderData={packages} />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* How to Play Section */}
         <div className="container">

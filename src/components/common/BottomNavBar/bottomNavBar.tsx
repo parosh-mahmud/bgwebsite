@@ -47,12 +47,17 @@ const BottomNavBar = () => {
 
 const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    setShowAccountScreen(newValue === 4); // Assuming the account tab is at index 4
+
+    if (newValue === 4) { // Assuming the account tab is at index 4
+      setShowAccountScreen(prevShowAccountScreen => !prevShowAccountScreen);
+    } else {
+      setShowAccountScreen(false);
+    }
 
     // Navigate based on tab index
     switch (newValue) {
       case 0:
-        router.push('/home');
+        router.push('/');
         break;
       case 1:
         router.push('/wallet');
@@ -64,10 +69,9 @@ const handleChange = (event: SyntheticEvent, newValue: number) => {
         router.push('/chats');
         break;
       case 4:
-        // Directly toggle the account screen visibility
+        // No need to navigate for account screen toggle
         break;
       default:
-        setShowAccountScreen(false);
         break;
     }
   };

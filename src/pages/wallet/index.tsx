@@ -196,44 +196,87 @@ console.log(depositRequests)
         subheaderTypographyProps={{ style: { color: "#AAB4BE" } }}
       />
       <CardContent>
-        {/* Balance Section */}
         <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          mb={4}
-          sx={{
-            padding: "16px",
-            borderRadius: "8px",
-            backgroundColor: "#455271",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
-          }}
-        >
-          <Typography
-            variant="subtitle1"
-            style={{ color: "#AAB4BE", marginBottom: "8px" }}
-          >
-            Main Balance
-          </Typography>
-          <Box display="flex" alignItems="center">
-            <Image
-              src="/images/bgcoin.svg"
-              alt="BG Coin"
-              width={40}
-              height={35}
-            />
-            <Typography
-              variant="h4"
-              style={{
-                color: "#FFD700",
-                fontWeight: "bold",
-                marginLeft: "12px",
-              }}
-            >
-              {balance}
-            </Typography>
-          </Box>
-        </Box>
+  sx={{
+    padding: "24px",
+    borderRadius: "16px",
+    background: "linear-gradient(145deg, #1e3c72, #2a5298)",
+    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.25)",
+    textAlign: "center",
+    maxWidth: "400px",
+    margin: "0 auto",
+    mt: 4,
+    mb: 6,
+  }}
+>
+  {/* User Type Label */}
+  <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
+    {isReseller ? (
+      <AccountBalanceWallet sx={{ color: "#FFD700", fontSize: 30, mr: 1 }} />
+    ) : (
+      <AccountBalanceWallet sx={{ color: "#4CAF50", fontSize: 30, mr: 1 }} />
+    )}
+    <Typography
+      variant="subtitle1"
+      sx={{
+        color: isReseller ? "#FFD700" : "#4CAF50",
+        fontWeight: "bold",
+        fontSize: "18px",
+      }}
+    >
+      {isReseller ? "Reseller Wallet" : "User Wallet"}
+    </Typography>
+  </Box>
+
+  {/* Balance Display */}
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "16px",
+      backgroundColor: "#0B1E37",
+      borderRadius: "12px",
+      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+    }}
+  >
+    <Image
+      src="/images/bgcoin.svg"
+      alt="BG Coin"
+      width={50}
+      height={50}
+      style={{ marginRight: "12px" }}
+    />
+    <Typography
+      variant="h4"
+      sx={{
+        color: "#FFD700",
+        fontWeight: "bold",
+        letterSpacing: "1px",
+        transition: "transform 0.3s ease-in-out",
+        "&:hover": { transform: "scale(1.1)" },
+      }}
+    >
+      {balance.toFixed(2)}
+    </Typography>
+  </Box>
+
+  {/* Last Updated Timestamp */}
+  <Typography
+    variant="body2"
+    sx={{
+      color: "#AAB4BE",
+      marginTop: "12px",
+      fontSize: "14px",
+    }}
+  >
+    Last Updated: {new Date().toLocaleString()}
+  </Typography>
+
+ 
+  
+</Box>
+
 
         {/* Deposit & Withdraw Buttons */}
         <div className="flex flex-col md:flex-row md:justify-around gap-4 mb-6">
@@ -269,65 +312,75 @@ console.log(depositRequests)
       Transaction History
     </Typography>
     <TableContainer
-      component={Paper}
-      style={{ backgroundColor: "#455271", borderRadius: 8 }}
-    >
-      <Table aria-label="transaction history table">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ color: "#AAB4BE" }}>Type</TableCell>
-            <TableCell style={{ color: "#AAB4BE" }}>Amount</TableCell>
-            <TableCell style={{ color: "#AAB4BE" }}>Currency</TableCell>
-            <TableCell style={{ color: "#AAB4BE" }}>Date</TableCell>
-            <TableCell style={{ color: "#AAB4BE" }}>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {transactionHistory.map((transaction, index) => (
-            <TableRow key={index}>
-              <TableCell style={{ color: "#FFFFFF" }}>
-                {transaction.transaction_type === "deposit" ? (
-                  <ArrowDownward
-                    style={{ color: "#4CAF50", verticalAlign: "middle" }}
-                  />
-                ) : (
-                  <ArrowUpward
-                    style={{ color: "#FF5722", verticalAlign: "middle" }}
-                  />
-                )}{" "}
-                {transaction.transaction_type.charAt(0).toUpperCase() +
-                  transaction.transaction_type.slice(1)}
-              </TableCell>
-              <TableCell style={{ color: "#FFFFFF" }}>
-                {parseFloat(transaction.amount).toFixed(2)}
-              </TableCell>
-              <TableCell style={{ color: "#FFFFFF" }}>
-                {transaction.currency}
-              </TableCell>
-              <TableCell style={{ color: "#FFFFFF" }}>
-                {transaction.payment_at
-                  ? new Date(transaction.payment_at).toLocaleDateString()
-                  : "N/A"}
-              </TableCell>
-              <TableCell style={{ color: "#FFFFFF" }}>
-                {transaction.payment_status ? (
-                  <Chip
-                    label={transaction.payment_status.toUpperCase()}
-                    color={
-                      transaction.payment_status.toLowerCase() === "pending"
-                        ? "warning"
-                        : "success"
-                    }
-                  />
-                ) : (
-                  "N/A"
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  component={Paper}
+  sx={{
+    backgroundColor: "rgba(69, 82, 113, 0.9)",
+    borderRadius: 2,
+    mt: 4,
+    boxShadow: 3,
+  }}
+>
+  <Table>
+    <TableHead>
+      <TableRow>
+        {["Type", "Amount", "Currency", "Date", "Status"].map((header) => (
+          <TableCell key={header} sx={{ color: "#AAB4BE", fontWeight: "bold" }}>
+            {header}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+  {transactionHistory.map((transaction, index) => (
+    <TableRow key={index} hover>
+      {/* Transaction Type */}
+      <TableCell sx={{ color: "#FFFFFF" }}>
+        {transaction.transaction_type === "deposit" ? (
+          <ArrowDownward sx={{ color: "#4CAF50", mr: 1 }} />
+        ) : (
+          <ArrowUpward sx={{ color: "#FF5722", mr: 1 }} />
+        )}
+        {transaction.transaction_type.charAt(0).toUpperCase() +
+          transaction.transaction_type.slice(1)}
+      </TableCell>
+
+      {/* Amount */}
+      <TableCell sx={{ color: "#FFFFFF" }}>
+        {parseFloat(transaction.amount).toFixed(2)}
+      </TableCell>
+
+      {/* Currency */}
+      <TableCell sx={{ color: "#FFFFFF" }}>{transaction.currency}</TableCell>
+
+      {/* Date with Time */}
+      <TableCell sx={{ color: "#FFFFFF" }}>
+        {transaction.payment_at
+          ? new Date(transaction.payment_at).toLocaleString() // Includes both date and time
+          : "N/A"}
+      </TableCell>
+
+      {/* Status in Lowercase */}
+      <TableCell>
+        <Chip
+          label={
+            transaction.payment_status
+              ? transaction.payment_status.toLowerCase() // Convert status to lowercase
+              : "n/a"
+          }
+          color={
+            transaction.payment_status?.toLowerCase() === "pending"
+              ? "warning"
+              : "success"
+          }
+        />
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
+  </Table>
+</TableContainer>
+
     <ReusableBottomBar value={value} onChange={(event, newValue) => setValue(newValue)} />
   </div>
         )}

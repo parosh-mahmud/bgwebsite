@@ -1,10 +1,9 @@
-// components/MainTabComponent.tsx
-
 import React, { useState } from 'react';
 import QuickLotterySection from './quickLottery';
 import ScratchCardContainer from './scratchCard/scractchCardContainer';
 import SpecialLottery from './specialLotteris/specialLottery';
 import Giveaway from './giveaways/giveAways';
+import Results from './results/results';
 
 const tabs = [
   { name: 'Quick Play', id: 'quickPlay' },
@@ -22,6 +21,31 @@ const MainTabComponent = () => {
     setActiveTab(id);
   };
 
+  // Demo prize data for the Results component
+  const demoPrizeData = [
+    { match: 'Jackpot', winners: 0, prize: '€4,726,328' },
+    { match: 'Match 5 + Bonus', winners: 1, prize: '€87,342' },
+    { match: 'Match 5', winners: 17, prize: '€1,837' },
+    { match: 'Match 4 + Bonus', winners: 49, prize: '€160' },
+    { match: 'Match 4', winners: 931, prize: '€55' },
+    { match: 'Match 3 + Bonus', winners: 1267, prize: '€27' },
+    { match: 'Match 3', winners: 16391, prize: '€9' },
+    { match: 'Match 2 + Bonus', winners: 13018, prize: '€3 Daily Million Plus GP*' },
+  ];
+
+  // Demo lottoResults data for the Results component
+  const demoLottoResults = [
+    {
+      drawName: "Super Lotto",
+      date: "2023-12-23",
+      winningNumbers: [12, 23, 34, 45, 56],
+      bonusNumber: 7,
+      jackpot: "€5 Million",
+      topPrize: "€1 Million"
+    },
+    // More lotto results can be added here
+  ];
+
   const renderContent = () => {
     switch (activeTab) {
       case 'quickPlay':
@@ -31,7 +55,8 @@ const MainTabComponent = () => {
       case 'giveaways':
         return <div><Giveaway/></div>;
       case 'results':
-        return <div>Results Content</div>;
+        console.log("Rendering Results with data:", demoPrizeData);
+        return <div><Results lottoResults={demoLottoResults} prizeData={demoPrizeData} /></div>;
       case 'upcomingLotteries':
         return <div>Upcoming Lottery Packages Content</div>;
       case 'Scratchcards':

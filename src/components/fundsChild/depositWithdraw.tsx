@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import { Reseller, ConvertedAmountDetails } from './types';
 import { paymentMethods, amountOptions } from './constants';
 import Bgcoin from '../../assets/LandingPage/SVG/bgcoin.svg';
+import { useRouter } from 'next/router';
+
 import dynamic from 'next/dynamic';
 type CountryData = {
   name: string;
@@ -15,7 +17,7 @@ type Props = {
   selectedTab: string;
   selectedPayment: string;
   amount: string;
-   setSelectedCountry: (value: string) => void;
+   setSelectedCountry: (value: string | null) => void;
   handlePaymentSelect: (id: string) => void;
   handleAmountSelect: (amount: number) => void;
   handleAmountInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -96,6 +98,7 @@ const DepositWithdrawContent: React.FC<Props> = ({
     console.log('Country search query:', query);
     handleCountrySearch(query);
 };
+const router = useRouter();
 
   return (
     <>
@@ -208,20 +211,22 @@ const DepositWithdrawContent: React.FC<Props> = ({
     <h2 className="text-xl font-semibold mb-6 text-green-400">Select Country & Reseller</h2>
 
     {/* Country Search Dropdown */}
-    <div className="relative mb-6">
-      <label className="block text-sm font-medium text-gray-300 mb-2">Search Country</label>
-      <input
-        type="text"
-        placeholder="Type to search..."
-        value={countrySearchQuery}
-        onChange={(e) => handleCountrySearch(e.target.value)}
-        className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
-      />
-      <div className="mt-2 bg-gray-900 rounded-lg overflow-hidden shadow-lg max-h-60 overflow-y-auto">
-        {filteredCountries.length > 0 ? (
-    filteredCountries
-      .filter((country) => !selectedCountry || country.name === selectedCountry) // Only show selected country
-      .map((country) => (
+    
+<div className="relative mb-6">
+  <label className="block text-sm font-medium text-gray-300 mb-2">Search Country</label>
+  <input
+    type="text"
+    placeholder="Type to search..."
+    value={countrySearchQuery}
+    onChange={(e) => {
+      handleCountrySearchUpdate(e.target.value);
+      setSelectedCountry(null);  // Reset selected country when search query changes
+    }}
+    className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+  />
+  <div className="mt-2 bg-gray-900 rounded-lg overflow-hidden shadow-lg max-h-60 overflow-y-auto">
+    {filteredCountries.length > 0 ? (
+      filteredCountries.map((country) => (
         <button
           key={country.name}
           onClick={() => {
@@ -235,11 +240,12 @@ const DepositWithdrawContent: React.FC<Props> = ({
           {country.name} ({country.currencyCode})
         </button>
       ))
-  ) : (
-    <p className="text-center text-gray-400 py-4">No countries found</p>
-  )}
-      </div>
-    </div>
+    ) : (
+      <p className="text-center text-gray-400 py-4">No countries found</p>
+    )}
+  </div>
+</div>
+
 
     {/* Reseller List */}
    {selectedCountry && (

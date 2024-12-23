@@ -132,8 +132,8 @@ const handleWithdraw = async () => {
     if (response.ok) {
       const data = await response.json();
       console.log('Withdrawal Success:', data);
-      alert('Withdrawal request submitted successfully.');
-
+ // Navigate to the withdrawal confirmation page
+  router.push('/withdrawal-confirmation');
       // Update the balance
       setBalance((prevBalance) => (prevBalance !== null ? prevBalance - selectedAmount : null));
       setAmount('');
@@ -435,37 +435,41 @@ const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
       {/* Instructions */}
       <div
-        style={{
-          backgroundColor: '#455271',
-          padding: '1rem',
-          borderRadius: '0.5rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <h2 className="text-lg font-semibold text-green-400 mb-2">Important</h2>
-        <p className="text-sm">
-          Dear member, to speed up your {selectedTab} process:
-          <ul className="list-disc list-inside mt-2">
-            {selectedTab === 'deposit' ? (
-              <>
-                <li>Ensure you have selected the correct deposit method.</li>
-                <li>Enter the exact amount you wish to deposit.</li>
-                <li>Confirm your transaction details before proceeding.</li>
-                <li>Attach the successful payment slip as proof.</li>
-                <li>Contact support if there are any issues with the deposit.</li>
-              </>
-            ) : (
-              <>
-                <li>Verify the phone number associated with your withdrawal account.</li>
-                <li>Enter the correct reference number for your withdrawal.</li>
-                <li>Withdraw only the amount you selected.</li>
-                <li>Ensure you have sufficient balance for the withdrawal amount.</li>
-                <li>Do not save phone numbers to avoid potential security issues.</li>
-              </>
-            )}
-          </ul>
-        </p>
-      </div>
+  style={{
+    backgroundColor: '#455271',
+    padding: '1rem',
+    borderRadius: '0.5rem',
+    marginBottom: '1rem',
+  }}
+>
+  <h2 className="text-lg font-semibold text-green-400 mb-2">Important Instructions</h2>
+  <p className="text-sm">
+    To ensure a smooth and efficient {selectedTab} process, please follow these guidelines:
+  </p>
+  <ul className="list-disc list-inside mt-2 text-sm">
+    {selectedTab === 'deposit' ? (
+      <>
+        <li>Verify the chosen deposit method is correct.</li>
+        <li>Enter the exact amount you intend to deposit.</li>
+        <li>Confirm all transaction details prior to submission.</li>
+        <li>Attach proof of payment, such as a payment slip.</li>
+        <li>If you encounter any issues, please <a href="/support" style={{ color: '#F2BA56' }}>contact support</a>.</li>
+      </>
+    ) : (
+      <>
+        <li>Confirm the phone number linked to your withdrawal account is correct.</li>
+        <li>Ensure the reference number for your withdrawal is accurate.</li>
+        <li>Withdraw only the specific amount requested.</li>
+        <li>Check that your account has sufficient funds for the withdrawal.</li>
+        <li>Avoid saving phone numbers on the platform to prevent security risks.</li>
+      </>
+    )}
+  </ul>
+  <p className="mt-4">
+    For more detailed information, please refer to our <a href="/faq" style={{ color: '#F2BA56' }}>FAQ</a> and <a href="/terms-and-conditions" style={{ color: '#F2BA56' }}>Terms & Conditions</a>.
+  </p>
+</div>
+
 
       {/* Submit Button */}
       <button

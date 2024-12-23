@@ -19,7 +19,7 @@ export const COLORS = {
     button: 'linear-gradient(270deg, #E65E09 0%, #F2BA56 100%)',
   },
   background: {
-    default: '#121212',
+    default: '#0B1E37',
     paper: '#1E1E1E',
     gradient: 'linear-gradient(180deg, #2A3441 0%, #1A2231 100%)',
     main: 'rgba(26, 26, 64, 0.8)', // Added the requested background main color
